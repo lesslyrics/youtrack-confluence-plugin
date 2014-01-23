@@ -1,7 +1,7 @@
 <atlassian-plugin key="youtrack.issue.highlighter.plugin" name="YouTrack Issue Highlighter" plugins-version="2">
     <plugin-info>
         <description>Plugin for macro that highlights YouTrack issues.</description>
-        <version>1.1</version>
+        <version>1.4</version>
         <vendor name="JetBrains" url="http://www.jetbrains.com"/>
     </plugin-info>
     <macro name="issue" class="issuehighlighter.IssueHighlighter" key="issue-key">
@@ -12,6 +12,7 @@
         <category name="confluence-content"/>
         <parameters>
             <parameter name="id" type="string"/>
+            <parameter name="style" type="string"/>
         </parameters>
     </macro>
 </atlassian-plugin>

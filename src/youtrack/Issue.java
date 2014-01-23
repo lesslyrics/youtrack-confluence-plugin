@@ -58,4 +58,8 @@ public class Issue {
     public String reporter() {
         return (fields.containsKey("reporterFullName")) ? fields.get("reporterFullName").first() : UNKNOWN;
     }
+
+    public String summary() {
+        return (fields.containsKey("summary")) ? fields.get("summary").first() : UNKNOWN;
+    }
 }

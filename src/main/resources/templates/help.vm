@@ -1,13 +1,15 @@
 <tr>
     <td>
-        {issue:id=XXX-NNNNN}
+        {issue:id=XXX-NNNNN|style=style}
     </td>
 
     <td>
-        <p>Inserts link to YouTrack issue that changes its appearance depending on the issue state. Link tooltip provides issue details.</p>
+        <p>Inserts link to YouTrack issue that changes its appearance depending on the issue state. Link tooltip
+            provides issue details.</p>
 
         <ul>
-            <li>id &mdash; YouTrack issue id. For example, JS-2541.</li>
+            <li>id &mdash; required. YouTrack issue id. For example, JS-2541.</li>
+            <li>style &mdash; optional. "detailed" inserts issue title before the link, "short" (default) link only.</li>
         </ul>
     </td>
 </tr>

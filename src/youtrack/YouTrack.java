@@ -32,19 +32,14 @@ public class YouTrack {
 
     /**
      * Returns authentication token for use with YouTrack REST API. Make sure you have configured access in settings.properties file.
+     *
      * @return token or an empty string if an error occurred.
      */
 
     public String getAuth() {
         String result = "";
         try {
-            Properties prop = new Properties();
-            ClassLoader loader = getClass().getClassLoader();
-            InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
-            prop.load(stream);
-            userName = prop.getProperty("username");
-            password = prop.getProperty("password");
-            baseHost = prop.getProperty("host");
+            init();
             String contentType = "application/x-www-form-urlencoded";
             URL url = new URL(baseHost + "user/login");
             HttpURLConnection conn = (HttpURLConnection) getUrlConnection(url);
@@ -68,6 +63,16 @@ public class YouTrack {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    private void init() throws IOException {
+        Properties prop = new Properties();
+        ClassLoader loader = getClass().getClassLoader();
+        InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
+        prop.load(stream);
+        userName = prop.getProperty("username");
+        password = prop.getProperty("password");
+        baseHost = prop.getProperty("host");
     }
 
     /**
@@ -100,6 +105,7 @@ public class YouTrack {
     public Issue getIssue(String id, String authToken) {
         Issue result = null;
         try {
+            init();
             String xmlString = "";
             HttpURLConnection conn = (HttpURLConnection) getUrlConnection(new URL(baseHost + "issue/" + id));
             conn.setRequestProperty("Cookie", authToken);

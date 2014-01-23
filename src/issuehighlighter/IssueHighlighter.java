@@ -1,7 +1,8 @@
 package issuehighlighter;
 
+import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
-import com.atlassian.confluence.spaces.SpaceManager;
+import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.confluence.user.AuthenticatedUserThreadLocal;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
@@ -16,9 +17,12 @@ import java.util.Map;
 
 public class IssueHighlighter extends BaseMacro {
     private static final String BODY = "templates/body.vm";
+    private static final String BODY_DETAILED = "templates/body-detailed.vm";
+    public static final String SETTINGS_KEY = "issue-highlighter-cached-acs-3";
+    private final BandanaManager bm;
 
-    public IssueHighlighter(SpaceManager spaceManager) {
-
+    public IssueHighlighter(BandanaManager bandanaManager) {
+        this.bm = bandanaManager;
     }
 
     public boolean isInline() {
@@ -37,15 +41,46 @@ public class IssueHighlighter extends BaseMacro {
             throws MacroException {
 
         Map<String, Object> context = MacroUtils.defaultVelocityContext();
-
+        String access;
         String issueId = (String) params.get("id");
+        String style = (String) params.get("style");
+        if (style != null && style.equals("detailed")) {
+            style = "detailed";
+        } else {
+            style = "short";
+        }
         YouTrack youTrack = new YouTrack();
-        String authToken = youTrack.getAuth();
+        Boolean cacheUsed = false;
+        SettingsCache settings = (SettingsCache) bm.getValue(new ConfluenceBandanaContext(), SETTINGS_KEY);
+        if (settings == null) {
+            settings = new SettingsCache();
+            settings.setAuthKey(youTrack.getAuth());
+            access = "(Direct)";
+            bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
+        } else {
+            access = "(Cached)";
+            cacheUsed = true;
+        }
+
+        String authToken = settings.getAuthKey();
         Issue issue = youTrack.getIssue(issueId, authToken);
+
+        if (issue == null && cacheUsed) {
+            authToken = youTrack.getAuth();
+            access = "(Re-cached)";
+            issue = youTrack.getIssue(issueId, authToken);
+        }
+
+        if (settings.getAuthKey().equals(authToken)) {
+            settings.setAuthKey(authToken);
+            bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
+        }
 
         if (issue != null) {
 
             context.put("issue", issueId);
+            context.put("access", access);
+            context.put("summary", issue.summary());
             context.put("style", (issue.isResolved()) ? "line-through" : "normal");
             context.put("title", "Reporter: " + issue.reporter() + ", Priority: " + issue.priority() + ", State: "
                     + issue.state() + ", Assignee: " + issue.assignee() + ", Votes: " + issue.votes() + ", Type: " + issue.type());
@@ -65,7 +100,7 @@ public class IssueHighlighter extends BaseMacro {
             }
         }
 
-        return VelocityUtils.getRenderedTemplate(BODY, context);
+        return VelocityUtils.getRenderedTemplate((style.equals("short") ? BODY : BODY_DETAILED), context);
 
     }
 }
