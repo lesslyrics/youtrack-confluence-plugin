@@ -1,4 +1,4 @@
-package youtrack.comments;
+package youtrack.comment;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -26,6 +26,8 @@ public class IssueComment {
 	private String text;
 	@XmlAttribute(name = "authorFullName")
 	private String authorFullName;
+	@XmlAttribute(name = "updated")
+	private Long updated;
 	@XmlElementWrapper(name = "replies")
 	@XmlElement(name = "comment")
 	private List<IssueComment> replies;

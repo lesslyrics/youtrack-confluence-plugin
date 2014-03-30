@@ -10,7 +10,7 @@ import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.BaseMacro;
 import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.user.User;
-import youtrack.Issue;
+import youtrack.issue.Issue;
 import youtrack.YouTrack;
 
 import java.util.Map;

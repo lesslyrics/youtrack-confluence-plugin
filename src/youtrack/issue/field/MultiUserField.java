@@ -1,6 +1,6 @@
-package youtrack.fields;
+package youtrack.issue.field;
 
-import youtrack.fields.values.MultiUserFieldValue;
+import youtrack.issue.field.value.MultiUserFieldValue;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

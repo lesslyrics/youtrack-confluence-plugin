@@ -1,6 +1,6 @@
-package youtrack.fields;
+package youtrack.issue.field;
 
-import youtrack.fields.values.IssueFieldValue;
+import youtrack.issue.field.value.AttachmentFieldValue;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -9,15 +9,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by egor.malyshev on 28.03.2014.
  */
 @XmlRootElement
-public class SingleField extends IssueField {
-	@XmlElement(name = "value")
-	private IssueFieldValue value;
+public class AttachmentField extends IssueField {
 
-	public SingleField() {
+	@XmlElement(name = "value")
+	private AttachmentFieldValue value;
+
+	public AttachmentField() {
 	}
 
 	@Override
-	public IssueFieldValue getValue() {
+	public AttachmentFieldValue getValue() {
 		return value;
 	}
 
@@ -25,4 +26,5 @@ public class SingleField extends IssueField {
 	public String getStringValue() {
 		return value.getValue();
 	}
+
 }

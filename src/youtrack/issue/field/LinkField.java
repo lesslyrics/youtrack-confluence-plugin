@@ -1,6 +1,6 @@
-package youtrack.fields;
+package youtrack.issue.field;
 
-import youtrack.fields.values.LinkFieldValue;
+import youtrack.issue.field.value.LinkFieldValue;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

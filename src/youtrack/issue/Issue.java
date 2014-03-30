@@ -1,7 +1,7 @@
-package youtrack;
+package youtrack.issue;
 
-import youtrack.comments.IssueComment;
-import youtrack.fields.IssueField;
+import youtrack.comment.IssueComment;
+import youtrack.issue.field.IssueField;
 
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;

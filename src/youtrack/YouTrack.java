@@ -1,10 +1,11 @@
 package youtrack;
 
 import org.xml.sax.SAXException;
-import youtrack.fields.*;
-import youtrack.fields.values.AttachmentFieldValue;
-import youtrack.fields.values.LinkFieldValue;
-import youtrack.fields.values.MultiUserFieldValue;
+import youtrack.issue.field.*;
+import youtrack.issue.field.value.AttachmentFieldValue;
+import youtrack.issue.field.value.LinkFieldValue;
+import youtrack.issue.field.value.MultiUserFieldValue;
+import youtrack.issue.Issue;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -90,7 +91,7 @@ public class YouTrack {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	private Issue GetIssue(String xmlString) throws ParserConfigurationException, JAXBException, SAXException, IOException, XMLStreamException {
+	private Issue issueFromXml(String xmlString) throws ParserConfigurationException, JAXBException, SAXException, IOException, XMLStreamException {
 
 		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader(new StringReader(xmlString));
@@ -124,7 +125,7 @@ public class YouTrack {
 				xmlString += line;
 			}
 			rd.close();
-			result = GetIssue(xmlString);
+			result = issueFromXml(xmlString);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -149,10 +150,10 @@ public class YouTrack {
 	 * Class to work around the JAXB name handling.
 	 * Forces upper case on the first letter of xsi:type attribute.
 	 */
-	private static class HackedReader extends StreamReaderDelegate {
+	private class HackedReader extends StreamReaderDelegate {
 
-		public HackedReader(XMLStreamReader xsr) {
-			super(xsr);
+		public HackedReader(XMLStreamReader xmlStreamReader) {
+			super(xmlStreamReader);
 		}
 
 		@Override
