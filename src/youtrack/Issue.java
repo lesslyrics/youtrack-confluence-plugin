@@ -1,8 +1,11 @@
 package youtrack;
 
-import javax.xml.bind.Unmarshaller;
+import youtrack.comments.IssueComment;
+import youtrack.fields.IssueField;
+
 import javax.xml.bind.annotation.*;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Egor.Malyshev on 19.12.13.
@@ -10,56 +13,71 @@ import java.util.HashMap;
 @XmlRootElement(name = "issue")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Issue {
-    private static final String UNKNOWN = "?";
-    @XmlAttribute(name = "id")
-    private String id;
+	private static final String UNKNOWN = "?";
+	@XmlAttribute(name = "id")
+	private String id;
 
-    @XmlElement(name = "field")
-    private IssueField[] fieldArray;
+	public void setFieldArray(List<IssueField> fieldArray) {
+		this.fieldArray = fieldArray;
+	}
 
-    @XmlTransient
-    private HashMap<String, IssueField> fields;
+	public List<IssueField> getFieldArray() {
+		return fieldArray;
+	}
 
-    public void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
-        fields = new HashMap<String, IssueField>();
-        for (IssueField issueField : fieldArray) {
-            fields.put(issueField.getId(), issueField);
-        }
-    }
+	@XmlElement(name = "field")
+	private List<IssueField> fieldArray;
 
-    public String getId() {
-        return id;
-    }
+	public List<IssueComment> getComments() {
+		return comments;
+	}
 
-    public Boolean isResolved() {
-        return fields.containsKey("resolved");
-    }
+	@XmlElement(name = "comment")
+	private List<IssueComment> comments;
 
-    public String state() {
-        return (fields.containsKey("State")) ? fields.get("State").first() : UNKNOWN;
-    }
+	@XmlTransient
+	private HashMap<String, IssueField> fields;
 
-    public String votes() {
-        return (fields.containsKey("votes")) ? fields.get("votes").first() : UNKNOWN;
-    }
+//	public void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {
+//		fields = new HashMap<String, IssueField>();
+//		for (IssueField issueField : fieldArray) {
+//			fields.put(issueField.getName(), issueField);
+//		}
+//	}
 
-    public String type() {
-        return (fields.containsKey("Type")) ? fields.get("Type").first() : UNKNOWN;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String priority() {
-        return (fields.containsKey("Priority")) ? fields.get("Priority").first() : UNKNOWN;
-    }
+	public Boolean isResolved() {
+		return fields.containsKey("resolved");
+	}
 
-    public String assignee() {
-        return (fields.containsKey("Assignee")) ? fields.get("Assignee").first() : UNKNOWN;
-    }
+	public String state() {
+		return (fields.containsKey("State")) ? fields.get("State").getValue().getValue() : UNKNOWN;
+	}
 
-    public String reporter() {
-        return (fields.containsKey("reporterFullName")) ? fields.get("reporterFullName").first() : UNKNOWN;
-    }
+	public String votes() {
+		return (fields.containsKey("votes")) ? fields.get("votes").getValue().getValue() : UNKNOWN;
+	}
 
-    public String summary() {
-        return (fields.containsKey("summary")) ? fields.get("summary").first() : UNKNOWN;
-    }
+	public String type() {
+		return (fields.containsKey("Type")) ? fields.get("Type").getValue().getValue() : UNKNOWN;
+	}
+
+	public String priority() {
+		return (fields.containsKey("Priority")) ? fields.get("Priority").getValue().getValue() : UNKNOWN;
+	}
+
+	public String assignee() {
+		return (fields.containsKey("Assignee")) ? fields.get("Assignee").getValue().getValue() : UNKNOWN;
+	}
+
+	public String reporter() {
+		return (fields.containsKey("reporterFullName")) ? fields.get("reporterFullName").getValue().getValue() : UNKNOWN;
+	}
+
+	public String summary() {
+		return (fields.containsKey("summary")) ? fields.get("summary").getValue().getValue() : UNKNOWN;
+	}
 }
