@@ -22,4 +22,9 @@ public class AttachmentField extends IssueField {
 		return value;
 	}
 
+	@Override
+	public String getStringValue() {
+		return value.getValue();
+	}
+
 }

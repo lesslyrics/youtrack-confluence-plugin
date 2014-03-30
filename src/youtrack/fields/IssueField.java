@@ -2,7 +2,10 @@ package youtrack.fields;
 
 import youtrack.fields.values.IssueFieldValue;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by Egor.Malyshev on 19.12.13.
@@ -21,4 +24,6 @@ public abstract class IssueField {
 	}
 
 	public abstract IssueFieldValue getValue();
+
+	public abstract String getStringValue();
 }

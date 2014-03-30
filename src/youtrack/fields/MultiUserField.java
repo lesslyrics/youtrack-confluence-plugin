@@ -20,4 +20,9 @@ public class MultiUserField extends IssueField {
 	public MultiUserFieldValue getValue() {
 		return this.value;
 	}
+
+	@Override
+	public String getStringValue() {
+		return value.getFullName();
+	}
 }

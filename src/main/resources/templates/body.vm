@@ -2,7 +2,7 @@
     #if ($user)
     <a href="http://youtrack.jetbrains.com/issue/$issue" target="_blank" style="text-decoration:$style;"
        title="$title $access">$issue</a>
-      #else
+    #else
     <span style="color:darkslategray;background-color:lightgrey">$issue</span>
     #end
 #else

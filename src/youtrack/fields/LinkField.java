@@ -20,4 +20,9 @@ public class LinkField extends IssueField {
 	public LinkFieldValue getValue() {
 		return value;
 	}
+
+	@Override
+	public String getStringValue() {
+		return value.getValue();
+	}
 }

@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Properties;
 
 /**
  * Created by Egor.Malyshev on 18.12.13.
@@ -70,48 +71,37 @@ public class YouTrack {
 	}
 
 	private void init() throws IOException {
-/*
-        Properties prop = new Properties();
-        ClassLoader loader = getClass().getClassLoader();
-        InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
-        prop.load(stream);
-        userName = prop.getProperty("username");
-        password = prop.getProperty("password");
-        baseHost = prop.getProperty("host");
-*/
-		userName = "megor";
-		password = "H8gpr09,";
-		baseHost = "http://youtrack.jetbrains.com/rest/";
+		Properties prop = new Properties();
+		ClassLoader loader = getClass().getClassLoader();
+		InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
+		prop.load(stream);
+		userName = prop.getProperty("username");
+		password = prop.getProperty("password");
+		baseHost = prop.getProperty("host");
 	}
 
 	/**
 	 * Helper method to deserealize XML to objects. Used to create Issue from XML response received from YouTrack.
 	 *
-	 * @param xmlString  Raw XML code.
-	 * @param resultType Type of object to retrieve.
-	 * @return Instance of an object.
+	 * @param xmlString Raw XML code.
+	 * @return Instance of an issue.
 	 * @throws ParserConfigurationException
 	 * @throws JAXBException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	private Object GetObjectFromXml(String xmlString, Class resultType) throws ParserConfigurationException, JAXBException, SAXException, IOException, XMLStreamException {
-//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder builder;
-//		builder = factory.newDocumentBuilder();
+	private Issue GetIssue(String xmlString) throws ParserConfigurationException, JAXBException, SAXException, IOException, XMLStreamException {
 
+		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+		XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader(new StringReader(xmlString));
 
-		XMLInputFactory xif = XMLInputFactory.newInstance();
-		XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xmlString));
-		xsr = new MyStreamReaderDelegate(xsr);
+		streamReader = new HackedReader(streamReader);
 
-		JAXBContext jaxbContext = JAXBContext.newInstance(resultType, IssueField.class, CustomFieldValue.class, AttachmentField.class,
+		JAXBContext jaxbContext = JAXBContext.newInstance(Issue.class, IssueField.class, CustomFieldValue.class, AttachmentField.class,
 				LinkField.class, MultiUserField.class, SingleField.class, MultiUserFieldValue.class, AttachmentFieldValue.class,
 				LinkFieldValue.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//		factory.setNamespaceAware(true);
-		return jaxbUnmarshaller.unmarshal(xsr);
-//		return jaxbUnmarshaller.unmarshal(builder.parse(new InputSource(new StringReader(xmlString))));
+		return (Issue) jaxbUnmarshaller.unmarshal(streamReader);
 	}
 
 	/**
@@ -134,7 +124,7 @@ public class YouTrack {
 				xmlString += line;
 			}
 			rd.close();
-			result = (Issue) GetObjectFromXml(xmlString, Issue.class);
+			result = GetIssue(xmlString);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -155,17 +145,20 @@ public class YouTrack {
 		return urlConnection;
 	}
 
-	private static class MyStreamReaderDelegate extends StreamReaderDelegate {
+	/**
+	 * Class to work around the JAXB name handling.
+	 * Forces upper case on the first letter of xsi:type attribute.
+	 */
+	private static class HackedReader extends StreamReaderDelegate {
 
-		public MyStreamReaderDelegate(XMLStreamReader xsr) {
+		public HackedReader(XMLStreamReader xsr) {
 			super(xsr);
 		}
 
 		@Override
 		public String getAttributeValue(int index) {
 			String attributeValue = super.getAttributeValue(index);
-			String attributeLocalName = getAttributeLocalName(index);
-			if (attributeLocalName.equals("type"))
+			if (getAttributeLocalName(index).equals("type"))
 				return attributeValue.substring(0, 1).toLowerCase() + attributeValue.substring(1);
 			else return super.getAttributeValue(index);
 		}

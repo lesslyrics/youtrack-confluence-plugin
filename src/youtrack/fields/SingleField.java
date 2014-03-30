@@ -20,4 +20,9 @@ public class SingleField extends IssueField {
 	public IssueFieldValue getValue() {
 		return value;
 	}
+
+	@Override
+	public String getStringValue() {
+		return value.getValue();
+	}
 }
