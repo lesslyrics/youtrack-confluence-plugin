@@ -16,7 +16,10 @@ import youtrack.command.Login;
 import youtrack.command.result.Result;
 import youtrack.issue.Issue;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 
 public class IssueHighlighter extends BaseMacro {
 	public static final String SETTINGS_KEY = "issue-highlighter-cached-acs-3";
@@ -52,17 +55,21 @@ public class IssueHighlighter extends BaseMacro {
 		} else {
 			style = "short";
 		}
-		/*Properties prop = new Properties();
+		String userName = "";
+		String password = "";
+		String baseHost = "";
+		Properties prop = new Properties();
 		ClassLoader loader = getClass().getClassLoader();
 		InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
-		prop.load(stream);
-		userName = prop.getProperty("username");
-		password = prop.getProperty("password");
-		baseHost = prop.getProperty("host");*/
 
-		String userName = "megor";
-		String password = "H8gpr09,";
-		String baseHost = "http://youtrack.jetbrains.com/rest/";
+		try {
+			prop.load(stream);
+			userName = prop.getProperty("username");
+			password = prop.getProperty("password");
+			baseHost = prop.getProperty("host");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		YouTrack youTrack = new YouTrack(baseHost);
 		Boolean cacheUsed = false;
