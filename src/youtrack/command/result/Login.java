@@ -8,22 +8,17 @@ import javax.xml.bind.annotation.XmlValue;
 /**
  * Created by egor.malyshev on 31.03.2014.
  */
-@XmlRootElement(name = "error")
+@XmlRootElement(name = "login")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Error {
+public class Login {
 
 	@XmlValue
-	private String error;
+	private String message;
 
-	public Error() {
-	}
-
-	public Error(String message) {
-
-		this.error = message;
+	public Login() {
 	}
 
 	public String getError() {
-		return error;
+		return message;
 	}
 }

@@ -10,8 +10,11 @@ import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.BaseMacro;
 import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.user.User;
-import youtrack.issue.Issue;
 import youtrack.YouTrack;
+import youtrack.command.GetIssue;
+import youtrack.command.Login;
+import youtrack.command.result.Result;
+import youtrack.issue.Issue;
 
 import java.util.Map;
 
@@ -41,7 +44,7 @@ public class IssueHighlighter extends BaseMacro {
 			throws MacroException {
 
 		Map<String, Object> context = MacroUtils.defaultVelocityContext();
-		String access;
+
 		String issueId = (String) params.get("id");
 		String style = (String) params.get("style");
 		if (style != null && style.equals("detailed")) {
@@ -49,26 +52,44 @@ public class IssueHighlighter extends BaseMacro {
 		} else {
 			style = "short";
 		}
-		YouTrack youTrack = new YouTrack();
+		/*Properties prop = new Properties();
+		ClassLoader loader = getClass().getClassLoader();
+		InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
+		prop.load(stream);
+		userName = prop.getProperty("username");
+		password = prop.getProperty("password");
+		baseHost = prop.getProperty("host");*/
+
+		String userName = "megor";
+		String password = "H8gpr09,";
+		String baseHost = "http://youtrack.jetbrains.com/rest/";
+
+		YouTrack youTrack = new YouTrack(baseHost);
 		Boolean cacheUsed = false;
+		Result result;
 		SettingsCache settings = (SettingsCache) bm.getValue(new ConfluenceBandanaContext(), SETTINGS_KEY);
+
 		if (settings == null) {
+
+			result = youTrack.execute(new Login(userName, password));
 			settings = new SettingsCache();
-			settings.setAuthKey(youTrack.getAuth());
-			access = "(Direct)";
+			settings.setAuthKey(result.getAuthToken());
 			bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
+
 		} else {
-			access = "(Cached)";
 			cacheUsed = true;
 		}
 
 		String authToken = settings.getAuthKey();
-		Issue issue = youTrack.getIssue(issueId, authToken);
+
+		result = youTrack.execute(new GetIssue(issueId, authToken));
+
+		Issue issue = result.getIssue();
 
 		if (issue == null && cacheUsed) {
-			authToken = youTrack.getAuth();
-			access = "(Re-cached)";
-			issue = youTrack.getIssue(issueId, authToken);
+			result = youTrack.execute(new Login(userName, password));
+			authToken = result.getAuthToken();
+			issue = youTrack.execute(new GetIssue(issueId, authToken)).getIssue();
 		}
 
 		if (settings.getAuthKey().equals(authToken)) {
@@ -79,7 +100,6 @@ public class IssueHighlighter extends BaseMacro {
 		if (issue != null) {
 
 			context.put("issue", issueId);
-			context.put("access", access);
 			context.put("summary", issue.summary());
 			context.put("style", (issue.isResolved()) ? "line-through" : "normal");
 			context.put("title", "Reporter: " + issue.reporter() + ", Priority: " + issue.priority() + ", State: "

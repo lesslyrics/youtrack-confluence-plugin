@@ -7,42 +7,32 @@ import youtrack.issue.Issue;
  */
 public class Result {
 
-	private Issue issue;
-	private String authToken;
-	private Error error;
+	private final Issue issue;
+	private final String authToken;
+	private final Error error;
+	private final int responseCode;
 
-
-	public Result(Issue issue, String authToken, Error error) {
+	public Result(Issue issue, String authToken, Error error, int responseCode) {
 		this.issue = issue;
 		this.authToken = authToken;
 		this.error = error;
+		this.responseCode = responseCode;
 	}
 
-	public Result() {
-
+	public Error getError() {
+		return error;
 	}
 
-	public void setIssue(Issue issue) {
-		this.issue = issue;
-	}
-
-	public void setAuthToken(String authToken) {
-		this.authToken = authToken;
-	}
-
-	public void setError(Error error) {
-		this.error = error;
+	public int getResponseCode() {
+		return responseCode;
 	}
 
 	public Issue getIssue() {
 		return issue;
 	}
 
+
 	public String getAuthToken() {
 		return authToken;
-	}
-
-	public Error getError() {
-		return error;
 	}
 }

@@ -2,8 +2,9 @@ package youtrack;
 
 import org.xml.sax.SAXException;
 import youtrack.command.Command;
-import youtrack.command.result.*;
 import youtrack.command.result.Error;
+import youtrack.command.result.Login;
+import youtrack.command.result.Result;
 import youtrack.issue.Issue;
 import youtrack.issue.field.*;
 import youtrack.issue.field.value.AttachmentFieldValue;
@@ -46,7 +47,7 @@ public class YouTrack {
 
 	public Result execute(Command command) {
 
-		Result result = new Result();
+		Result result = null;
 
 		try {
 
@@ -54,6 +55,7 @@ public class YouTrack {
 			URL url = new URL(hostAddress + command.getUrl());
 			HttpURLConnection httpURLConnection = (HttpURLConnection) getUrlConnection(url);
 			httpURLConnection.setDoOutput(true);
+
 			httpURLConnection.setRequestMethod(command.getMethod());
 
 			if (command.getParams() != null) {
@@ -70,9 +72,12 @@ public class YouTrack {
 				httpURLConnection.setRequestProperty("Cookie", command.getAuthorizationToken());
 			}
 
-			OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream(), enc);
-			writer.write(commandData);
-			writer.flush();
+			if (command.getParams() != null) {
+				OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream(), enc);
+				writer.write(commandData);
+				writer.flush();
+				writer.close();
+			}
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), enc));
 			String responseBuffer;
@@ -82,23 +87,28 @@ public class YouTrack {
 				response += responseBuffer;
 			}
 
-			writer.close();
 			reader.close();
 
-			result.setAuthToken(httpURLConnection.getHeaderField("Set-Cookie"));
+			String authToken = httpURLConnection.getHeaderField("Set-Cookie");
 
 			Object responseObject = objectFromXml(response);
 
 			if (responseObject instanceof Issue) {
 
-				result.setIssue((Issue) responseObject);
+				result = new Result((Issue) responseObject, authToken, null, httpURLConnection.getResponseCode());
+
 			} else {
 				if (responseObject instanceof Error) {
-					result.setError((Error) responseObject);
+					result = new Result(null, authToken, (Error) responseObject, httpURLConnection.getResponseCode());
+				} else {
+					if (responseObject instanceof Login) {
+						result = new Result(null, authToken, null, httpURLConnection.getResponseCode());
+					}
 				}
 			}
 
 		} catch (Exception ex) {
+			result = new Result(null, null, new Error(ex.getMessage()), 0);
 			ex.printStackTrace();
 		}
 		return result;
@@ -123,7 +133,7 @@ public class YouTrack {
 
 		JAXBContext jaxbContext = JAXBContext.newInstance(Issue.class, IssueField.class, CustomFieldValue.class, AttachmentField.class,
 				LinkField.class, MultiUserField.class, SingleField.class, MultiUserFieldValue.class, AttachmentFieldValue.class,
-				LinkFieldValue.class, youtrack.command.result.Error.class);
+				LinkFieldValue.class, youtrack.command.result.Error.class, Login.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		return jaxbUnmarshaller.unmarshal(streamReader);
 	}
@@ -161,5 +171,4 @@ public class YouTrack {
 		}
 
 	}
-
 }

@@ -17,13 +17,13 @@ public class Login implements Command {
 
 	@Override
 	public String getUrl() {
-		return "useer/login";
+		return "user/login";
 	}
 
 	@Override
 	public Map<String, String> getParams() {
 		Map<String, String> result = new HashMap<String, String>();
-		result.put("username", userName);
+		result.put("login", userName);
 		result.put("password", password);
 		return result;
 	}
