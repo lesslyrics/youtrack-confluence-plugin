@@ -1,6 +1,6 @@
 package youtrack.issue;
 
-import youtrack.comment.IssueComment;
+import youtrack.comment.Comment;
 import youtrack.issue.field.IssueField;
 
 import javax.xml.bind.Unmarshaller;
@@ -21,11 +21,11 @@ public class Issue {
 	@XmlElement(name = "field")
 	private List<IssueField> fieldArray;
 	@XmlElement(name = "comment")
-	private List<IssueComment> comments;
+	private List<Comment> comments;
 	@XmlTransient
 	private HashMap<String, IssueField> fields;
 
-	public List<IssueComment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 

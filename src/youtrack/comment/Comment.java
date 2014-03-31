@@ -8,7 +8,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "comment")
-public class IssueComment {
+public class Comment {
 
 	@XmlAttribute(name = "id")
 	private String id;
@@ -30,9 +30,9 @@ public class IssueComment {
 	private Long updated;
 	@XmlElementWrapper(name = "replies")
 	@XmlElement(name = "comment")
-	private List<IssueComment> replies;
+	private List<Comment> replies;
 
-	public IssueComment() {
+	public Comment() {
 	}
 
 	public String getId() {
@@ -59,7 +59,7 @@ public class IssueComment {
 		return created;
 	}
 
-	public List<IssueComment> getReplies() {
+	public List<Comment> getReplies() {
 		return replies;
 	}
 

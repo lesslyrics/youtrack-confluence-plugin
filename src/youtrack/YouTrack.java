@@ -1,11 +1,14 @@
 package youtrack;
 
 import org.xml.sax.SAXException;
+import youtrack.command.Command;
+import youtrack.command.result.*;
+import youtrack.command.result.Error;
+import youtrack.issue.Issue;
 import youtrack.issue.field.*;
 import youtrack.issue.field.value.AttachmentFieldValue;
 import youtrack.issue.field.value.LinkFieldValue;
 import youtrack.issue.field.value.MultiUserFieldValue;
-import youtrack.issue.Issue;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -20,78 +23,98 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Properties;
 
 /**
  * Created by Egor.Malyshev on 18.12.13.
  */
 public class YouTrack {
 
-	private final String enc = "UTF-8";
+	private final static String enc = "UTF-8";
+	private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
+	private final String hostAddress;
 
-	String userName;
-	String password;
-	String baseHost;
+	public YouTrack(String hostAddress) {
 
-	public YouTrack() {
+		this.hostAddress = hostAddress;
 	}
 
 	/**
-	 * Returns authentication token for use with YouTrack REST API. Make sure you have configured access in settings.properties file.
+	 * Executes a YouTrack command described by an object that implements @link Command interface.
 	 *
-	 * @return token or an empty string if an error occurred.
+	 * @return instance of @link Result containing command execution results.
 	 */
 
-	public String getAuth() {
-		String result = "";
+	public Result execute(Command command) {
+
+		Result result = new Result();
+
 		try {
-			init();
-			String contentType = "application/x-www-form-urlencoded";
-			URL url = new URL(baseHost + "user/login");
-			HttpURLConnection conn = (HttpURLConnection) getUrlConnection(url);
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", contentType);
-			String encodedData = "login=" + URLEncoder.encode(userName, enc) + "&password=" + URLEncoder.encode(password, enc);
-			conn.setRequestProperty("Content-Length", String.valueOf(encodedData.length()));
-			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), enc);
-			wr.write(encodedData);
-			wr.flush();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), enc));
-			String line;
-			while ((line = rd.readLine()) != null) {
-				result += line;
+
+			String commandData = "";
+			URL url = new URL(hostAddress + command.getUrl());
+			HttpURLConnection httpURLConnection = (HttpURLConnection) getUrlConnection(url);
+			httpURLConnection.setDoOutput(true);
+			httpURLConnection.setRequestMethod(command.getMethod());
+
+			if (command.getParams() != null) {
+				for (String commandKey : command.getParams().keySet()) {
+
+					commandData += commandKey + "=" + URLEncoder.encode(command.getParams().get(commandKey), enc) + "&";
+				}
+				commandData = commandData.substring(0, commandData.length() - 1);
+				httpURLConnection.setRequestProperty("Content-Type", CONTENT_TYPE);
+				httpURLConnection.setRequestProperty("Content-Length", String.valueOf(commandData.length()));
 			}
-			wr.close();
-			rd.close();
-			result = conn.getHeaderField("Set-Cookie");
+
+			if (command.usesAuthorization()) {
+				httpURLConnection.setRequestProperty("Cookie", command.getAuthorizationToken());
+			}
+
+			OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream(), enc);
+			writer.write(commandData);
+			writer.flush();
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), enc));
+			String responseBuffer;
+			String response = "";
+
+			while ((responseBuffer = reader.readLine()) != null) {
+				response += responseBuffer;
+			}
+
+			writer.close();
+			reader.close();
+
+			result.setAuthToken(httpURLConnection.getHeaderField("Set-Cookie"));
+
+			Object responseObject = objectFromXml(response);
+
+			if (responseObject instanceof Issue) {
+
+				result.setIssue((Issue) responseObject);
+			} else {
+				if (responseObject instanceof Error) {
+					result.setError((Error) responseObject);
+				}
+			}
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return result;
 	}
 
-	private void init() throws IOException {
-		Properties prop = new Properties();
-		ClassLoader loader = getClass().getClassLoader();
-		InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
-		prop.load(stream);
-		userName = prop.getProperty("username");
-		password = prop.getProperty("password");
-		baseHost = prop.getProperty("host");
-	}
-
 	/**
-	 * Helper method to deserealize XML to objects. Used to create Issue from XML response received from YouTrack.
+	 * Helper method to deserealize XML to objects. Used to interpret XML response received from YouTrack.
 	 *
 	 * @param xmlString Raw XML code.
-	 * @return Instance of an issue.
+	 * @return Instance of an object.
 	 * @throws ParserConfigurationException
 	 * @throws JAXBException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	private Issue issueFromXml(String xmlString) throws ParserConfigurationException, JAXBException, SAXException, IOException, XMLStreamException {
+	private Object objectFromXml(String xmlString) throws ParserConfigurationException, JAXBException, SAXException, IOException, XMLStreamException {
 
 		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader(new StringReader(xmlString));
@@ -100,36 +123,9 @@ public class YouTrack {
 
 		JAXBContext jaxbContext = JAXBContext.newInstance(Issue.class, IssueField.class, CustomFieldValue.class, AttachmentField.class,
 				LinkField.class, MultiUserField.class, SingleField.class, MultiUserFieldValue.class, AttachmentFieldValue.class,
-				LinkFieldValue.class);
+				LinkFieldValue.class, youtrack.command.result.Error.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		return (Issue) jaxbUnmarshaller.unmarshal(streamReader);
-	}
-
-	/**
-	 * Retreives specified YouTrack issue as an object.
-	 *
-	 * @param id        Issue id.
-	 * @param authToken authentincation token.
-	 * @return An instance of Issue or null if there was an error.
-	 */
-	public Issue getIssue(String id, String authToken) {
-		Issue result = null;
-		try {
-			init();
-			String xmlString = "";
-			HttpURLConnection conn = (HttpURLConnection) getUrlConnection(new URL(baseHost + "issue/" + id));
-			conn.setRequestProperty("Cookie", authToken);
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), enc));
-			String line;
-			while ((line = rd.readLine()) != null) {
-				xmlString += line;
-			}
-			rd.close();
-			result = issueFromXml(xmlString);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
+		return jaxbUnmarshaller.unmarshal(streamReader);
 	}
 
 	/**
