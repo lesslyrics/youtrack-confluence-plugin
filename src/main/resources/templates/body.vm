@@ -1,7 +1,7 @@
 #if ($issue)
     #if ($user)
     <a href="http://youtrack.jetbrains.com/issue/$issue" target="_blank" style="text-decoration:$style;"
-       title="$title $access">$issue</a>
+       title="$title">$issue</a>
     #else
     <span style="color:darkslategray;background-color:lightgrey">$issue</span>
     #end
