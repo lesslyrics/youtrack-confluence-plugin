@@ -107,7 +107,7 @@ public class IssueHighlighter extends BaseMacro {
 				context.put("title", "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: "
 						+ issue.getState() + ", Assignee: " + issue.getAssignee().getFullName() + ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
 
-				User currentUser = AuthenticatedUserThreadLocal.getUser();
+				User currentUser = AuthenticatedUserThreadLocal.get();
 
 				if (currentUser != null) {
 					context.put("user", currentUser.getFullName());
