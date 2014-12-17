@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ea1bef3-d46c-4fd0-b6cf-df10a25c014e" name="Default" comment="Replaced deprecated API with 5.6.1 compatible.">
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\out\artifacts\plugin_bundle\plugin-bundle.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\out\production\main\youtrack\Issue.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\out\production\main\youtrack\IssueField.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\out\production\main\youtrack\YouTrack.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/main/issuehighlighter/IssueHighlighter.class" afterPath="$PROJECT_DIR$/out/production/main/issuehighlighter/IssueHighlighter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+    <list default="true" id="4ea1bef3-d46c-4fd0-b6cf-df10a25c014e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Issue Highlighter.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -181,6 +176,13 @@
       </map>
     </option>
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+      </list>
+    </option>
+  </component>
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
   </component>
@@ -321,6 +323,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Issue Highlighter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="youtrack-confluence-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value=".idea" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -728,7 +744,7 @@
       <workItem from="1397564230093" duration="10300000" />
       <workItem from="1397582219093" duration="75000" />
       <workItem from="1400226204732" duration="644000" />
-      <workItem from="1418812014490" duration="60000" />
+      <workItem from="1418812014490" duration="464000" />
     </task>
     <task id="LOCAL-00001" summary="Version 1.4: detailed mode plus access caching to reduce YouTrack load.">
       <created>1390489209656</created>
@@ -790,11 +806,17 @@
       <option name="project" value="LOCAL" />
       <updated>1397574618482</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Project fixed">
+      <created>1418812080800</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1418812080801</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="178225000" />
+    <option name="totallyTimeSpent" value="178629000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="1600" extended-state="0" />
@@ -857,7 +879,8 @@
     <MESSAGE value="Now YouTrack api isn't a part of this plugin, so it's imported via JAR" />
     <MESSAGE value="Added missing library" />
     <MESSAGE value="Replaced deprecated API with 5.6.1 compatible." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced deprecated API with 5.6.1 compatible." />
+    <MESSAGE value="Project fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Project fixed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -870,14 +893,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="289" max-vertical-offset="391">
-          <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/issuehighlighter/IssueHighlighter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1819" max-vertical-offset="2431">
@@ -1249,6 +1264,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="276" max-vertical-offset="1989">
           <caret line="99" column="13" selection-start-line="99" selection-start-column="13" selection-end-line="99" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.077857144" vertical-offset="5671" max-vertical-offset="23443">
+          <caret line="340" column="32" selection-start-line="340" selection-start-column="32" selection-end-line="340" selection-end-column="32" />
           <folding />
         </state>
       </provider>
