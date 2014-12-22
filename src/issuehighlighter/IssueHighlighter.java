@@ -49,54 +49,58 @@ public class IssueHighlighter extends BaseMacro {
             throws MacroException {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
-            String issueId = (String) params.get("id");
+            final String issueId = (String) params.get("id");
             String style = (String) params.get("style");
-            if (style != null && DETAILED.equals(style)) {
+            if (DETAILED.equals(style)) {
                 style = DETAILED;
             } else {
                 style = SHORT;
             }
-            final Properties prop = new Properties();
-            final ClassLoader loader = getClass().getClassLoader();
-            final InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
-            prop.load(stream);
-            final String userName = prop.getProperty("username");
-            final String password = prop.getProperty("password");
-            final String baseHost = prop.getProperty("host");
-            youTrack = YouTrack.getInstance(baseHost);
-            boolean cacheUsed = false;
-            SettingsCache settings = (SettingsCache) bm.getValue(new ConfluenceBandanaContext(), SETTINGS_KEY);
-            if (settings == null) {
-                youTrack.login(userName, password);
-                settings = new SettingsCache();
-                settings.setAuthKey((youTrack.getAuthorization()));
-                bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
-            } else {
-                youTrack.setAuthorization(settings.getAuthKey());
-                cacheUsed = true;
-            }
-            Issue issue = tryGetIssue(issueId);
-            if (issue == null && cacheUsed) {
-                youTrack.login(userName, password);
-                issue = tryGetIssue(issueId);
-            }
-            if (!settings.getAuthKey().equals(youTrack.getAuthorization())) {
-                settings.setAuthKey(youTrack.getAuthorization());
-                bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
-            }
-            if (issue != null) {
-                issue = issue.createSnapshot();
-                context.put("issue", issueId);
-                context.put("summary", issue.getSummary());
-                context.put("style", (issue.isResolved()) ? "line-through" : "normal");
-                context.put("title", MessageFormat.format("Reporter: {0}, Priority: {1},  State: {2}, Assignee: {3}, Votes: {4}, Type: {5}",
-                        issue.getReporter(), issue.getPriority(), issue.getState(), issue.getAssignee().getFullName(), issue.getVotes(), issue.getType()));
-                final User currentUser = AuthenticatedUserThreadLocal.get();
-                if (currentUser != null) {
-                    context.put("user", currentUser.getFullName());
+            if (issueId != null && !issueId.isEmpty()) {
+                final Properties prop = new Properties();
+                final ClassLoader loader = getClass().getClassLoader();
+                final InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
+                prop.load(stream);
+                final String userName = prop.getProperty("username");
+                final String password = prop.getProperty("password");
+                final String baseHost = prop.getProperty("host");
+                youTrack = YouTrack.getInstance(baseHost);
+                boolean cacheUsed = false;
+                SettingsCache settings = (SettingsCache) bm.getValue(new ConfluenceBandanaContext(), SETTINGS_KEY);
+                if (settings == null) {
+                    youTrack.login(userName, password);
+                    settings = new SettingsCache();
+                    settings.setAuthKey((youTrack.getAuthorization()));
+                    bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
+                } else {
+                    youTrack.setAuthorization(settings.getAuthKey());
+                    cacheUsed = true;
+                }
+                Issue issue = tryGetIssue(issueId);
+                if (issue == null && cacheUsed) {
+                    youTrack.login(userName, password);
+                    issue = tryGetIssue(issueId);
+                }
+                if (!settings.getAuthKey().equals(youTrack.getAuthorization())) {
+                    settings.setAuthKey(youTrack.getAuthorization());
+                    bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
+                }
+                if (issue != null) {
+                    issue = issue.createSnapshot();
+                    context.put("issue", issueId);
+                    context.put("summary", issue.getSummary());
+                    context.put("style", (issue.isResolved()) ? "line-through" : "normal");
+                    context.put("title", MessageFormat.format("Reporter: {0}, Priority: {1},  State: {2}, Assignee: {3}, Votes: {4}, Type: {5}",
+                            issue.getReporter(), issue.getPriority(), issue.getState(), issue.getAssignee().getFullName(), issue.getVotes(), issue.getType()));
+                    final User currentUser = AuthenticatedUserThreadLocal.get();
+                    if (currentUser != null) {
+                        context.put("user", currentUser.getFullName());
+                    }
+                } else {
+                    context.put("error", "ISSUE NOT FOUND " + issueId);
                 }
             } else {
-                context.put("error", (issueId != null ? "ISSUE NOT FOUND " + issueId : "ISSUE NOT SPECIFIED"));
+                context.put("error", "ISSUE NOT SPECIFIED");
             }
             return VelocityUtils.getRenderedTemplate((style.equals(SHORT) ? BODY : BODY_DETAILED), context);
         } catch (Exception ex) {
@@ -106,7 +110,6 @@ public class IssueHighlighter extends BaseMacro {
     }
 
     private Issue tryGetIssue(String issueId) throws Exception {
-
         IssueId id = new IssueId(issueId);
         Project project = youTrack.project(id.projectId);
         return project.issues.item(issueId);
