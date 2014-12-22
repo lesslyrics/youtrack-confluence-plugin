@@ -10,6 +10,7 @@ import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.BaseMacro;
 import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.user.User;
+import com.sun.istack.internal.NotNull;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
@@ -102,16 +103,16 @@ public class IssueHighlighter extends BaseMacro {
             } else {
                 context.put("error", "ISSUE NOT SPECIFIED");
             }
-            return VelocityUtils.getRenderedTemplate((style.equals(SHORT) ? BODY : BODY_DETAILED), context);
+            return VelocityUtils.getRenderedTemplate((SHORT.equals(style) ? BODY : BODY_DETAILED), context);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new MacroException(ex);
         }
     }
 
-    private Issue tryGetIssue(String issueId) throws Exception {
-        IssueId id = new IssueId(issueId);
-        Project project = youTrack.project(id.projectId);
+    private Issue tryGetIssue(@NotNull String issueId) throws Exception {
+        final IssueId id = new IssueId(issueId);
+        final Project project = youTrack.project(id.projectId);
         return project.issues.item(issueId);
     }
 }
