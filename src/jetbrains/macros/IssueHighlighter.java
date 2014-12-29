@@ -8,7 +8,6 @@ import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.user.User;
-import com.sun.istack.internal.Nullable;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import youtrack.Issue;
 import youtrack.Project;
@@ -55,17 +54,21 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                 style = SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                Issue issue = tryGetIssue(issueId);
-                if (issue != null) {
-                    issue = issue.createSnapshot();
-                    context.put("issue", issueId);
-                    context.put("summary", issue.getSummary());
-                    context.put("style", (issue.isResolved()) ? "line-through" : "normal");
-                    context.put("title", MessageFormat.format("Reporter: {0}, Priority: {1},  State: {2}, Assignee: {3}, Votes: {4}, Type: {5}",
-                            issue.getReporter(), issue.getPriority(), issue.getState(), issue.getAssignee().getFullName(), issue.getVotes(), issue.getType()));
-                    final User currentUser = AuthenticatedUserThreadLocal.get();
-                    if (currentUser != null) {
-                        context.put("user", currentUser.getFullName());
+                IssueId id = new IssueId(issueId);
+                final Project project = tryGetItem(youTrack.projects, id.projectId);
+                if (project != null) {
+                    Issue issue = tryGetItem(project.issues, issueId);
+                    if (issue != null) {
+                        issue = issue.createSnapshot();
+                        context.put("issue", issueId);
+                        context.put("summary", issue.getSummary());
+                        context.put("style", (issue.isResolved()) ? "line-through" : "normal");
+                        context.put("title", MessageFormat.format("Reporter: {0}, Priority: {1},  State: {2}, Assignee: {3}, Votes: {4}, Type: {5}",
+                                issue.getReporter(), issue.getPriority(), issue.getState(), issue.getAssignee().getFullName(), issue.getVotes(), issue.getType()));
+                        final User currentUser = AuthenticatedUserThreadLocal.get();
+                        if (currentUser != null) {
+                            context.put("user", currentUser.getFullName());
+                        }
                     }
                 } else {
                     context.put("error", "ISSUE NOT FOUND " + issueId);
@@ -78,28 +81,5 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
             ex.printStackTrace();
             throw new MacroException(ex);
         }
-    }
-
-    @Nullable
-    private Issue tryGetIssue(String issueId) throws CommandExecutionException, IOException, NoSuchIssueFieldException, AuthenticationErrorException {
-        Issue issue;
-        Project project;
-        final IssueId id = new IssueId(issueId);
-        try {
-            project = youTrack.projects.item(id.projectId);
-            issue = project.issues.item(id.issueId);
-        } catch (Exception e) {
-            issue = null;
-            project = null;
-        }
-        if (issue == null && project == null) {
-            youTrack.login(userName, password);
-            project = youTrack.projects.item(id.projectId);
-            issue = project.issues.item(id.issueId);
-            if (issue != null) {
-                storeCurrentAuth();
-            }
-        }
-        return issue;
     }
 }

@@ -6,7 +6,6 @@ import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
-import com.sun.istack.internal.Nullable;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import youtrack.Issue;
 import youtrack.Project;
@@ -40,24 +39,6 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
         return RenderMode.NO_RENDER;
     }
 
-    @Nullable
-    private Project tryGetProject(String id) throws CommandExecutionException, IOException, NoSuchIssueFieldException, AuthenticationErrorException {
-        Project result;
-        try {
-            result = youTrack.projects.item(id);
-        } catch (Exception e) {
-            result = null;
-        }
-        if (result == null) {
-            youTrack.login(userName, password);
-            result = youTrack.projects.item(id);
-            if (result != null) {
-                storeCurrentAuth();
-            }
-        }
-        return result;
-    }
-
     public String execute(Map params, String body, RenderContext renderContext)
             throws MacroException {
         try {
@@ -67,34 +48,33 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final StringBuilder result = new StringBuilder();
             final StringBuilder rows = new StringBuilder();
             if (project != null && query != null) {
-                final Project prj = tryGetProject(project);
-                final Map<String, Object> myContext = new HashMap<String, Object>();
-                final List<Issue> issues = prj.issues.query(query);
-                for (Issue sIssue : issues) {
-                    myContext.clear();
-                    myContext.putAll(context);
-                    Issue issue = sIssue.createSnapshot();
-                    myContext.put("issue", sIssue.getId());
-                    myContext.put("base", baseHost.replace("/rest/", ""));
-                    myContext.put("state", issue.getState());
-                    myContext.put("summary", issue.getSummary());
-                    myContext.put("assignee", issue.getAssignee().getFullName());
-                    rows.append(VelocityUtils.getRenderedTemplate(ROW, myContext));
+                final Project prj = tryGetItem(youTrack.projects, project);
+                if (prj != null) {
+                    final Map<String, Object> myContext = new HashMap<String, Object>();
+                    final List<Issue> issues = prj.issues.query(query);
+                    for (Issue sIssue : issues) {
+                        myContext.clear();
+                        myContext.putAll(context);
+                        Issue issue = sIssue.createSnapshot();
+                        myContext.put("issue", sIssue.getId());
+                        myContext.put("base", baseHost.replace("/rest/", ""));
+                        myContext.put("state", issue.getState());
+                        myContext.put("summary", issue.getSummary());
+                        myContext.put("assignee", issue.getAssignee().getFullName());
+                        rows.append(VelocityUtils.getRenderedTemplate(ROW, myContext));
+                    }
+                    String report = "<p>{0}</p>\n" +
+                            "<table>\n" +
+                            "    <tr>\n" +
+                            "        <th>Issue</th>\n" +
+                            "        <th>State</th>\n" +
+                            "        <th>Summary</th>\n" +
+                            "        <th>Assignee</th>\n" +
+                            "    </tr>\n" +
+                            "{1}\n" +
+                            "</table>";
+                    result.append(MessageFormat.format(report, query + " from " + project, rows.toString()));
                 }
-
-                String s = "<p>{0}</p>\n" +
-                        "<table>\n" +
-                        "    <tr>\n" +
-                        "        <th>Issue</th>\n" +
-                        "        <th>State</th>\n" +
-                        "        <th>Summary</th>\n" +
-                        "        <th>Assignee</th>\n" +
-                        "    </tr>\n" +
-                        "{1}\n" +
-                        "</table>";
-
-
-                result.append(MessageFormat.format(s, query + " from " + project, rows.toString()));
             }
             return result.toString();
         } catch (Exception ex) {

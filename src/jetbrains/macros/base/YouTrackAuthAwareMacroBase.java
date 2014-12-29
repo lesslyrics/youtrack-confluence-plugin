@@ -1,6 +1,9 @@
 package jetbrains.macros.base;
 
 import com.atlassian.bandana.BandanaManager;
+import com.sun.istack.internal.Nullable;
+import youtrack.BaseItem;
+import youtrack.CommandBasedList;
 import youtrack.YouTrack;
 import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
@@ -35,6 +38,40 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             youTrack.login(userName, password);
             storeCurrentAuth();
         }
+    }
+
+    @Nullable
+    protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id) throws CommandExecutionException, IOException, NoSuchIssueFieldException, AuthenticationErrorException {
+        I result = null;
+        try {
+            result = list.item(id);
+        } catch (CommandExecutionException e) {
+            if (isErrorLoginExpired(e.getError())) {
+                refreshStoredAuthKey();
+                storeCurrentAuth();
+                result = list.item(id);
+            }
+        }
+        return result;
+    }
+
+    protected void refreshStoredAuthKey() {
+        try {
+            youTrack.login(userName, password);
+            storeCurrentAuth();
+        } catch (AuthenticationErrorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchIssueFieldException e) {
+            e.printStackTrace();
+        } catch (CommandExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected boolean isErrorLoginExpired(final @Nullable youtrack.Error error) {
+        return error != null && error.getCode() == 403;
     }
 
     protected void storeCurrentAuth() {
