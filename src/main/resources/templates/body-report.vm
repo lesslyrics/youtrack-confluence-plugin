@@ -1,0 +1,10 @@
+<p>$title</p>
+<table>
+    <tr>
+        <th>Issue</th>
+        <th>State</th>
+        <th>Summary</th>
+        <th>Assignee</th>
+    </tr>
+$rows
+</table>

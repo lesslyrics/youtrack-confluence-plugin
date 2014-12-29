@@ -1,37 +1,34 @@
-package issuehighlighter;
+package jetbrains.macros;
 
 import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
-import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.confluence.user.AuthenticatedUserThreadLocal;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
-import com.atlassian.renderer.v2.macro.BaseMacro;
 import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.user.User;
-import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
+import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import youtrack.Issue;
 import youtrack.Project;
-import youtrack.YouTrack;
+import youtrack.exceptions.AuthenticationErrorException;
+import youtrack.exceptions.CommandExecutionException;
+import youtrack.exceptions.NoSuchIssueFieldException;
 import youtrack.util.IssueId;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Map;
-import java.util.Properties;
 
-public class IssueHighlighter extends BaseMacro {
-    public static final String SETTINGS_KEY = "issue-highlighter-cached-acs-3a";
+public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
     public static final String DETAILED = "detailed";
     public static final String SHORT = "short";
-    private static final String BODY = "templates/body.vm";
-    private static final String BODY_DETAILED = "templates/body-detailed.vm";
-    private final BandanaManager bm;
-    private YouTrack youTrack;
+    private static final String BODY = "templates/body-link.vm";
+    private static final String BODY_DETAILED = "templates/body-link-detailed.vm";
 
-    public IssueHighlighter(BandanaManager bandanaManager) {
-        this.bm = bandanaManager;
+    public IssueHighlighter(BandanaManager bandanaManager) throws CommandExecutionException, NoSuchIssueFieldException, AuthenticationErrorException, IOException {
+        super(bandanaManager);
     }
 
     public boolean isInline() {
@@ -58,34 +55,7 @@ public class IssueHighlighter extends BaseMacro {
                 style = SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                final Properties prop = new Properties();
-                final ClassLoader loader = getClass().getClassLoader();
-                final InputStream stream = loader.getResourceAsStream("/resources/settings.properties");
-                prop.load(stream);
-                final String userName = prop.getProperty("username");
-                final String password = prop.getProperty("password");
-                final String baseHost = prop.getProperty("host");
-                youTrack = YouTrack.getInstance(baseHost);
-                boolean cacheUsed = false;
-                SettingsCache settings = (SettingsCache) bm.getValue(new ConfluenceBandanaContext(), SETTINGS_KEY);
-                if (settings == null) {
-                    youTrack.login(userName, password);
-                    settings = new SettingsCache();
-                    settings.setAuthKey((youTrack.getAuthorization()));
-                    bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
-                } else {
-                    youTrack.setAuthorization(settings.getAuthKey());
-                    cacheUsed = true;
-                }
                 Issue issue = tryGetIssue(issueId);
-                if (issue == null && cacheUsed) {
-                    youTrack.login(userName, password);
-                    issue = tryGetIssue(issueId);
-                }
-                if (!settings.getAuthKey().equals(youTrack.getAuthorization())) {
-                    settings.setAuthKey(youTrack.getAuthorization());
-                    bm.setValue(new ConfluenceBandanaContext(), SETTINGS_KEY, settings);
-                }
                 if (issue != null) {
                     issue = issue.createSnapshot();
                     context.put("issue", issueId);
@@ -110,9 +80,26 @@ public class IssueHighlighter extends BaseMacro {
         }
     }
 
-    private Issue tryGetIssue(@NotNull String issueId) throws Exception {
+    @Nullable
+    private Issue tryGetIssue(String issueId) throws CommandExecutionException, IOException, NoSuchIssueFieldException, AuthenticationErrorException {
+        Issue issue;
+        Project project;
         final IssueId id = new IssueId(issueId);
-        final Project project = youTrack.project(id.projectId);
-        return project.issues.item(issueId);
+        try {
+            project = youTrack.projects.item(id.projectId);
+            issue = project.issues.item(id.issueId);
+        } catch (Exception e) {
+            issue = null;
+            project = null;
+        }
+        if (issue == null && project == null) {
+            youTrack.login(userName, password);
+            project = youTrack.projects.item(id.projectId);
+            issue = project.issues.item(id.issueId);
+            if (issue != null) {
+                storeCurrentAuth();
+            }
+        }
+        return issue;
     }
 }
