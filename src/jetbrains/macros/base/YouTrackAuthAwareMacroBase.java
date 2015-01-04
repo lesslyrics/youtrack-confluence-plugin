@@ -48,7 +48,6 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         } catch (CommandExecutionException e) {
             if (isErrorLoginExpired(e.getError())) {
                 refreshStoredAuthKey();
-                storeCurrentAuth();
                 result = list.item(id);
             }
         }
