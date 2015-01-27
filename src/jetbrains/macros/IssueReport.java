@@ -60,7 +60,13 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.put("base", baseHost.replace("/rest/", ""));
                         myContext.put("state", issue.getState());
                         myContext.put("summary", issue.getSummary());
-                        myContext.put("assignee", issue.getAssignee().getFullName());
+
+                        try {
+                            myContext.put("assignee", issue.getAssignee().getFullName());
+                        } catch (Exception ex) {
+                            myContext.put("assignee", "Unassigned");
+                        }
+
                         rows.append(VelocityUtils.getRenderedTemplate(ROW, myContext));
                     }
                     String report = "<p>{0}</p>\n" +

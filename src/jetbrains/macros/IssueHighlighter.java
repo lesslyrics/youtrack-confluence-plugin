@@ -63,8 +63,24 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         context.put("issue", issueId);
                         context.put("summary", issue.getSummary());
                         context.put("style", (issue.isResolved()) ? "line-through" : "normal");
-                        context.put("title", MessageFormat.format("Reporter: {0}, Priority: {1},  State: {2}, Assignee: {3}, Votes: {4}, Type: {5}",
-                                issue.getReporter(), issue.getPriority(), issue.getState(), issue.getAssignee().getFullName(), issue.getVotes(), issue.getType()));
+
+                        StringBuilder titleContext = new StringBuilder();
+                        titleContext.append("Reporter: ").append(issue.getReporter());
+                        titleContext.append(", Priority: ").append(issue.getPriority());
+                        titleContext.append(", State: ").append(issue.getState());
+                        titleContext.append(", Assignee: ");
+
+                        try {
+                            titleContext.append(issue.getAssignee().getFullName());
+                        } catch (Exception ex) {
+                            titleContext.append("Unassigned");
+                        }
+
+                        titleContext.append(", Votes: ").append(issue.getVotes());
+                        titleContext.append(", Type: ").append(issue.getType());
+
+                        context.put("title", titleContext.toString());
+
                         final User currentUser = AuthenticatedUserThreadLocal.get();
                         if (currentUser != null) {
                             context.put("user", currentUser.getFullName());
