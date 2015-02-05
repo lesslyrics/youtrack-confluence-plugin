@@ -19,7 +19,6 @@ import youtrack.exceptions.NoSuchIssueFieldException;
 import youtrack.util.IssueId;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Map;
 
 public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
@@ -90,6 +89,7 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         }
                     } else context.put("error", "ISSUE NOT FOUND " + issueId);
                 } else {
+                    refreshStoredAuthKey();
                     context.put("error", "PROJECT NOT FOUND " + id.projectId);
                 }
             } else {

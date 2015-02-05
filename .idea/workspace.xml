@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ea1bef3-d46c-4fd0-b6cf-df10a25c014e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/atlassian-core-4.6.9.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/rife-continuations-0.0.2.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/xwork-1.2.2.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/jetbrains/macros/actions/Configuration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/templates/settings.vm" />
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\src\main\resources\settings.properties" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/YouTrackRestApi.jar" afterPath="$PROJECT_DIR$/lib/YouTrackRestApi.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/base/MacroWithPersistableSettingsBase.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/base/MacroWithPersistableSettingsBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/base/SettingsCache.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/base/SettingsCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/base/YouTrackAuthAwareMacroBase.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/base/YouTrackAuthAwareMacroBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml" afterPath="$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/youtrack-confluence-plugin.iml" afterPath="$PROJECT_DIR$/youtrack-confluence-plugin.iml" />
     </list>
     <ignored path="Issue Highlighter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -137,11 +126,9 @@
       <file leaf-file-name="atlassian-plugin.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="155" max-vertical-offset="884">
-              <caret line="32" column="19" selection-start-line="32" selection-start-column="19" selection-end-line="32" selection-end-column="19" />
-              <folding>
-                <element signature="n#web-item#0;n#atlassian-plugin#0;n#!!top" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="884">
+              <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -149,8 +136,8 @@
       <file leaf-file-name="IssueHighlighter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="412" max-vertical-offset="1122">
-              <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="786" max-vertical-offset="1428">
+              <caret line="90" column="24" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -179,8 +166,8 @@
       <file leaf-file-name="Configuration.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/jetbrains/macros/actions/Configuration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5636071" vertical-offset="296" max-vertical-offset="1530">
-              <caret line="38" column="5" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.7117552" vertical-offset="102" max-vertical-offset="1530">
+              <caret line="32" column="3" selection-start-line="32" selection-start-column="3" selection-end-line="32" selection-end-column="3" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -220,14 +207,14 @@
         <option value="$PROJECT_DIR$/src/jetbrains/macros/IssueReport.java" />
         <option value="$PROJECT_DIR$/src/main/resources/templates/settings.vm" />
         <option value="$PROJECT_DIR$/src/jetbrains/macros/base/SettingsCache.java" />
-        <option value="$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java" />
         <option value="$PROJECT_DIR$/src/jetbrains/macros/base/YouTrackAuthAwareMacroBase.java" />
         <option value="$PROJECT_DIR$/src/jetbrains/macros/actions/Configuration.java" />
         <option value="$PROJECT_DIR$/src/jetbrains/macros/actions/Search.java" />
         <option value="$PROJECT_DIR$/src/main/resources/templates/search.vm" />
         <option value="$PROJECT_DIR$/src/main/resources/conveyor-config.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml" />
         <option value="$PROJECT_DIR$/src/jetbrains/macros/base/MacroWithPersistableSettingsBase.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml" />
+        <option value="$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java" />
       </list>
     </option>
   </component>
@@ -841,7 +828,7 @@
       <workItem from="1421672902891" duration="17977000" />
       <workItem from="1421854417992" duration="2525000" />
       <workItem from="1422623719197" duration="2985000" />
-      <workItem from="1423142077808" duration="3213000" />
+      <workItem from="1423142077808" duration="3896000" />
     </task>
     <task id="LOCAL-00001" summary="Version 1.4: detailed mode plus access caching to reduce YouTrack load.">
       <created>1390489209656</created>
@@ -957,11 +944,23 @@
       <option name="project" value="LOCAL" />
       <updated>1420366492173</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="New macros for displaying reports (beta)">
+      <created>1423150851188</created>
+      <option name="number" value="00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1423150851188</updated>
+    </task>
+    <task id="LOCAL-00021" summary="New macros for displaying reports (beta)">
+      <created>1423151125624</created>
+      <option name="number" value="00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1423151125624</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="247259000" />
+    <option name="totallyTimeSpent" value="247942000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1376" height="780" extended-state="0" />
@@ -970,6 +969,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32607216" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -991,7 +991,6 @@
       <window_info id="Kotlin Bytecode" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3035343" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32607216" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="708" y="946" width="500" height="405" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4261954" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1083,9 +1082,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="289" max-vertical-offset="391">
           <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-          <folding>
-            <element signature="n#web-item#0;n#atlassian-plugin#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1128,9 +1125,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="578">
           <caret line="24" column="48" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#web-item#0;n#atlassian-plugin#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1152,9 +1147,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="578">
           <caret line="24" column="48" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#web-item#0;n#atlassian-plugin#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1176,9 +1169,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="578">
           <caret line="28" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#web-item#0;n#atlassian-plugin#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1354,24 +1345,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="412" max-vertical-offset="1122">
-          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="155" max-vertical-offset="884">
-          <caret line="32" column="19" selection-start-line="32" selection-start-column="19" selection-end-line="32" selection-end-column="19" />
-          <folding>
-            <element signature="n#web-item#0;n#atlassian-plugin#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/jetbrains/macros/base/MacroWithPersistableSettingsBase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
@@ -1388,10 +1361,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/atlassian-plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="884">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="786" max-vertical-offset="1428">
+          <caret line="90" column="24" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/jetbrains/macros/actions/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5636071" vertical-offset="296" max-vertical-offset="1530">
-          <caret line="38" column="5" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.7117552" vertical-offset="102" max-vertical-offset="1530">
+          <caret line="32" column="3" selection-start-line="32" selection-start-column="3" selection-end-line="32" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
