@@ -49,9 +49,7 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             final String issueId = (String) params.get("id");
             String style = (String) params.get("style");
-            if (DETAILED.equals(style)) {
-                style = DETAILED;
-            } else {
+            if (!DETAILED.equals(style)) {
                 style = SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
@@ -89,7 +87,6 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         }
                     } else context.put("error", "ISSUE NOT FOUND " + issueId);
                 } else {
-                    refreshStoredAuthKey();
                     context.put("error", "PROJECT NOT FOUND " + id.projectId);
                 }
             } else {
