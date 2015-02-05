@@ -17,9 +17,6 @@
             </action>
         </package>
     </xwork>
-    <conveyor name="My Action Overrides" key="myActionOverrides" state="enabled">
-        <resource type="xml" name="conveyor-config" location="conveyor-config.xml" />
-    </conveyor>
 
     <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin/administration" weight="10">
         <description key="youtrack.plugin.configuration.description">Click here to configure plugin.</description>
