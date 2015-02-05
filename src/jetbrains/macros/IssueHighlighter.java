@@ -9,8 +9,10 @@ import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.user.User;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
+import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
+import youtrack.YouTrack;
 import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
 import youtrack.exceptions.NoSuchIssueFieldException;
@@ -55,7 +57,8 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
             }
             if (issueId != null && !issueId.isEmpty()) {
                 IssueId id = new IssueId(issueId);
-                final Project project = tryGetItem(youTrack.projects, id.projectId);
+                CommandBasedList<YouTrack, Project> projects = youTrack.projects;
+                final Project project = tryGetItem(projects, id.projectId);
                 if (project != null) {
                     Issue issue = tryGetItem(project.issues, issueId);
                     if (issue != null) {
@@ -69,16 +72,15 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         if (currentUser != null) {
                             context.put("user", currentUser.getFullName());
                         }
-                    }
+                    } else context.put("error", "ISSUE NOT FOUND " + issueId);
                 } else {
-                    context.put("error", "ISSUE NOT FOUND " + issueId);
+                    context.put("error", "PROJECT NOT FOUND " + id.projectId);
                 }
             } else {
                 context.put("error", "ISSUE NOT SPECIFIED");
             }
             return VelocityUtils.getRenderedTemplate((SHORT.equals(style) ? BODY : BODY_DETAILED), context);
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new MacroException(ex);
         }
     }

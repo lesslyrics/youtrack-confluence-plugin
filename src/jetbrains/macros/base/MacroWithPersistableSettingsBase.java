@@ -6,7 +6,7 @@ import com.atlassian.renderer.v2.macro.BaseMacro;
 import com.sun.istack.internal.NotNull;
 
 public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
-    public static final String SETTINGS_KEY = "jetbrains-macro-storage-storage-key#25122014";
+    public static final String SETTINGS_KEY = "jetbrains-macro-storage-storage-key#02022015";
     @NotNull
     protected final BandanaManager bm;
     @NotNull

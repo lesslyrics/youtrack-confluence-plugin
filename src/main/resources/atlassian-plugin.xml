@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<atlassian-plugin key="youtrack.issue.highlighter.plugin" name="YouTrack Issue Highlighter" plugins-version="2">
+<atlassian-plugin key="youtrack.integration.plugin" name="YouTrack Integration" plugins-version="2">
     <plugin-info>
-        <description>Plugin for macro that highlights YouTrack issues.</description>
-        <version>1.6</version>
+        <description>Plugin that enables integration between Confluence and YouTrack via macros that allow inserting
+            dynamic links.
+        </description>
+        <version>1.6.1</version>
         <vendor name="JetBrains" url="http://www.jetbrains.com"/>
+        <param name="configure.url">/admin/plugins/youtrack-integration/configurePlugin.action</param>
     </plugin-info>
+    <xwork name="configurepluginaction" key="youtrack.integration.plugin.configurePlugin">
+        <package name="pluginsettings" extends="default" namespace="/admin/plugins/youtrack-integration">
+            <default-interceptor-ref name="defaultStack"/>
+            <action name="configurePlugin"
+                    class="jetbrains.macros.actions.Configuration">
+                <result name="success" type="velocity">/templates/settings.vm</result>
+            </action>
+        </package>
+    </xwork>
+    <conveyor name="My Action Overrides" key="myActionOverrides" state="enabled">
+        <resource type="xml" name="conveyor-config" location="conveyor-config.xml" />
+    </conveyor>
+
+    <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin/administration" weight="10">
+        <description key="youtrack.plugin.configuration.description">Click here to configure plugin.</description>
+        <label key="item.google.home.label">Click Yo!</label>
+        <link linkId="youtrack.plugin.configuration">/admin/plugins/youtrack-integration/configurePlugin.action</link>
+    </web-item>
     <macro name="issue" class="jetbrains.macros.IssueHighlighter" key="issue-key">
-        <description>Inserts dynamic link to a YouTrack issue.</description>
+        <description>Inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
@@ -17,7 +38,7 @@
         </parameters>
     </macro>
     <macro name="report" class="jetbrains.macros.IssueReport" key="report-key">
-        <description>Inserts a report based on YouTrack query.</description>
+        <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
         </resource>
