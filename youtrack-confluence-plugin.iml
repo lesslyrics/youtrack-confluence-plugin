@@ -8,11 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="3" level="project" />
-    <orderEntry type="library" name="renderer" level="project" />
-    <orderEntry type="library" name="user" level="project" />
-    <orderEntry type="library" name="apache-velocity-velocity-1.5" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="YouTrackRestApi" level="project" />
   </component>
 </module>
-

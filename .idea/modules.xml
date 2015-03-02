@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://E:/YouTrack-Issue-Highlighte/main.iml" filepath="E:/YouTrack-Issue-Highlighte/main.iml" />
       <module fileurl="file://$PROJECT_DIR$/youtrack-confluence-plugin.iml" filepath="$PROJECT_DIR$/youtrack-confluence-plugin.iml" />
     </modules>
   </component>
 </project>
-

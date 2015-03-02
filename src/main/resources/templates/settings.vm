@@ -1,0 +1,21 @@
+<meta name="decorator" content="atl.admin">
+<form name="youtrackPluginSettings" action="/admin/plugins/youtrack-integration/configurePlugin.action" method="GET">
+    <h3>Configure YouTrack Integration Plugin</h3>
+    <table>
+        <tr>
+            <td>YouTrack host address:</td>
+            <td><input type="text" name="youtrackhost" value="$action.youtrackhost"></td>
+        </tr>
+        <tr>
+            <td>Login:</td>
+            <td><input type="text" name="youtracklogin" value="$action.youtracklogin"></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="youtrackpassword" value="$action.youtrackpassword"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Save Settings"></td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,6 @@
+<tr>
+    <td><a href="$base/$issue">$issue</a></td>
+    <td>$state</td>
+    <td>$summary</td>
+    <td>$assignee</td>
+</tr>
