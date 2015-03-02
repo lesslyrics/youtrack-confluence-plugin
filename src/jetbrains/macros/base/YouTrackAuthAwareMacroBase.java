@@ -34,7 +34,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     @Nullable
     protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id) throws CommandExecutionException, AuthenticationErrorException {
-        I result = null;
+        I result;
         try {
             result = list.item(id);
             if (result == null) {
@@ -42,10 +42,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
                 result = list.item(id);
             }
         } catch (CommandExecutionException e) {
-            if (isErrorLoginExpired(e.getError())) {
-                refreshStoredAuthKey();
-                result = list.item(id);
-            }
+            refreshStoredAuthKey();
+            result = list.item(id);
         }
         return result;
     }

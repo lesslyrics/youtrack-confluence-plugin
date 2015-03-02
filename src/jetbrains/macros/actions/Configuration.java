@@ -24,6 +24,10 @@ public class Configuration extends ConfluenceActionSupport implements PageAware 
     public Configuration(BandanaManager bm) {
         this.bm = bm;
         context = new ConfluenceBandanaContext();
+        init();
+    }
+
+    private void init() {
         settings = (SettingsCache) bm.getValue(context, MacroWithPersistableSettingsBase.SETTINGS_KEY);
         if (settings != null) {
             youtrackhost = (String) settings.storage.get("host");
