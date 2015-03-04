@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ea1bef3-d46c-4fd0-b6cf-df10a25c014e" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\src\jetbrains\macros\base\SettingsCache.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\egor.malyshev\Documents\GitHub\youtrack-confluence-plugin\src\jetbrains\macros\util\Service.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/actions/Configuration.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/actions/Configuration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/IssueHighlighter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/IssueReport.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/IssueReport.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/base/MacroWithPersistableSettingsBase.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/base/MacroWithPersistableSettingsBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jetbrains/macros/base/YouTrackAuthAwareMacroBase.java" afterPath="$PROJECT_DIR$/src/jetbrains/macros/base/YouTrackAuthAwareMacroBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Issue Highlighter.iws" />
@@ -924,7 +917,7 @@
       <workItem from="1423214050667" duration="835000" />
       <workItem from="1425315988962" duration="935000" />
       <workItem from="1425469842280" duration="2412000" />
-      <workItem from="1425472468902" duration="7645000" />
+      <workItem from="1425472468902" duration="7676000" />
     </task>
     <task id="LOCAL-00001" summary="Version 1.4: detailed mode plus access caching to reduce YouTrack load.">
       <created>1390489209656</created>
@@ -1070,11 +1063,17 @@
       <option name="project" value="LOCAL" />
       <updated>1425316160642</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Configuration management rewritten again">
+      <created>1425487045594</created>
+      <option name="number" value="00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1425487045594</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="265504000" />
+    <option name="totallyTimeSpent" value="265535000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1814" height="1600" extended-state="0" />
@@ -1142,7 +1141,8 @@
     <MESSAGE value="New macros for displaying reports (beta)" />
     <MESSAGE value="Funny fix" />
     <MESSAGE value="Fixing error when wrong authentication is stuck in cache" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing error when wrong authentication is stuck in cache" />
+    <MESSAGE value="Configuration management rewritten again" />
+    <option name="LAST_COMMIT_MESSAGE" value="Configuration management rewritten again" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
