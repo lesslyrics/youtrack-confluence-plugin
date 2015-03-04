@@ -3,8 +3,8 @@
     <h3>Configure YouTrack Integration Plugin</h3>
     <table>
         <tr>
-            <td>YouTrack host address:</td>
-            <td><input type="text" name="youtrackhost" value="$action.youtrackhost"></td>
+            <td>YouTrack host REST address:</td>
+            <td><input type="text" name="youtrackhost" value="$action.youtrackhost"><br/>Typically you only need to add /rest/ after your usual YouTrack host address, but that might need checking with admins.</td>
         </tr>
         <tr>
             <td>Login:</td>

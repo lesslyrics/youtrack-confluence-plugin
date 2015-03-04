@@ -13,23 +13,29 @@ import java.io.IOException;
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
     public static final String YOUTRACK_AUTH_KEY = "youtrack-auth-key-cached";
-    protected final String userName;
-    protected final String password;
-    protected final String baseHost;
+    protected String userName;
+    protected String password;
+    protected String baseHost;
     protected YouTrack youTrack;
+    protected String cachedAuthKey;
 
     public YouTrackAuthAwareMacroBase(BandanaManager bandanaManager) throws IOException, AuthenticationErrorException, CommandExecutionException {
         super(bandanaManager);
-        baseHost = (String) settings.storage.get("host");
-        userName = (String) settings.storage.get("login");
-        password = (String) settings.storage.get("password");
-        youTrack = YouTrack.getInstance(baseHost);
-        String cachedAuthKey = (String) settings.storage.get(YOUTRACK_AUTH_KEY);
+        init();
         if (cachedAuthKey != null) {
             youTrack.setAuthorization(cachedAuthKey);
         } else {
             refreshStoredAuthKey();
         }
+    }
+
+    private void init() {
+        baseHost = settings.getValue("host");
+        baseHost = settings.getValue("host");
+        userName = settings.getValue("login");
+        password = settings.getValue("password");
+        youTrack = YouTrack.getInstance(baseHost);
+        cachedAuthKey = settings.getValue(YOUTRACK_AUTH_KEY);
     }
 
     @Nullable
@@ -50,6 +56,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected void refreshStoredAuthKey() {
         try {
+            init();
             youTrack.login(userName, password);
             storeCurrentAuth();
         } catch (AuthenticationErrorException e) {
@@ -64,7 +71,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     }
 
     protected void storeCurrentAuth() {
-        settings.storage.put(YOUTRACK_AUTH_KEY, youTrack.getAuthorization());
+        settings.setValue(YOUTRACK_AUTH_KEY, youTrack.getAuthorization());
         persist();
     }
 }
