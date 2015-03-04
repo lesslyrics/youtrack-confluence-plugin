@@ -2,9 +2,9 @@
 <atlassian-plugin key="youtrack.integration.plugin" name="YouTrack Integration" plugins-version="2">
     <plugin-info>
         <description>Plugin that enables integration between Confluence and YouTrack via macros that allow inserting
-            dynamic links.
+            dynamic links and query-based reports.
         </description>
-        <version>1.6.4</version>
+        <version>1.6.5</version>
         <vendor name="JetBrains" url="http://www.jetbrains.com"/>
         <param name="configure.url">/admin/plugins/youtrack-integration/configurePlugin.action</param>
     </plugin-info>
@@ -19,7 +19,6 @@
     </xwork>
     <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin" weight="10">
         <description key="youtrack.plugin.configuration.description">Click here to configure plugin.</description>
-        <label key="item.google.home.label">Click Yo!</label>
         <link linkId="youtrack.plugin.configuration">/admin/plugins/youtrack-integration/configurePlugin.action</link>
     </web-item>
     <macro name="issue" class="jetbrains.macros.IssueHighlighter" key="issue-key">

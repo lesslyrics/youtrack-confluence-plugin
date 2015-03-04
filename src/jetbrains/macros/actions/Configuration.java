@@ -4,9 +4,8 @@ import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.pages.AbstractPage;
 import com.atlassian.confluence.pages.actions.PageAware;
-import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
-import jetbrains.macros.base.MacroWithPersistableSettingsBase;
 import jetbrains.macros.base.SettingsCache;
+import jetbrains.macros.util.Service;
 
 /**
  * Created by egor.malyshev on 19.01.2015.
@@ -14,7 +13,6 @@ import jetbrains.macros.base.SettingsCache;
 public class Configuration extends ConfluenceActionSupport implements PageAware {
 
     private final BandanaManager bm;
-    private final ConfluenceBandanaContext context;
     private SettingsCache settings;
     private AbstractPage page;
     private String youtrackhost = "";
@@ -23,16 +21,15 @@ public class Configuration extends ConfluenceActionSupport implements PageAware 
 
     public Configuration(BandanaManager bm) {
         this.bm = bm;
-        context = new ConfluenceBandanaContext();
         init();
     }
 
     private void init() {
-        settings = (SettingsCache) bm.getValue(context, MacroWithPersistableSettingsBase.SETTINGS_KEY);
+        settings = Service.getSettingsCache(bm);
         if (settings != null) {
-            youtrackhost = (String) settings.storage.get("host");
-            youtracklogin = (String) settings.storage.get("login");
-            youTrackpassword = (String) settings.storage.get("password");
+            youtrackhost = Service.getStoredHost(settings);
+            youtracklogin = Service.getStoredLogin(settings);
+            youTrackpassword = Service.getStoredPassword(settings);
         } else {
             settings = new SettingsCache();
         }
@@ -90,21 +87,11 @@ public class Configuration extends ConfluenceActionSupport implements PageAware 
         return false;
     }
 
-    @Override
-    public String toString() {
-        return "Configuration{" +
-                "youtrackhost='" + youtrackhost + '\'' +
-                ", youtracklogin='" + youtracklogin + '\'' +
-                ", youTrackpassword='" + youTrackpassword + '\'' +
-                '}';
-    }
-
     public String execute() {
-        System.out.println(this.toString());
-        settings.storage.put("host", youtrackhost);
-        settings.storage.put("password", youTrackpassword);
-        settings.storage.put("login", youtracklogin);
-        bm.setValue(context, MacroWithPersistableSettingsBase.SETTINGS_KEY, settings);
+        Service.storeLogin(youtracklogin, settings);
+        Service.storeHost(youtrackhost, settings);
+        Service.storePassword(youTrackpassword, settings);
+        Service.storeSettinsCache(settings, bm, Service.CONTEXT);
         return "success";
     }
 }
