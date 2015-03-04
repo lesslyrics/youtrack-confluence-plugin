@@ -6,10 +6,10 @@
         </description>
         <version>1.6.5</version>
         <vendor name="JetBrains" url="http://www.jetbrains.com"/>
-        <param name="configure.url">/admin/plugins/youtrack-integration/configurePlugin.action</param>
+        <param name="configure.url">/plugins/youtrack-integration/configurePlugin.action</param>
     </plugin-info>
     <xwork name="configurepluginaction" key="youtrack.integration.plugin.configurePlugin">
-        <package name="pluginsettings" extends="default" namespace="/admin/plugins/youtrack-integration">
+        <package name="pluginsettings" extends="default" namespace="/plugins/youtrack-integration">
             <default-interceptor-ref name="defaultStack"/>
             <action name="configurePlugin"
                     class="jetbrains.macros.actions.Configuration">
@@ -17,9 +17,9 @@
             </action>
         </package>
     </xwork>
-    <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin" weight="10">
-        <description key="youtrack.plugin.configuration.description">Click here to configure plugin.</description>
-        <link linkId="youtrack.plugin.configuration">/admin/plugins/youtrack-integration/configurePlugin.action</link>
+    <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin/plugins" weight="10">
+        <description>Click here to configure YouTrack integration plugin.</description>
+        <link linkId="youtrack.plugin.configuration">/plugins/youtrack-integration/configurePlugin.action</link>
     </web-item>
     <macro name="issue" class="jetbrains.macros.IssueHighlighter" key="issue-key">
         <description>Inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>

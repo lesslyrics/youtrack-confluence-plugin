@@ -1,21 +1,21 @@
 <meta name="decorator" content="atl.admin">
-<form name="youtrackPluginSettings" action="/admin/plugins/youtrack-integration/configurePlugin.action" method="GET">
+<form class="aui" name="youtrackPluginSettings" action="/admin/plugins/youtrack-integration/configurePlugin.action"
+      method="GET">
     <h3>Configure YouTrack Integration Plugin</h3>
-    <table>
-        <tr>
-            <td>YouTrack host REST address:</td>
-            <td><input type="text" name="youtrackhost" value="$action.youtrackhost"><br/>Typically you only need to add /rest/ after your usual YouTrack host address, but that might need checking with admins.</td>
-        </tr>
-        <tr>
-            <td>Login:</td>
-            <td><input type="text" name="youtracklogin" value="$action.youtracklogin"></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type="password" name="youtrackpassword" value="$action.youtrackpassword"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Save Settings"></td>
-        </tr>
-    </table>
+
+    <div class="field-group">
+        <label for="youtrackhost">YouTrack host REST address:</label>
+        <input type="text" name="youtrackhost" value="$action.youtrackhost" class="text">
+    </div>
+    <div class="field-group">
+        <label for="youtracklogin">Login:</label>
+        <input type="text" name="youtracklogin" value="$action.youtracklogin" class="text">
+    </div>
+    <div class="field-group">
+        <label for="youtrackpassword">Password:</label>
+        <input type="password" name="youtrackpassword" value="$action.youtrackpassword" class="text">
+    </div>
+    <div class="field-group">
+        <input type="submit" value="Save Settings" class="button">
+    </div>
 </form>
