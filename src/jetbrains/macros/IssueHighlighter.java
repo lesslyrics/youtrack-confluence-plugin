@@ -13,12 +13,8 @@ import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
-import youtrack.exceptions.AuthenticationErrorException;
-import youtrack.exceptions.CommandExecutionException;
-import youtrack.exceptions.NoSuchIssueFieldException;
 import youtrack.util.IssueId;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
@@ -27,7 +23,7 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
     private static final String BODY = "templates/body-link.vm";
     private static final String BODY_DETAILED = "templates/body-link-detailed.vm";
 
-    public IssueHighlighter(BandanaManager bandanaManager) throws CommandExecutionException, NoSuchIssueFieldException, AuthenticationErrorException, IOException {
+    public IssueHighlighter(BandanaManager bandanaManager) {
         super(bandanaManager);
     }
 

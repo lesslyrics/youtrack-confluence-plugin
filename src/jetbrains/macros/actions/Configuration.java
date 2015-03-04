@@ -4,8 +4,7 @@ import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.pages.AbstractPage;
 import com.atlassian.confluence.pages.actions.PageAware;
-import jetbrains.macros.base.SettingsCache;
-import jetbrains.macros.util.Service;
+import jetbrains.macros.util.SettingsManager;
 
 /**
  * Created by egor.malyshev on 19.01.2015.
@@ -13,26 +12,10 @@ import jetbrains.macros.util.Service;
 public class Configuration extends ConfluenceActionSupport implements PageAware {
 
     private final BandanaManager bm;
-    private SettingsCache settings;
     private AbstractPage page;
-    private String youtrackhost = "";
-    private String youtracklogin = "";
-    private String youTrackpassword = "";
 
     public Configuration(BandanaManager bm) {
         this.bm = bm;
-        init();
-    }
-
-    private void init() {
-        settings = Service.getSettingsCache(bm);
-        if (settings != null) {
-            youtrackhost = Service.getStoredHost(settings);
-            youtracklogin = Service.getStoredLogin(settings);
-            youTrackpassword = Service.getStoredPassword(settings);
-        } else {
-            settings = new SettingsCache();
-        }
     }
 
     @Override
@@ -54,27 +37,27 @@ public class Configuration extends ConfluenceActionSupport implements PageAware 
     }
 
     public String getYoutrackhost() {
-        return youtrackhost;
+        return SettingsManager.getInstance(bm).getStoredHost();
     }
 
     public void setYoutrackhost(String youtrackhost) {
-        this.youtrackhost = youtrackhost;
+        SettingsManager.getInstance(bm).storeHost(youtrackhost);
     }
 
     public String getYoutracklogin() {
-        return youtracklogin;
+        return SettingsManager.getInstance(bm).getStoredLogin();
     }
 
     public void setYoutracklogin(String youtracklogin) {
-        this.youtracklogin = youtracklogin;
+        SettingsManager.getInstance(bm).storeLogin(youtracklogin);
     }
 
     public String getYoutrackpassword() {
-        return youTrackpassword;
+        return SettingsManager.getInstance(bm).getStoredPassword();
     }
 
     public void setYoutrackpassword(String youTrackpassword) {
-        this.youTrackpassword = youTrackpassword;
+        SettingsManager.getInstance(bm).storePassword(youTrackpassword);
     }
 
     @Override
@@ -88,10 +71,6 @@ public class Configuration extends ConfluenceActionSupport implements PageAware 
     }
 
     public String execute() {
-        Service.storeLogin(youtracklogin, settings);
-        Service.storeHost(youtrackhost, settings);
-        Service.storePassword(youTrackpassword, settings);
-        Service.storeSettinsCache(settings, bm, Service.CONTEXT);
         return "success";
     }
 }

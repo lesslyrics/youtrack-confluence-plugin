@@ -7,6 +7,7 @@ import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
+import jetbrains.macros.util.SettingsManager;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.exceptions.AuthenticationErrorException;
@@ -57,7 +58,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.putAll(context);
                         Issue issue = sIssue.createSnapshot();
                         myContext.put("issue", sIssue.getId());
-                        myContext.put("base", baseHost.replace("/rest/", ""));
+                        myContext.put("base", SettingsManager.getInstance(bm).getStoredHost().replace("/rest/", ""));
                         myContext.put("state", issue.getState());
                         myContext.put("summary", issue.getSummary());
 

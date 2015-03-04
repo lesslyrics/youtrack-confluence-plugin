@@ -2,40 +2,26 @@ package jetbrains.macros.base;
 
 import com.atlassian.bandana.BandanaManager;
 import com.sun.istack.internal.Nullable;
+import jetbrains.macros.util.SettingsManager;
 import youtrack.BaseItem;
 import youtrack.CommandBasedList;
 import youtrack.YouTrack;
 import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
 
-import java.io.IOException;
-
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
-    public static final String YOUTRACK_AUTH_KEY = "youtrack-auth-key-cached";
-    protected String userName;
-    protected String password;
-    protected String baseHost;
     protected YouTrack youTrack;
-    protected String cachedAuthKey;
 
-    public YouTrackAuthAwareMacroBase(BandanaManager bandanaManager) throws IOException, AuthenticationErrorException, CommandExecutionException {
+    public YouTrackAuthAwareMacroBase(BandanaManager bandanaManager) {
         super(bandanaManager);
-        init();
-        if (cachedAuthKey != null) {
-            youTrack.setAuthorization(cachedAuthKey);
+        youTrack = YouTrack.getInstance(SettingsManager.getInstance(bm).getStoredHost());
+        final String authKey = SettingsManager.getInstance(bm).getAuthKey();
+        if (authKey != null) {
+            youTrack.setAuthorization(authKey);
         } else {
             refreshStoredAuthKey();
         }
-    }
-
-    private void init() {
-        baseHost = settings.getValue("host");
-        baseHost = settings.getValue("host");
-        userName = settings.getValue("login");
-        password = settings.getValue("password");
-        youTrack = YouTrack.getInstance(baseHost);
-        cachedAuthKey = settings.getValue(YOUTRACK_AUTH_KEY);
     }
 
     @Nullable
@@ -56,8 +42,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected void refreshStoredAuthKey() {
         try {
-            init();
-            youTrack.login(userName, password);
+            youTrack.login(SettingsManager.getInstance(bm).getStoredLogin(),
+                    SettingsManager.getInstance(bm).getStoredPassword());
             storeCurrentAuth();
         } catch (AuthenticationErrorException e) {
             e.printStackTrace();
@@ -71,7 +57,6 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     }
 
     protected void storeCurrentAuth() {
-        settings.setValue(YOUTRACK_AUTH_KEY, youTrack.getAuthorization());
-        persist();
+        SettingsManager.getInstance(bm).storeAuthKey(youTrack.getAuthorization());
     }
 }
