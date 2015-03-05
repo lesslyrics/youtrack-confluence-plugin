@@ -2,12 +2,10 @@ package jetbrains.macros;
 
 import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
-import com.atlassian.confluence.user.AuthenticatedUserThreadLocal;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
-import com.atlassian.user.User;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import youtrack.CommandBasedList;
 import youtrack.Issue;
@@ -76,11 +74,13 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         titleContext.append(", Type: ").append(issue.getType());
 
                         context.put("title", titleContext.toString());
-
+/*
                         final User currentUser = AuthenticatedUserThreadLocal.get();
                         if (currentUser != null) {
                             context.put("user", currentUser.getFullName());
-                        }
+                       }
+*/
+                        context.put("user", "USER");
                     } else context.put("error", "ISSUE NOT FOUND " + issueId);
                 } else {
                     context.put("error", "PROJECT NOT FOUND " + id.projectId);
