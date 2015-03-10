@@ -2,7 +2,6 @@
 <form class="aui" name="youtrackPluginSettings" action="/admin/plugins/youtrack-integration/configurePlugin.action"
       method="GET">
     <h3>Configure YouTrack Integration Plugin</h3>
-
     <div class="field-group">
         <label for="youtrackhost">YouTrack host REST address:</label>
         <input type="text" name="youtrackhost" value="$action.youtrackhost" class="text">

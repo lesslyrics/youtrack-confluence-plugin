@@ -1,0 +1,14 @@
+<tr>
+    <td>
+        {report:project=XXX|query=query string}
+    </td>
+
+    <td>
+        <p>Inserts a table report based on to YouTrack query.</p>
+
+        <ul>
+            <li><b>project</b> &mdash; required. YouTrack project id from which you want your report.</li>
+            <li><b>style</b> &mdash; requited. Query that will be used to retrieve issues. This is the same query you'd enter in YouTrack UI.</li>
+        </ul>
+    </td>
+</tr>

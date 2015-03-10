@@ -17,7 +17,8 @@
             </action>
         </package>
     </xwork>
-    <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin/plugins" weight="10">
+    <web-item key="youtrack.plugin.configuration" name="YouTrack Integration Config" section="system.admin/plugins"
+              weight="10">
         <description key="youtrack.plugin.configuration.description">Click here to configure plugin.</description>
         <link linkId="youtrack.plugin.configuration">/admin/plugins/youtrack-integration/configurePlugin.action</link>
     </web-item>
@@ -28,8 +29,8 @@
         </resource>
         <category name="confluence-content"/>
         <parameters>
-            <parameter name="id" type="string"/>
-            <parameter name="style" type="string"/>
+            <parameter name="id" type="string" required="true"/>
+            <parameter name="style" type="string" required="false" default="short"/>
         </parameters>
     </macro>
     <macro name="report" class="jetbrains.macros.IssueReport" key="report-key">
@@ -39,8 +40,8 @@
         </resource>
         <category name="confluence-content"/>
         <parameters>
-            <parameter name="project" type="string"/>
-            <parameter name="query" type="string"/>
+            <parameter name="project" type="string" required="true"/>
+            <parameter name="query" type="string" required="true"/>
         </parameters>
     </macro>
 </atlassian-plugin>

@@ -8,8 +8,9 @@
             provides issue details.</p>
 
         <ul>
-            <li>id &mdash; required. YouTrack issue id. For example, JS-2541.</li>
-            <li>style &mdash; optional. "detailed" inserts issue title before the link, "short" (default) link only.
+            <li><b>id</b> &mdash; required. YouTrack issue id. For example, JS-2541.</li>
+            <li><b>style</b> &mdash; optional. <i>detailed</i>> inserts issue title before the link, <i>short</i>
+                (default) link only.
             </li>
         </ul>
     </td>
