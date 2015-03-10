@@ -1,4 +1,5 @@
-<p>$title</p>
+<h3>$title</h3>
+#set($rowsWithHtml = $rows)
 <table>
     <tr>
         <th>Issue</th>
@@ -6,5 +7,6 @@
         <th>Summary</th>
         <th>Assignee</th>
     </tr>
-$rows
+$rowsWithHtml
 </table>
+<p>Total issues: $total</p>

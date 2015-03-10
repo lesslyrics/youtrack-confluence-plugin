@@ -7,6 +7,8 @@ import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
+import jetbrains.macros.util.SettingsManager;
+import jetbrains.macros.util.Strings;
 import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
@@ -16,10 +18,6 @@ import youtrack.util.IssueId;
 import java.util.Map;
 
 public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
-    public static final String DETAILED = "detailed";
-    public static final String SHORT = "short";
-    private static final String BODY = "templates/body-link.vm";
-    private static final String BODY_DETAILED = "templates/body-link-detailed.vm";
 
     public IssueHighlighter(BandanaManager bandanaManager) {
         super(bandanaManager);
@@ -41,10 +39,10 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
             throws MacroException {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
-            final String issueId = (String) params.get("id");
-            String style = (String) params.get("style");
-            if (!DETAILED.equals(style)) {
-                style = SHORT;
+            final String issueId = (String) params.get(Strings.ID);
+            String style = (String) params.get(Strings.STYLE);
+            if (!Strings.DETAILED.equals(style)) {
+                style = Strings.SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
                 IssueId id = new IssueId(issueId);
@@ -54,41 +52,22 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                     Issue issue = tryGetItem(project.issues, issueId);
                     if (issue != null) {
                         issue = issue.createSnapshot();
-                        context.put("issue", issueId);
-                        context.put("summary", issue.getSummary());
-                        context.put("style", (issue.isResolved()) ? "line-through" : "normal");
-
-                        StringBuilder titleContext = new StringBuilder();
-                        titleContext.append("Reporter: ").append(issue.getReporter());
-                        titleContext.append(", Priority: ").append(issue.getPriority());
-                        titleContext.append(", State: ").append(issue.getState());
-                        titleContext.append(", Assignee: ");
-
-                        try {
-                            titleContext.append(issue.getAssignee().getFullName());
-                        } catch (Exception ex) {
-                            titleContext.append("Unassigned");
-                        }
-
-                        titleContext.append(", Votes: ").append(issue.getVotes());
-                        titleContext.append(", Type: ").append(issue.getType());
-
-                        context.put("title", titleContext.toString());
-/*
-                        final User currentUser = AuthenticatedUserThreadLocal.get();
-                        if (currentUser != null) {
-                            context.put("user", currentUser.getFullName());
-                       }
-*/
-                        context.put("user", "USER");
-                    } else context.put("error", "ISSUE NOT FOUND " + issueId);
+                        context.put(Strings.ISSUE, issueId);
+                        context.put(Strings.SUMMARY, issue.getSummary());
+                        context.put(Strings.BASE, SettingsManager.getInstance(bm).getStoredHost().replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
+                        context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
+                        context.put("title", "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
+                                issue.getState() + ", Assignee: " +
+                                (issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED) +
+                                ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
+                    } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
                 } else {
-                    context.put("error", "PROJECT NOT FOUND " + id.projectId);
+                    context.put(Strings.ERROR, "Project not found: " + id.projectId);
                 }
             } else {
-                context.put("error", "ISSUE NOT SPECIFIED");
+                context.put(Strings.ERROR, "Missing id parameter");
             }
-            return VelocityUtils.getRenderedTemplate((SHORT.equals(style) ? BODY : BODY_DETAILED), context);
+            return VelocityUtils.getRenderedTemplate((Strings.SHORT.equals(style) ? Strings.BODY_LINK : Strings.BODY_DETAILED), context);
         } catch (Exception ex) {
             throw new MacroException(ex);
         }
