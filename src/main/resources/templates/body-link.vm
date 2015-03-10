@@ -1,5 +1,5 @@
 #if ($issue)
-<a href="$base$issue" target="_blank" style="text-decoration:$style;"
+<a href="$base/issue/$issue" target="_blank" style="text-decoration:$style;"
    title="$title">$issue</a>
 #else
 <span style="color:darkslategray;background-color:lightgrey">$issue</span>

@@ -9,7 +9,6 @@ import com.atlassian.renderer.v2.macro.MacroException;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.SettingsManager;
 import jetbrains.macros.util.Strings;
-import org.apache.commons.lang.StringEscapeUtils;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.exceptions.AuthenticationErrorException;
@@ -63,8 +62,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.put(Strings.ASSIGNEE, issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED);
                         rows.append(VelocityUtils.getRenderedTemplate(Strings.ROW, myContext));
                     }
-                    System.out.println(rows.toString());
-                    context.put("rows", StringEscapeUtils.unescapeHtml(rows.toString()));
+                    context.put("rows", rows.toString());
                     context.put("title", query + " from " + project);
                     context.put("total", issues.size());
                     result.append(VelocityUtils.getRenderedTemplate(Strings.BODY_REPORT, context));
