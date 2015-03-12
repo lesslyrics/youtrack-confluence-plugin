@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>YouTrack Integration Settings</title>
+    <meta name="decorator" content="atl.admin"/>
+</head>
+<body>
+<form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/admin" method="post">
+
+    <div class="field-group">
+        <label for="youtrackhost">YouTrack host REST address:</label>
+        <input type="text" name="host" id="host" class="text" value="$host">
+    </div>
+    <div class="field-group">
+        <label for="youtracklogin">Login:</label>
+        <input type="text" name="login" id="login" class="text" value="$login">
+    </div>
+    <div class="field-group">
+        <label for="youtrackpassword">Password:</label>
+        <input type="password" name="password" id="password" class="text" value="$password">
+    </div>
+    <div class="field-group">
+        <input type="submit" value="Save Settings" class="button">
+    </div>
+    if ($justSaved)
+    <div class="field-group">
+        <p>Settings have been updated successfully.</p>
+    </div>
+    end#
+</form>
+</body>
+</html>

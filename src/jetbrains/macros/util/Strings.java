@@ -4,6 +4,7 @@ package jetbrains.macros.util;
  * Created by Egor.Malyshev on 06.03.2015.
  */
 public class Strings {
+    public static final String MAIN_KEY = "";
     public static final String ISSUE = "issue";
     public static final String BASE = "base";
     public static final String STATE = "state";
@@ -21,6 +22,11 @@ public class Strings {
     public static final String BODY_DETAILED = TEMPLATES_ROOT + "body-link-detailed.vm";
     public static final String BODY_LINK = TEMPLATES_ROOT + "body-link.vm";
     public static final String ERROR = "error";
+    public static final String HOST = "host";
+    public static final String EMPTY = "";
+    public static final String PASSWORD = "password";
+    public static final String LOGIN = "login";
+    public static final String AUTH_KEY = "AUTH_KEY";
     public static String STYLE = "style";
     public static String ID = "id";
 }

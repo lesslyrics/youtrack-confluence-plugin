@@ -1,29 +1,26 @@
 package jetbrains.macros;
 
-import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
+import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.SettingsManager;
 import jetbrains.macros.util.Strings;
 import youtrack.Issue;
 import youtrack.Project;
-import youtrack.exceptions.AuthenticationErrorException;
-import youtrack.exceptions.CommandExecutionException;
-import youtrack.exceptions.NoSuchIssueFieldException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class IssueReport extends YouTrackAuthAwareMacroBase {
 
-    public IssueReport(BandanaManager bandanaManager) throws IOException, AuthenticationErrorException, NoSuchIssueFieldException, CommandExecutionException {
-        super(bandanaManager);
+    public IssueReport(PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
+        super(pluginSettingsFactory, transactionTemplate);
     }
 
     public boolean isInline() {
@@ -56,7 +53,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.putAll(context);
                         final Issue issue = sIssue.createSnapshot();
                         myContext.put(Strings.ISSUE, sIssue.getId());
-                        myContext.put(Strings.BASE, SettingsManager.getInstance(bm).getStoredHost().replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
+                        myContext.put(Strings.BASE, storage.getProperty(Strings.HOST).replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
                         myContext.put(Strings.STATE, issue.getState());
                         myContext.put(Strings.SUMMARY, issue.getSummary());
                         myContext.put(Strings.ASSIGNEE, issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED);

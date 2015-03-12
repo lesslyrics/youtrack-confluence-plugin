@@ -1,8 +1,9 @@
 package jetbrains.macros.base;
 
-import com.atlassian.bandana.BandanaManager;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
+import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.sun.istack.internal.Nullable;
-import jetbrains.macros.util.SettingsManager;
+import jetbrains.macros.util.Strings;
 import youtrack.BaseItem;
 import youtrack.CommandBasedList;
 import youtrack.YouTrack;
@@ -13,10 +14,11 @@ import youtrack.exceptions.CommandExecutionException;
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
     protected YouTrack youTrack;
 
-    public YouTrackAuthAwareMacroBase(BandanaManager bandanaManager) {
-        super(bandanaManager);
-        youTrack = YouTrack.getInstance(SettingsManager.getInstance(bm).getStoredHost());
-        final String authKey = SettingsManager.getInstance(bm).getAuthKey();
+    public YouTrackAuthAwareMacroBase(PluginSettingsFactory pluginSettingsFactory,
+                                      TransactionTemplate transactionTemplate) {
+        super(pluginSettingsFactory, transactionTemplate);
+        youTrack = YouTrack.getInstance(storage.getProperty(Strings.HOST, ""));
+        final String authKey = storage.getProperty(Strings.AUTH_KEY);
         if (authKey != null) {
             youTrack.setAuthorization(authKey);
         } else {
@@ -42,8 +44,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected void refreshStoredAuthKey() {
         try {
-            youTrack.login(SettingsManager.getInstance(bm).getStoredLogin(),
-                    SettingsManager.getInstance(bm).getStoredPassword());
+            youTrack.login(storage.getProperty(Strings.LOGIN),
+                    storage.getProperty(Strings.PASSWORD));
             storeCurrentAuth();
         } catch (AuthenticationErrorException e) {
             e.printStackTrace();
@@ -52,11 +54,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         }
     }
 
-    protected boolean isErrorLoginExpired(final @Nullable youtrack.Error error) {
-        return error != null && error.getCode() == 403;
-    }
-
     protected void storeCurrentAuth() {
-        SettingsManager.getInstance(bm).storeAuthKey(youTrack.getAuthorization());
+        set(Strings.MAIN_KEY, storage);
     }
 }

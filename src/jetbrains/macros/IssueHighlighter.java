@@ -1,11 +1,12 @@
 package jetbrains.macros;
 
-import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.MacroException;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
+import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.SettingsManager;
 import jetbrains.macros.util.Strings;
@@ -19,8 +20,8 @@ import java.util.Map;
 
 public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
 
-    public IssueHighlighter(BandanaManager bandanaManager) {
-        super(bandanaManager);
+    public IssueHighlighter(PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
+        super(pluginSettingsFactory, transactionTemplate);
     }
 
     public boolean isInline() {
@@ -54,7 +55,7 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         issue = issue.createSnapshot();
                         context.put(Strings.ISSUE, issueId);
                         context.put(Strings.SUMMARY, issue.getSummary());
-                        context.put(Strings.BASE, SettingsManager.getInstance(bm).getStoredHost().replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
+                        context.put(Strings.BASE, storage.getProperty(Strings.HOST).replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                         context.put("title", "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " +
