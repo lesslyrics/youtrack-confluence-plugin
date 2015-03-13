@@ -13,6 +13,7 @@ import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
+import youtrack.exceptions.NoSuchIssueFieldException;
 import youtrack.util.IssueId;
 
 import java.util.Map;
@@ -56,9 +57,14 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         context.put(Strings.SUMMARY, issue.getSummary());
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
+                        String assignee;
+                        try {
+                            assignee = issue.getAssignee().getFullName();
+                        } catch (NoSuchIssueFieldException nfe) {
+                            assignee = Strings.UNASSIGNED;
+                        }
                         context.put("title", "Title: " + issue.getSummary() + "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
-                                issue.getState() + ", Assignee: " +
-                                (issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED) +
+                                issue.getState() + ", Assignee: " + assignee +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
                     } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
                 } else {
