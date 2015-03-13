@@ -13,7 +13,6 @@ import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
-import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.util.IssueId;
 
 import java.util.Map;
@@ -57,7 +56,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         context.put(Strings.SUMMARY, issue.getSummary());
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
-                        context.put("title", "Title: " + issue.getDescription() + "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
+                        context.put("title", "Title: " + issue.getSummary() + "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " +
                                 (issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
