@@ -13,6 +13,7 @@ import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
+import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.util.IssueId;
 
 import java.util.Map;

@@ -18,12 +18,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
                                       TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST));
-        final String authKey = getProperty(Strings.AUTH_KEY);
-        if (!authKey.isEmpty()) {
-            youTrack.setAuthorization(authKey);
-        } else {
-            refreshStoredAuthKey();
-        }
+        youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
     }
 
     @Nullable
@@ -38,19 +33,13 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         return result;
     }
 
-    protected void refreshStoredAuthKey() {
+    protected void refreshStoredAuthKey() throws AuthenticationErrorException {
         try {
             youTrack.login(getProperty(Strings.LOGIN),
                     getProperty(Strings.PASSWORD));
-            storeCurrentAuth();
-        } catch (AuthenticationErrorException e) {
-            e.printStackTrace();
+            setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
         } catch (CommandExecutionException e) {
             e.printStackTrace();
         }
-    }
-
-    protected void storeCurrentAuth() {
-        setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
     }
 }

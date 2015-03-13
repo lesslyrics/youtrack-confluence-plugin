@@ -11,6 +11,7 @@ import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.Strings;
 import youtrack.Issue;
 import youtrack.Project;
+import youtrack.exceptions.AuthenticationErrorException;
 
 import java.util.HashMap;
 import java.util.List;
