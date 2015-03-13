@@ -31,10 +31,6 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         I result;
         try {
             result = list.item(id);
-            if (result == null) {
-                refreshStoredAuthKey();
-                result = list.item(id);
-            }
         } catch (CommandExecutionException e) {
             refreshStoredAuthKey();
             result = list.item(id);

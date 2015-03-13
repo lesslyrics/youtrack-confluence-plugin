@@ -4,12 +4,12 @@
         <description>Plugin that enables integration between Confluence and YouTrack via macros that allow inserting
             dynamic links and query-based reports.
         </description>
-        <version>1.6.7.2</version>
+        <version>1.6.7.3</version>
         <vendor name="JetBrains" url="http://www.jetbrains.com"/>
-        <param name="configure.url">/plugins/servlet/youtrack-integration/admin</param>
+        <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>
     <!-- Macro modules  -->
-    <macro name="issue" class="jetbrains.macros.IssueHighlighter" key="issue-key">
+    <macro name="issue" class="jetbrains.macros.IssueLink" key="youtrack.integration.plugin.issue">
         <description>Inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
@@ -20,7 +20,7 @@
             <parameter name="style" type="string" required="false" default="short"/>
         </parameters>
     </macro>
-    <macro name="report" class="jetbrains.macros.IssueReport" key="report-key">
+    <macro name="report" class="jetbrains.macros.IssueReport" key="youtrack.integration.plugin.report">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
@@ -41,7 +41,7 @@
                       interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"/>
     <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate"/>
     <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.macros.actions.ConfigurationServlet">
-        <url-pattern>/youtrack-integration/admin</url-pattern>
+        <url-pattern>/youtrack-integration/settings</url-pattern>
     </servlet>
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
 </atlassian-plugin>

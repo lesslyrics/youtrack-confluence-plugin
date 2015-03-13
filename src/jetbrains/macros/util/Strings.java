@@ -4,7 +4,7 @@ package jetbrains.macros.util;
  * Created by Egor.Malyshev on 06.03.2015.
  */
 public class Strings {
-    public static final String MAIN_KEY = "";
+    public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#0";
     public static final String ISSUE = "issue";
     public static final String BASE = "base";
     public static final String STATE = "state";

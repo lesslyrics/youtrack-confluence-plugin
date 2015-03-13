@@ -17,9 +17,9 @@ import youtrack.util.IssueId;
 
 import java.util.Map;
 
-public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
+public class IssueLink extends YouTrackAuthAwareMacroBase {
 
-    public IssueHighlighter(PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
+    public IssueLink(PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
     }
 

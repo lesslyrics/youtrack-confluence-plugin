@@ -4,7 +4,7 @@
     <meta name="decorator" content="atl.admin"/>
 </head>
 <body>
-<form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/admin" method="post">
+<form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
 
     <div class="field-group">
         <label for="youtrackhost">YouTrack host REST address:</label>

@@ -4,7 +4,6 @@ package jetbrains.macros.actions;
  * Created by Egor.Malyshev on 12.03.2015.
  */
 
-import com.atlassian.confluence.setup.settings.SettingsManager;
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
@@ -29,7 +28,6 @@ public class ConfigurationServlet extends HttpServlet {
     private final UserManager userManager;
     private final LoginUriProvider loginUriProvider;
     private final TemplateRenderer renderer;
-    private final SettingsManager settingsManager;
     private final ApplicationProperties applicationProperties;
     private final PluginSettingsFactory pluginSettingsFactory;
     private final TransactionTemplate transactionTemplate;
@@ -38,14 +36,12 @@ public class ConfigurationServlet extends HttpServlet {
     public ConfigurationServlet(UserManager userManager,
                                 LoginUriProvider loginUriProvider,
                                 TemplateRenderer renderer,
-                                SettingsManager settingsManager,
                                 ApplicationProperties applicationProperties,
                                 PluginSettingsFactory pluginSettingsFactory,
                                 TransactionTemplate transactionTemplate) {
         this.userManager = userManager;
         this.loginUriProvider = loginUriProvider;
         this.renderer = renderer;
-        this.settingsManager = settingsManager;
         this.applicationProperties = applicationProperties;
         this.pluginSettingsFactory = pluginSettingsFactory;
         this.transactionTemplate = transactionTemplate;
