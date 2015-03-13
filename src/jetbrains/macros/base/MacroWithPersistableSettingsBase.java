@@ -13,31 +13,50 @@ import java.util.Properties;
 
 public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
     @NotNull
-    protected final PluginSettingsFactory pluginSettingsFactory;
-    protected final TransactionTemplate transactionTemplate;
-    protected Properties storage;
+    private final PluginSettingsFactory pluginSettingsFactory;
+    @NotNull
+    private final TransactionTemplate transactionTemplate;
+    @NotNull
+    private Properties storage;
 
     public MacroWithPersistableSettingsBase(PluginSettingsFactory pluginSettingsFactory,
                                             TransactionTemplate transactionTemplate) {
         this.pluginSettingsFactory = pluginSettingsFactory;
         this.transactionTemplate = transactionTemplate;
-        storage = get(Strings.MAIN_KEY);
+        load();
+    }
+
+    private void persist() {
+        transactionTemplate.execute(new TransactionCallback<Properties>() {
+            @Override
+            public Properties doInTransaction() {
+                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+                pluginSettings.put(Strings.MAIN_KEY, storage);
+                return null;
+            }
+        });
+    }
+
+    private void load() {
+        storage = transactionTemplate.execute(new TransactionCallback<Properties>() {
+            @Override
+            public Properties doInTransaction() {
+                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+                final Object o = pluginSettings.get(Strings.MAIN_KEY);
+                return o instanceof Properties ? (Properties) o : null;
+            }
+        });
         if (storage == null) storage = new Properties();
     }
 
-    protected <T> void set(final @NotNull String key, final @Nullable T value) {
-        final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-        pluginSettings.put(key, value);
+    @NotNull
+    protected String getProperty(final @NotNull String key) {
+        load();
+        return storage.getProperty(key, Strings.EMPTY);
     }
 
-    protected <T> T get(final @NotNull String key) {
-        return transactionTemplate.execute(new TransactionCallback<T>() {
-            @Override
-            public T doInTransaction() {
-                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                //noinspection unchecked
-                return (T) pluginSettings.get(key);
-            }
-        });
+    protected void setProperty(final @NotNull String key, final @Nullable String value) {
+        storage.setProperty(key, value);
+        persist();
     }
 }

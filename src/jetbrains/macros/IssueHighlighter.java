@@ -8,7 +8,6 @@ import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
-import jetbrains.macros.util.SettingsManager;
 import jetbrains.macros.util.Strings;
 import youtrack.CommandBasedList;
 import youtrack.Issue;
@@ -55,9 +54,9 @@ public class IssueHighlighter extends YouTrackAuthAwareMacroBase {
                         issue = issue.createSnapshot();
                         context.put(Strings.ISSUE, issueId);
                         context.put(Strings.SUMMARY, issue.getSummary());
-                        context.put(Strings.BASE, storage.getProperty(Strings.HOST).replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
+                        context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
-                        context.put("title", "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
+                        context.put("title", "Title: " + issue.getDescription() + "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " +
                                 (issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());

@@ -8,7 +8,6 @@ import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
-import jetbrains.macros.util.SettingsManager;
 import jetbrains.macros.util.Strings;
 import youtrack.Issue;
 import youtrack.Project;
@@ -53,7 +52,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.putAll(context);
                         final Issue issue = sIssue.createSnapshot();
                         myContext.put(Strings.ISSUE, sIssue.getId());
-                        myContext.put(Strings.BASE, storage.getProperty(Strings.HOST).replace(Strings.REST_PREFIX, SettingsManager.EMPTY_STRING));
+                        myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         myContext.put(Strings.STATE, issue.getState());
                         myContext.put(Strings.SUMMARY, issue.getSummary());
                         myContext.put(Strings.ASSIGNEE, issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED);

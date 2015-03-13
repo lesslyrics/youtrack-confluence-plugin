@@ -21,11 +21,11 @@
     <div class="field-group">
         <input type="submit" value="Save Settings" class="button">
     </div>
-    if ($justSaved)
-    <div class="field-group">
-        <p>Settings have been updated successfully.</p>
-    </div>
-    end#
+    #if ($justSaved)
+        <div class="field-group">
+            <p style="color:darkgreen;">Settings have been updated successfully.</p>
+        </div>
+    #end
 </form>
 </body>
 </html>
