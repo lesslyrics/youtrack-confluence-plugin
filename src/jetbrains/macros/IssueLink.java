@@ -13,8 +13,7 @@ import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
-import youtrack.exceptions.NoSuchIssueFieldException;
-import youtrack.util.IssueId;
+import youtrack.issue.fields.values.MultiUserFieldValue;
 
 import java.util.Map;
 
@@ -46,9 +45,9 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = Strings.SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                IssueId id = new IssueId(issueId);
                 CommandBasedList<YouTrack, Project> projects = youTrack.projects;
-                final Project project = tryGetItem(projects, id.projectId);
+                String[] idPair = issueId.split("-");
+                final Project project = tryGetItem(projects, idPair[0]);
                 if (project != null) {
                     Issue issue = tryGetItem(project.issues, issueId);
                     if (issue != null) {
@@ -57,18 +56,13 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         context.put(Strings.SUMMARY, issue.getSummary());
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
-                        String assignee;
-                        try {
-                            assignee = issue.getAssignee().getFullName();
-                        } catch (NoSuchIssueFieldException nfe) {
-                            assignee = Strings.UNASSIGNED;
-                        }
+                        MultiUserFieldValue assignee = issue.getAssignee();
                         context.put("title", "Title: " + issue.getSummary() + "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
-                                issue.getState() + ", Assignee: " + assignee +
+                                issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.toString()) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
                     } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
                 } else {
-                    context.put(Strings.ERROR, "Project not found: " + id.projectId);
+                    context.put(Strings.ERROR, "Project not found: " + idPair[0]);
                 }
             } else {
                 context.put(Strings.ERROR, "Missing id parameter");

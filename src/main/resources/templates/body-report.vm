@@ -1,5 +1,7 @@
 <h3>$title</h3>
 #set($rowsWithHtml = $rows)
+#set($paginationWithHtml = $pagination)
+#if ($hasIssues)
 <table>
     <tr>
         <th>Issue</th>
@@ -7,6 +9,11 @@
         <th>Summary</th>
         <th>Assignee</th>
     </tr>
-$rowsWithHtml
+    $rowsWithHtml
 </table>
-<p>Total issues: $total</p>
+#else
+<p>No more matching issues to display.</p>
+#end
+<p>
+    $paginationWithHtml
+</p>
