@@ -15,6 +15,7 @@ import youtrack.Project;
 import youtrack.YouTrack;
 import youtrack.issue.fields.values.MultiUserFieldValue;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 public class IssueLink extends YouTrackAuthAwareMacroBase {
@@ -58,9 +59,10 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                         MultiUserFieldValue assignee = issue.getAssignee();
                         context.put("title", "Title: " + issue.getSummary() + "Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
-                                issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.toString()) +
+                                issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.getFullName()) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
                     } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
+                    System.out.println(issue != null ? new String(issue.getSummary().getBytes(Charset.forName("UTF-8"))) : null);
                 } else {
                     context.put(Strings.ERROR, "Project not found: " + idPair[0]);
                 }
