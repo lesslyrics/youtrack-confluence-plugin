@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="issue_highlighter" default="all">
-
-
-    <property file="build-plugin.properties"/>
     <!-- Uncomment the following property if no tests compilation is needed -->
     <!--
     <property name="skip.tests" value="true"/>
      -->
-
     <!-- Compiler options -->
-    <property name="baseDir" value="${teamcity.build.checkoutDir}"/>
     <property name="compiler.debug" value="on"/>
     <property name="compiler.generate.no.warnings" value="off"/>
     <property name="compiler.args" value=""/>
