@@ -58,7 +58,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                         MultiUserFieldValue assignee = issue.getAssignee();
-                        context.put("title", "Title: " + issue.getSummary() + " Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
+                        context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.getFullName()) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
                     } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
