@@ -2,7 +2,6 @@ package jetbrains.macros.base;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import com.sun.istack.internal.Nullable;
 import jetbrains.macros.util.Strings;
 import youtrack.BaseItem;
 import youtrack.CommandBasedList;
@@ -21,7 +20,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
     }
 
-    @Nullable
+
     protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id) throws CommandExecutionException, AuthenticationErrorException {
         I result;
         try {

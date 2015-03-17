@@ -5,18 +5,16 @@ import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import jetbrains.macros.util.Strings;
 
 import java.util.Properties;
 
 public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
-    @NotNull
+
     private final PluginSettingsFactory pluginSettingsFactory;
-    @NotNull
+
     private final TransactionTemplate transactionTemplate;
-    @NotNull
+
     private Properties storage;
 
     public MacroWithPersistableSettingsBase(PluginSettingsFactory pluginSettingsFactory,
@@ -49,13 +47,13 @@ public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
         if (storage == null) storage = new Properties();
     }
 
-    @NotNull
-    protected String getProperty(final @NotNull String key) {
+
+    protected String getProperty(final String key) {
         load();
         return storage.getProperty(key, Strings.EMPTY);
     }
 
-    protected void setProperty(final @NotNull String key, final @Nullable String value) {
+    protected void setProperty(final String key, final String value) {
         storage.setProperty(key, value);
         persist();
     }

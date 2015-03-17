@@ -8,7 +8,9 @@
 
         <ul>
             <li><b>project</b> &mdash; required. YouTrack project id from which you want your report.</li>
-            <li><b>query</b> &mdash; requited. Query that will be used to retrieve issues. This is the same query you'd enter in YouTrack UI.</li>
+            <li><b>query</b> &mdash; requited. Query that will be used to retrieve issues. This is the same query you'd
+                enter in YouTrack UI.
+            </li>
         </ul>
     </td>
 </tr>
