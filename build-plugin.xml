@@ -72,6 +72,7 @@
     <pathelement location="${basedir}/lib/javax.servlet.jsp.jar"/>
     <pathelement location="${basedir}/lib/javax.servlet.jsp.jstl.jar"/>
     <pathelement location="${basedir}/lib/javax.transaction.jar"/>
+
   </path>
   
   <path id="library.lib.classpath">
@@ -81,11 +82,9 @@
   </path>
   
   <path id="library.youtrackrestapi.classpath">
-    <fileset dir="${basedir}/../YouTrackRestApi/out/artifacts/YouTrackRestApi_jar">
-      <patternset refid="library.patterns"/>
-    </fileset>
+      <pathelement location="${basedir}/lib/YouTrackRestApi.jar"/>
   </path>
-  
+
   
   <!-- Application Server Libraries -->
   
