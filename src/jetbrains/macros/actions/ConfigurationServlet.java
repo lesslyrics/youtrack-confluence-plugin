@@ -47,9 +47,18 @@ public class ConfigurationServlet extends HttpServlet {
         this.transactionTemplate = transactionTemplate;
     }
 
+    private void checkAdminRights(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        final String username = userManager.getRemoteUsername(req);
+        if (username == null || !userManager.isSystemAdmin(username)) {
+            redirectToLogin(req, resp);
+        }
+    }
+
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final HttpServletRequest request = req;
+        checkAdminRights(req, resp);
         transactionTemplate.execute(new TransactionCallback<Properties>() {
             @Override
             public Properties doInTransaction() {
@@ -68,11 +77,7 @@ public class ConfigurationServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        final String username = userManager.getRemoteUsername(request);
-        if (username == null || !userManager.isSystemAdmin(username)) {
-            redirectToLogin(request, response);
-            return;
-        }
+        checkAdminRights(request, response);
         final Map<String, Object> params = new HashMap<String, Object>();
         params.put("baseUrl", applicationProperties.getBaseUrl());
         Properties storage = transactionTemplate.execute(new TransactionCallback<Properties>() {
