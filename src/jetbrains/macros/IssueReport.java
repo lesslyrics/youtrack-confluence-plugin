@@ -16,6 +16,7 @@ import jetbrains.macros.util.Strings;
 import youtrack.Issue;
 import youtrack.Project;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,17 +62,18 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String project = (String) params.get(Strings.PROJECT);
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
-            final StringBuilder rows = new StringBuilder();
-            final int pageSize = intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
-            final int currentPage = intValueOf(ServletActionContext.getRequest().getParameter(Strings.PAGINATION_PARAM), 1);
-            final int numPages = intValueOf((String) params.get(Strings.TOTAL_PAGES), 10);
-            final StringBuilder pagination = new StringBuilder();
-            final PageContext pageContext = (PageContext) renderContext;
-            final Page page = pageManager.getPage(pageContext.getSpaceKey(), pageContext.getPageTitle());
-            final String thisPageUrl = page.getUrlPath();
             if (project != null && query != null) {
                 final Project prj = tryGetItem(youTrack.projects, project);
                 if (prj != null) {
+                    final StringBuilder rows = new StringBuilder();
+                    final int pageSize = intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
+                    final HttpServletRequest request = ServletActionContext.getRequest();
+                    final int currentPage = request == null ? 1 : intValueOf(request.getParameter(Strings.PAGINATION_PARAM), 1);
+                    final int numPages = intValueOf((String) params.get(Strings.TOTAL_PAGES), 10);
+                    final StringBuilder pagination = new StringBuilder();
+                    final PageContext pageContext = (PageContext) renderContext;
+                    final Page page = pageManager.getPage(pageContext.getSpaceKey(), pageContext.getPageTitle());
+                    final String thisPageUrl = page.getUrlPath();
                     final Map<String, Object> myContext = new HashMap<String, Object>();
                     final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
                     final List<Issue> issues = prj.issues.query(query, startIssue, pageSize);
@@ -95,7 +97,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.put("style", i == currentPage ? "font-weight:bold;" : "font-weight:normal;");
                         pagination.append(VelocityUtils.getRenderedTemplate(Strings.PAGINATION_SINGLE, myContext));
                     }
-                    context.put("pagination", pagination.toString());
+                    context.put("pagination", request != null ? pagination.toString() : Strings.EMPTY);
                     context.put("rows", rows.toString());
                     context.put("hasIssues", issues.size() > 0 ? String.valueOf(true) : null);
                     context.put("title", query + " from " + project);

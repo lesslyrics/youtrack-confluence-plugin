@@ -32,8 +32,8 @@
         <parameters>
             <parameter name="project" type="string" required="true"/>
             <parameter name="query" type="string" required="true"/>
-            <parameter name="pageSize" type="integer" required="false" default="25"/>
-            <parameter name="numPages" type="integer" required="false" default="10"/>
+            <parameter name="pageSize" type="string" required="false" default="25"/>
+            <parameter name="numPages" type="string" required="false" default="10"/>
         </parameters>
     </macro>
 
