@@ -164,13 +164,13 @@
             <patternset refid="excluded.from.compilation.youtrack-confluence-plugin"/>
         </javac>
 
-        <copy todir="${youtrack-confluence-plugin.output.dir}">
+       <!-- <copy todir="${youtrack-confluence-plugin.output.dir}">
             <fileset dir="${module.youtrack-confluence-plugin.basedir}/src">
                 <patternset refid="compiler.resources"/>
                 <type type="file"/>
                 <patternset refid="excluded.from.compilation.youtrack-confluence-plugin"/>
             </fileset>
-        </copy>
+        </copy>-->
     </target>
 
     <target name="compile.module.youtrack-confluence-plugin.tests"
