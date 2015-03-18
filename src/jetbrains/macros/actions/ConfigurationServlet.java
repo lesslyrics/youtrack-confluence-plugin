@@ -91,7 +91,10 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(Strings.HOST, storage.getProperty(Strings.HOST, Strings.EMPTY));
         params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
         params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
-        if (justSaved) params.put("justSaved", true);
+        if (justSaved) {
+            params.put("justSaved", true);
+            justSaved = false;
+        }
         response.setContentType("text/html;charset=utf-8");
         renderer.render("/templates/settings-servlet.vm", params, response.getWriter());
     }

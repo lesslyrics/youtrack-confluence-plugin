@@ -2,6 +2,7 @@
 <head>
     <title>YouTrack Integration Settings</title>
     <meta name="decorator" content="atl.admin"/>
+    #requireResource("com.atlassian.auiplugin:aui-experimental-iconfont")
 </head>
 <body>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
@@ -22,8 +23,12 @@
         <input type="submit" value="Save Settings" class="button">
     </div>
     #if ($justSaved)
-        <div class="field-group">
-            <p style="color:darkgreen;">Settings have been updated successfully.</p>
+        <div class="aui-message message-success">
+            <span class="aui-icon aui-icon-small aui-iconfont-approve"></span>
+            <p class="title">
+                <strong>Success!</strong>
+            </p>
+            <p>Settings have been updated successfully.</p>
         </div>
     #end
 </form>
