@@ -63,7 +63,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
             if (project != null && query != null) {
-                final Project prj = tryGetItem(youTrack.projects(), project);
+                final Project prj = tryGetItem(youTrack.projects, project);
                 if (prj != null) {
                     final StringBuilder rows = new StringBuilder();
                     final int pageSize = intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
@@ -76,7 +76,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     final String thisPageUrl = page.getUrlPath();
                     final Map<String, Object> myContext = new HashMap<String, Object>();
                     final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
-                    final List<Issue> issues = prj.issues().query(query, startIssue, pageSize);
+                    final List<Issue> issues = prj.issues.query(query, startIssue, pageSize);
                     for (final Issue sIssue : issues) {
                         myContext.clear();
                         myContext.putAll(context);
