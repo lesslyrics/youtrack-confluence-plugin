@@ -45,11 +45,11 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = Strings.SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                CommandBasedList<YouTrack, Project> projects = youTrack.projects;
+                CommandBasedList<YouTrack, Project> projects = youTrack.projects();
                 String[] idPair = issueId.split("-");
                 final Project project = tryGetItem(projects, idPair[0]);
                 if (project != null) {
-                    Issue issue = tryGetItem(project.issues, issueId);
+                    Issue issue = tryGetItem(project.issues(), issueId);
                     if (issue != null) {
                         issue = issue.createSnapshot();
                         context.put(Strings.ISSUE, issueId);
