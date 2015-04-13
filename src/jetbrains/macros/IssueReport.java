@@ -33,7 +33,6 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
         this.pageManager = pageManager;
     }
 
-
     public boolean isInline() {
         return false;
     }

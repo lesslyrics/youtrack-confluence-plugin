@@ -21,7 +21,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     }
 
 
-    protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id) throws CommandExecutionException, AuthenticationErrorException {
+    protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id)
+            throws CommandExecutionException, AuthenticationErrorException {
         I result;
         try {
             result = list.item(id);
