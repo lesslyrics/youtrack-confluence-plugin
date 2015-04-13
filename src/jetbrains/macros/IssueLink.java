@@ -45,6 +45,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = Strings.SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
+                checkHostState();
                 CommandBasedList<YouTrack, Project> projects = youTrack.projects;
                 String[] idPair = issueId.split("-");
                 final Project project = tryGetItem(projects, idPair[0]);

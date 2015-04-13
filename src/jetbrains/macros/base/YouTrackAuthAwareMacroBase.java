@@ -20,6 +20,13 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
     }
 
+    protected void checkHostState() {
+        final String savedHostAddress = getProperty(Strings.HOST);
+        if (!youTrack.getHostAddress().equals(savedHostAddress)) {
+            youTrack = YouTrack.getInstance(savedHostAddress);
+            setProperty(Strings.AUTH_KEY, "");
+        }
+    }
 
     protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id)
             throws CommandExecutionException, AuthenticationErrorException {
@@ -33,13 +40,14 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         return result;
     }
 
-    protected void refreshStoredAuthKey() throws AuthenticationErrorException {
+    protected void refreshStoredAuthKey() {
         try {
-            youTrack = YouTrack.getInstance(getProperty(Strings.HOST));
             youTrack.login(getProperty(Strings.LOGIN),
                     getProperty(Strings.PASSWORD));
             setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
         } catch (CommandExecutionException e) {
+            e.printStackTrace();
+        } catch (AuthenticationErrorException e) {
             e.printStackTrace();
         }
     }
