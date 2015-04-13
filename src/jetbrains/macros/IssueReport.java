@@ -62,6 +62,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
             if (project != null && query != null) {
+                checkHostState();
                 final Project prj = tryGetItem(youTrack.projects, project);
                 if (prj != null) {
                     final StringBuilder rows = new StringBuilder();
@@ -81,6 +82,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         myContext.putAll(context);
                         final Issue issue = sIssue.createSnapshot();
                         myContext.put(Strings.ISSUE, sIssue.getId());
+                        myContext.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                         myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         myContext.put(Strings.STATE, issue.getState());
                         myContext.put(Strings.SUMMARY, issue.getSummary());
