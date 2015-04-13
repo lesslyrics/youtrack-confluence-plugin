@@ -35,6 +35,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected void refreshStoredAuthKey() throws AuthenticationErrorException {
         try {
+            youTrack = YouTrack.getInstance(getProperty(Strings.HOST));
             youTrack.login(getProperty(Strings.LOGIN),
                     getProperty(Strings.PASSWORD));
             setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
