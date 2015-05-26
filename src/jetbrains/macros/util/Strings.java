@@ -19,8 +19,8 @@ public class Strings {
     public static final String ROW = TEMPLATES_ROOT + "body-report-row.vm";
     public static final String DETAILED = "detailed";
     public static final String SHORT = "short";
-    public static final String BODY_DETAILED = TEMPLATES_ROOT + "body-link-detailed.vm";
-    public static final String BODY_LINK = TEMPLATES_ROOT + "body-link.vm";
+    public static final String BODY_LINK = TEMPLATES_ROOT + "body-link-";
+    public static final String TEMPLATE_EXT= ".vm";
     public static final String ERROR = "error";
     public static final String HOST = "host";
     public static final String EMPTY = "";
@@ -31,6 +31,11 @@ public class Strings {
     public static final String TOTAL_PAGES = "numPages";
     public static final String PAGINATION_SINGLE = TEMPLATES_ROOT + "pagination-report-single.vm";
     public static final String PAGINATION_PARAM = "youtrack-report-page";
+    public static final String CUSTOM = "custom";
+    public static final String TEMPLATE = "template";
+    public static final String DEFAULT_TEMPLATE = "$summary";
+    public static final String ISSUE_SEPARATOR = "-";
+    public static final String ISSUE_FORMATTED = "issueFormatted";
     public static String STYLE = "style";
     public static String ID = "id";
 }

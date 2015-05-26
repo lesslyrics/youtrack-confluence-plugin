@@ -1,5 +1,4 @@
 package jetbrains.macros;
-
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.renderer.RenderContext;
@@ -13,54 +12,62 @@ import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
 import youtrack.YouTrack;
+import youtrack.issue.fields.BaseIssueField;
 import youtrack.issue.fields.values.MultiUserFieldValue;
 
+import java.util.HashMap;
 import java.util.Map;
-
 public class IssueLink extends YouTrackAuthAwareMacroBase {
-
     public IssueLink(PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
     }
-
     public boolean isInline() {
         return true;
     }
-
     public boolean hasBody() {
         return false;
     }
-
     public RenderMode getBodyRenderMode() {
         return RenderMode.NO_RENDER;
     }
-
     public String execute(Map params, String body, RenderContext renderContext)
             throws MacroException {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             final String issueId = (String) params.get(Strings.ID);
+            String issueCustomTemplate = (String) params.get(Strings.TEMPLATE);
+            if(issueCustomTemplate.isEmpty()) issueCustomTemplate = Strings.DEFAULT_TEMPLATE;
             String style = (String) params.get(Strings.STYLE);
-            if (!Strings.DETAILED.equals(style)) {
-                style = Strings.SHORT;
+            if(!Strings.DETAILED.equals(style)) {
+                if(!Strings.CUSTOM.equals(style)) {
+                    style = Strings.SHORT;
+                } else {
+                    style = Strings.CUSTOM;
+                }
             }
-            if (issueId != null && !issueId.isEmpty()) {
+            if(issueId != null && !issueId.isEmpty()) {
                 checkHostState();
                 CommandBasedList<YouTrack, Project> projects = youTrack.projects;
-                String[] idPair = issueId.split("-");
+                String[] idPair = issueId.split(Strings.ISSUE_SEPARATOR);
                 final Project project = tryGetItem(projects, idPair[0]);
-                if (project != null) {
+                if(project != null) {
                     Issue issue = tryGetItem(project.issues, issueId);
-                    if (issue != null) {
+                    if(issue != null) {
                         issue = issue.createSnapshot();
+                        final HashMap<String, BaseIssueField> fields = issue.getFields();
+                        for(final String fieldName : fields.keySet()) {
+                            context.put(fieldName, fields.get(fieldName).getValue());
+                        }
                         context.put(Strings.ISSUE, issueId);
-                        context.put(Strings.SUMMARY, issue.getSummary());
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                         context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
-                        MultiUserFieldValue assignee = issue.getAssignee();
+                        final MultiUserFieldValue assignee = issue.getAssignee();
                         context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.getFullName()) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
+                        if(Strings.CUSTOM.equals(style)) {
+                            context.put(Strings.ISSUE_FORMATTED, VelocityUtils.getRenderedContent(issueCustomTemplate, context));
+                        }
                     } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
                 } else {
                     context.put(Strings.ERROR, "Project not found: " + idPair[0]);
@@ -68,8 +75,8 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             } else {
                 context.put(Strings.ERROR, "Missing id parameter");
             }
-            return VelocityUtils.getRenderedTemplate((Strings.SHORT.equals(style) ? Strings.BODY_LINK : Strings.BODY_DETAILED), context);
-        } catch (Exception ex) {
+            return VelocityUtils.getRenderedTemplate(Strings.BODY_LINK + style + Strings.TEMPLATE_EXT, context);
+        } catch(Exception ex) {
             throw new MacroException(ex);
         }
     }

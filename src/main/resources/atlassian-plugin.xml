@@ -20,7 +20,9 @@
             <parameter name="style" type="enum" required="false" default="short">
                 <value name="short"/>
                 <value name="detailed"/>
+                <value name="custom"/>
             </parameter>
+            <parameter name="template" type="string" required="false" default=""/>
         </parameters>
     </macro>
     <macro name="report" class="jetbrains.macros.IssueReport" key="youtrack.integration.plugin.report">
