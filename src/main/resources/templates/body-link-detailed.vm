@@ -1,7 +1,6 @@
 #if ($issue)
-<span>$summary</span>&nbsp;(<a href="$base/issue/$issue" target="_blank"
-                               style="text-decoration:$style;"
-                               title="$title">$issueLinkText</a>)
+    #set($issueLinkTextWithHtml = $issueLinkText)
+<span>$summary</span>&nbsp;(<a href="$base/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>)
 #else
 <span style="color:darkred;background-color:lightgrey">$error</span>
 #end

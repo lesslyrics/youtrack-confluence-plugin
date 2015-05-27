@@ -13,6 +13,7 @@ import youtrack.Project;
 import youtrack.issue.fields.BaseIssueField;
 import youtrack.issue.fields.values.MultiUserFieldValue;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 public class IssueLink extends YouTrackAuthAwareMacroBase {
@@ -33,6 +34,8 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             final String issueId = (String) params.get(Strings.ID);
+            String strikeMode = (String) params.get(Strings.STRIKE_THRU_PARAM);
+            if(strikeMode == null) strikeMode = Strings.ID_ONLY;
             String linkTextTemplate = (String) params.get(Strings.TEMPLATE_PARAM);
             if(linkTextTemplate == null || linkTextTemplate.isEmpty()) linkTextTemplate = Strings.DEFAULT_TEMPLATE;
             String style = (String) params.get(Strings.STYLE);
@@ -53,7 +56,12 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         }
                         context.put(Strings.ISSUE, issueId);
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
-                        context.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
+                        final String thru = Strings.ALL.equals(strikeMode) || Strings.ID_ONLY.equals(strikeMode) ? "line-through" : "normal";
+                        if(Strings.ID_ONLY.equals(strikeMode)) {
+                            linkTextTemplate = linkTextTemplate.replace("$issue", MessageFormat.format(Strings.STRIKE_THRU, thru, "$issue"));
+                        } else {
+                            linkTextTemplate = MessageFormat.format(Strings.STRIKE_THRU, thru, linkTextTemplate);
+                        }
                         final MultiUserFieldValue assignee = issue.getAssignee();
                         context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.getFullName()) +
