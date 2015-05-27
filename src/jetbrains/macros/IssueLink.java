@@ -8,10 +8,8 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.Strings;
-import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.Project;
-import youtrack.YouTrack;
 import youtrack.issue.fields.BaseIssueField;
 import youtrack.issue.fields.values.MultiUserFieldValue;
 
@@ -35,28 +33,23 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             final String issueId = (String) params.get(Strings.ID);
-            String issueCustomTemplate = (String) params.get(Strings.TEMPLATE);
-            if(issueCustomTemplate.isEmpty()) issueCustomTemplate = Strings.DEFAULT_TEMPLATE;
+            String linkTextTemplate = (String) params.get(Strings.TEMPLATE_PARAM);
+            if(linkTextTemplate == null || linkTextTemplate.isEmpty()) linkTextTemplate = Strings.DEFAULT_TEMPLATE;
             String style = (String) params.get(Strings.STYLE);
             if(!Strings.DETAILED.equals(style)) {
-                if(!Strings.CUSTOM.equals(style)) {
-                    style = Strings.SHORT;
-                } else {
-                    style = Strings.CUSTOM;
-                }
+                style = Strings.SHORT;
             }
             if(issueId != null && !issueId.isEmpty()) {
                 checkHostState();
-                CommandBasedList<YouTrack, Project> projects = youTrack.projects;
                 String[] idPair = issueId.split(Strings.ISSUE_SEPARATOR);
-                final Project project = tryGetItem(projects, idPair[0]);
+                final Project project = tryGetItem(youTrack.projects, idPair[0]);
                 if(project != null) {
                     Issue issue = tryGetItem(project.issues, issueId);
                     if(issue != null) {
                         issue = issue.createSnapshot();
                         final HashMap<String, BaseIssueField> fields = issue.getFields();
                         for(final String fieldName : fields.keySet()) {
-                            context.put(fieldName, fields.get(fieldName).getValue());
+                            context.put(fieldName, fields.get(fieldName).getStringValue());
                         }
                         context.put(Strings.ISSUE, issueId);
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
@@ -65,18 +58,17 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.getFullName()) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
-                        if(Strings.CUSTOM.equals(style)) {
-                            context.put(Strings.ISSUE_FORMATTED, VelocityUtils.getRenderedContent(issueCustomTemplate, context));
-                        }
-                    } else context.put(Strings.ERROR, "Issue not fount: " + issueId);
+                        context.put(Strings.ISSUE_LINK_TEXT, VelocityUtils.getRenderedContent(linkTextTemplate, context));
+                    } else context.put(Strings.ERROR, "Issue not found: " + issueId);
                 } else {
                     context.put(Strings.ERROR, "Project not found: " + idPair[0]);
                 }
             } else {
-                context.put(Strings.ERROR, "Missing id parameter");
+                context.put(Strings.ERROR, "Issue not specified.");
             }
             return VelocityUtils.getRenderedTemplate(Strings.BODY_LINK + style + Strings.TEMPLATE_EXT, context);
         } catch(Exception ex) {
+            ex.printStackTrace();
             throw new MacroException(ex);
         }
     }
