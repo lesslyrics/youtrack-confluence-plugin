@@ -37,6 +37,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             String strikeMode = (String) params.get(Strings.STRIKE_THRU_PARAM);
             if(strikeMode == null) strikeMode = Strings.ID_ONLY;
             String linkTextTemplate = (String) params.get(Strings.TEMPLATE_PARAM);
+            String summaryTextTemplate = null;
             if(linkTextTemplate == null || linkTextTemplate.isEmpty()) linkTextTemplate = Strings.DEFAULT_TEMPLATE;
             String style = (String) params.get(Strings.STYLE);
             if(!Strings.DETAILED.equals(style)) {
@@ -48,6 +49,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 final Project project = tryGetItem(youTrack.projects, idPair[0]);
                 if(project != null) {
                     Issue issue = tryGetItem(project.issues, issueId);
+
                     if(issue != null) {
                         issue = issue.createSnapshot();
                         final HashMap<String, BaseIssueField> fields = issue.getFields();
@@ -56,17 +58,20 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                         }
                         context.put(Strings.ISSUE, issueId);
                         context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
-                        final String thru = Strings.ALL.equals(strikeMode) || Strings.ID_ONLY.equals(strikeMode) ? "line-through" : "normal";
+                        final String thru = (Strings.ALL.equals(strikeMode) || Strings.ID_ONLY.equals(strikeMode)) && issue.isResolved() ? "line-through" : Strings.NORMAL;
                         if(Strings.ID_ONLY.equals(strikeMode)) {
                             linkTextTemplate = linkTextTemplate.replace("$issue", MessageFormat.format(Strings.STRIKE_THRU, thru, "$issue"));
+                            summaryTextTemplate = MessageFormat.format(Strings.STRIKE_THRU, Strings.NORMAL, "$summary");
                         } else {
                             linkTextTemplate = MessageFormat.format(Strings.STRIKE_THRU, thru, linkTextTemplate);
+                            summaryTextTemplate = MessageFormat.format(Strings.STRIKE_THRU, thru, "$summary");
                         }
                         final MultiUserFieldValue assignee = issue.getAssignee();
                         context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                                 issue.getState() + ", Assignee: " + (assignee == null ? Strings.UNASSIGNED : assignee.getFullName()) +
                                 ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
                         context.put(Strings.ISSUE_LINK_TEXT, VelocityUtils.getRenderedContent(linkTextTemplate, context));
+                        context.put(Strings.SUMMARY_FORMATTED, VelocityUtils.getRenderedContent(summaryTextTemplate, context));
                     } else context.put(Strings.ERROR, "Issue not found: " + issueId);
                 } else {
                     context.put(Strings.ERROR, "Project not found: " + idPair[0]);

@@ -5,7 +5,6 @@ package jetbrains.macros.util;
 public class Strings {
     public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#0";
     public static final String ALL = "all";
-    public static final String NONE = "none";
     public static final String STRIKE_THRU_PARAM = "strikethru-resolved";
     public static final String ISSUE = "issue";
     public static final String BASE = "base";
@@ -39,6 +38,8 @@ public class Strings {
     public static final String ISSUE_SEPARATOR = "-";
     public static final String ISSUE_LINK_TEXT = "issueLinkText";
     public static final String ID_ONLY = "issueId";
+    public static final String NORMAL = "normal";
     public static String STYLE = "style";
     public static String ID = "id";
+    public static String SUMMARY_FORMATTED = "summaryFormattedText";
 }
