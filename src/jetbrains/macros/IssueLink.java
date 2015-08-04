@@ -37,19 +37,17 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             String strikeMode = (String) params.get(Strings.STRIKE_THRU_PARAM);
             if(strikeMode == null) strikeMode = Strings.ID_ONLY;
             String linkTextTemplate = (String) params.get(Strings.TEMPLATE_PARAM);
-            String summaryTextTemplate = null;
+            String summaryTextTemplate;
             if(linkTextTemplate == null || linkTextTemplate.isEmpty()) linkTextTemplate = Strings.DEFAULT_TEMPLATE;
             String style = (String) params.get(Strings.STYLE);
             if(!Strings.DETAILED.equals(style)) {
                 style = Strings.SHORT;
             }
             if(issueId != null && !issueId.isEmpty()) {
-                checkHostState();
                 String[] idPair = issueId.split(Strings.ISSUE_SEPARATOR);
                 final Project project = tryGetItem(youTrack.projects, idPair[0]);
                 if(project != null) {
                     Issue issue = tryGetItem(project.issues, issueId);
-
                     if(issue != null) {
                         issue = issue.createSnapshot();
                         final HashMap<String, BaseIssueField> fields = issue.getFields();
@@ -81,7 +79,6 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             }
             return VelocityUtils.getRenderedTemplate(Strings.BODY_LINK + style + Strings.TEMPLATE_EXT, context);
         } catch(Exception ex) {
-            ex.printStackTrace();
             throw new MacroException(ex);
         }
     }

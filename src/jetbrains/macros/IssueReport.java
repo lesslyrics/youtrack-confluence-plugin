@@ -62,7 +62,6 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
             if (project != null && query != null) {
-                checkHostState();
                 final Project prj = tryGetItem(youTrack.projects, project);
                 if (prj != null) {
                     final StringBuilder rows = new StringBuilder();

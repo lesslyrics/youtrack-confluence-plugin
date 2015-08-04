@@ -22,13 +22,23 @@
     <div class="field-group">
         <input type="submit" value="Save Settings" class="button">
     </div>
-    #if ($justSaved)
+    #if ($justSaved==0)
         <div class="aui-message message-success">
             <span class="aui-icon aui-icon-small aui-iconfont-approve"></span>
             <p class="title">
                 <strong>Success!</strong>
             </p>
             <p>Settings have been updated successfully.</p>
+        </div>
+    #end
+    #if ($justSaved==-2)
+        <div class="aui-message message-error">
+            <span class="aui-icon aui-icon-small aui-iconfont-error"></span>
+            <p class="title">
+                <strong>Error!</strong>
+            </p>
+            <p>Cannot login to the specified YouTrack instance with credentials you provided.</p>
+            <p>Settings have not been updated.</p>
         </div>
     #end
 </form>

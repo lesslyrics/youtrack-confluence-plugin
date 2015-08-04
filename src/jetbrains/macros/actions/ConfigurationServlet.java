@@ -11,6 +11,9 @@ import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import jetbrains.macros.util.Strings;
+import youtrack.YouTrack;
+import youtrack.exceptions.AuthenticationErrorException;
+import youtrack.exceptions.CommandExecutionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +32,7 @@ public class ConfigurationServlet extends HttpServlet {
     private final ApplicationProperties applicationProperties;
     private final PluginSettingsFactory pluginSettingsFactory;
     private final TransactionTemplate transactionTemplate;
-    private boolean justSaved = false;
+    private int justSaved = -1;
     public ConfigurationServlet(UserManager userManager,
                                 LoginUriProvider loginUriProvider,
                                 TemplateRenderer renderer,
@@ -51,23 +54,33 @@ public class ConfigurationServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final HttpServletRequest request = req;
         checkAdminRights(req, resp);
-        transactionTemplate.execute(new TransactionCallback<Properties>() {
-            @Override
-            public Properties doInTransaction() {
-                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                final Properties storage = new Properties();
-                String hostAddress = request.getParameter(Strings.HOST);
-                if(!hostAddress.endsWith("/")) hostAddress += URL_SEPARATOR;
-                storage.setProperty(Strings.HOST, hostAddress);
-                storage.setProperty(Strings.LOGIN, request.getParameter(Strings.LOGIN));
-                storage.setProperty(Strings.PASSWORD, request.getParameter(Strings.PASSWORD));
-                pluginSettings.put(Strings.MAIN_KEY, storage);
-                return null;
-            }
-        });
-        justSaved = true;
+        final String hostAddressPassed = req.getParameter(Strings.HOST);
+        final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
+        final String password = req.getParameter(Strings.PASSWORD);
+        final String login = req.getParameter(Strings.LOGIN);
+        final YouTrack testYouTrack = YouTrack.getInstance(hostAddress);
+        try {
+            testYouTrack.login(login, password);
+            transactionTemplate.execute(new TransactionCallback<Properties>() {
+                @Override
+                public Properties doInTransaction() {
+                    final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+                    final Properties storage = new Properties();
+                    storage.setProperty(Strings.HOST, hostAddress);
+                    storage.setProperty(Strings.LOGIN, login);
+                    storage.setProperty(Strings.PASSWORD, password);
+                    storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
+                    pluginSettings.put(Strings.MAIN_KEY, storage);
+                    return null;
+                }
+            });
+            justSaved = 0;
+        } catch(CommandExecutionException e) {
+            justSaved = -2;
+        } catch(AuthenticationErrorException e) {
+            justSaved = -2;
+        }
         doGet(req, resp);
     }
     @Override
@@ -86,10 +99,8 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(Strings.HOST, storage.getProperty(Strings.HOST, Strings.EMPTY));
         params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
         params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
-        if(justSaved) {
-            params.put("justSaved", true);
-            justSaved = false;
-        }
+        params.put("justSaved", justSaved);
+        justSaved = -1;
         response.setContentType("text/html;charset=utf-8");
         renderer.render("/templates/settings-servlet.vm", params, response.getWriter());
     }
