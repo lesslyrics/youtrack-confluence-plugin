@@ -7,6 +7,7 @@ import youtrack.CommandBasedList;
 import youtrack.YouTrack;
 import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
+import youtrack.exceptions.NotLoggedInException;
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
     protected YouTrack youTrack;
     public YouTrackAuthAwareMacroBase(PluginSettingsFactory pluginSettingsFactory,
@@ -15,13 +16,18 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST));
         youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
     }
-    protected <O extends BaseItem, I extends BaseItem> I tryGetItem(CommandBasedList<O, I> list, String id)
+    protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final boolean retrying)
             throws CommandExecutionException, AuthenticationErrorException {
-        I result;
+        I result = null;
         try {
             result = list.item(id);
         } catch(CommandExecutionException e) {
-            result = null;
+            if(((e.getError() != null && e.getError().getCode() == 403)) ||
+                    (e.getInnerException() instanceof NotLoggedInException) && !retrying) {
+                youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
+                setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
+                return tryGetItem(list, id, true);
+            }
         }
         return result;
     }
