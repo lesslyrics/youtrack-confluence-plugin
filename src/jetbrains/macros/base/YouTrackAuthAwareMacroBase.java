@@ -13,17 +13,21 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     public YouTrackAuthAwareMacroBase(PluginSettingsFactory pluginSettingsFactory,
                                       TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
+        init();
+    }
+    private void init() {
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST));
-        youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
+        youTrack.setAuthorization(Strings.AUTH_KEY);
     }
     protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final boolean retrying)
             throws CommandExecutionException, AuthenticationErrorException {
         I result = null;
         try {
+            if(!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
             result = list.item(id);
         } catch(CommandExecutionException e) {
-            if(((e.getError() != null && e.getError().getCode() == 403)) ||
-                    (e.getInnerException() instanceof NotLoggedInException) && !retrying) {
+            if((((e.getError() != null && e.getError().getCode() == 403)) ||
+                    (e.getInnerException() instanceof NotLoggedInException)) && !retrying) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryGetItem(list, id, true);
