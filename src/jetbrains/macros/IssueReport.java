@@ -52,7 +52,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
             if(project != null && query != null) {
-                final Project prj = tryGetItem(youTrack.projects, project, false);
+                final Project prj = tryGetItem(youTrack.projects, project, 10);
                 if(prj != null) {
                     final StringBuilder rows = new StringBuilder();
                     final int pageSize = intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
