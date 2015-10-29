@@ -52,7 +52,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
             if(project != null && query != null) {
-                final int retries = Integer.valueOf(getProperty(Strings.RETRIES));
+                final int retries = Integer.valueOf(getProperty(Strings.RETRIES, "10"));
                 final Project prj = tryGetItem(youTrack.projects, project, retries);
                 if(prj != null) {
                     final StringBuilder rows = new StringBuilder();

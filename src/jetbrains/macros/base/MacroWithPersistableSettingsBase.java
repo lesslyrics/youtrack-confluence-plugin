@@ -53,6 +53,11 @@ public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
         return storage.getProperty(key, Strings.EMPTY);
     }
 
+    protected String getProperty(final String key, String defaultValue) {
+        load();
+        return storage.getProperty(key, defaultValue);
+    }
+
     protected void setProperty(final String key, final String value) {
         storage.setProperty(key, value);
         persist();
