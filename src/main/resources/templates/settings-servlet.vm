@@ -12,6 +12,10 @@
         <input type="text" name="host" id="host" class="text" value="$host">
     </div>
     <div class="field-group">
+        <label for="retries">Number of consecutive connection attempts:</label>
+        <input type="text" name="retries" id="retries" class="text" value="$retries">
+    </div>
+    <div class="field-group">
         <label for="youtracklogin">Login:</label>
         <input type="text" name="login" id="login" class="text" value="$login">
     </div>

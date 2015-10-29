@@ -59,6 +59,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
         final String password = req.getParameter(Strings.PASSWORD);
         final String login = req.getParameter(Strings.LOGIN);
+        final String retries = req.getParameter(Strings.RETRIES);
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress);
         try {
             testYouTrack.login(login, password);
@@ -69,6 +70,7 @@ public class ConfigurationServlet extends HttpServlet {
                     final Properties storage = new Properties();
                     storage.setProperty(Strings.HOST, hostAddress);
                     storage.setProperty(Strings.LOGIN, login);
+                    storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
                     storage.setProperty(Strings.PASSWORD, password);
                     storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
                     pluginSettings.put(Strings.MAIN_KEY, storage);
@@ -82,6 +84,14 @@ public class ConfigurationServlet extends HttpServlet {
             justSaved = -2;
         }
         doGet(req, resp);
+    }
+    private String intValueOf(String retries, int defaultValue) {
+        try {
+            Integer i = Integer.parseInt(retries);
+            return String.valueOf(i);
+        } catch(NumberFormatException nfe) {
+            return String.valueOf(defaultValue);
+        }
     }
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -97,6 +107,7 @@ public class ConfigurationServlet extends HttpServlet {
         });
         if(storage == null) storage = new Properties();
         params.put(Strings.HOST, storage.getProperty(Strings.HOST, Strings.EMPTY));
+        params.put(Strings.RETRIES, storage.getProperty(Strings.RETRIES, "10"));
         params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
         params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
         params.put("justSaved", justSaved);

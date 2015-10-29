@@ -29,6 +29,7 @@ public class Strings {
     public static final String PASSWORD = "password";
     public static final String LOGIN = "login";
     public static final String AUTH_KEY = "AUTH_KEY";
+    public static final String RETRIES= "retries";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TOTAL_PAGES = "numPages";
     public static final String PAGINATION_SINGLE = TEMPLATES_ROOT + "pagination-report-single.vm";

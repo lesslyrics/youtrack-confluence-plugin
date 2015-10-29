@@ -26,7 +26,6 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             result = list.item(id);
         } catch(CommandExecutionException e) {
             if(retry > 0) {
-                System.out.println("Trying retry " + retry);
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryGetItem(list, id, retry - 1);
