@@ -11,5 +11,9 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="YouTrackRestApi" level="project" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="library" name="apache-velocity-velocity-1.5" level="project" />
+    <orderEntry type="library" name="user" level="project" />
+    <orderEntry type="library" name="renderer" level="project" />
+    <orderEntry type="library" name="slf4j-api-1.7.17" level="project" />
   </component>
 </module>

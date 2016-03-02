@@ -2,6 +2,7 @@ package jetbrains.macros.actions;
 /**
  * Created by Egor.Malyshev on 12.03.2015.
  */
+
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
@@ -11,6 +12,8 @@ import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import jetbrains.macros.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import youtrack.YouTrack;
 import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
@@ -24,7 +27,9 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
 public class ConfigurationServlet extends HttpServlet {
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationServlet.class);
     public static final String URL_SEPARATOR = "/";
     private final UserManager userManager;
     private final LoginUriProvider loginUriProvider;
@@ -79,8 +84,12 @@ public class ConfigurationServlet extends HttpServlet {
             });
             justSaved = 0;
         } catch(CommandExecutionException e) {
+            LOG.error("YouTrack integration command failed",e);
+            e.printStackTrace();
             justSaved = -2;
         } catch(AuthenticationErrorException e) {
+            LOG.error("YouTrack integration login failed.",e);
+            e.printStackTrace();
             justSaved = -2;
         }
         doGet(req, resp);
