@@ -36,7 +36,7 @@
         </resource>
         <category name="confluence-content"/>
         <parameters>
-            <parameter name="project" type="string" required="false"/>
+            <parameter name="project" type="string" required="false" default="Everything"/>
             <parameter name="query" type="string" required="true"/>
             <parameter name="pageSize" type="string" required="false" default="25"/>
             <parameter name="numPages" type="string" required="false" default="10"/>
