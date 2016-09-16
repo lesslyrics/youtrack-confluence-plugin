@@ -1,4 +1,5 @@
 package jetbrains.macros.util;
+
 /**
  * Created by Egor.Malyshev on 06.03.2015.
  */
@@ -29,7 +30,7 @@ public class Strings {
     public static final String PASSWORD = "password";
     public static final String LOGIN = "login";
     public static final String AUTH_KEY = "AUTH_KEY";
-    public static final String RETRIES= "retries";
+    public static final String RETRIES = "retries";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TOTAL_PAGES = "numPages";
     public static final String PAGINATION_SINGLE = TEMPLATES_ROOT + "pagination-report-single.vm";
@@ -40,6 +41,7 @@ public class Strings {
     public static final String ISSUE_LINK_TEXT = "issueLinkText";
     public static final String ID_ONLY = "issueId";
     public static final String NORMAL = "normal";
+    public static final String ALL_PROJECTS = "Everything";
     public static String STYLE = "style";
     public static String ID = "id";
     public static String SUMMARY_FORMATTED = "summaryFormattedText";
