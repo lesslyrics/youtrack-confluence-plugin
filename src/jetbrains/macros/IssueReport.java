@@ -64,8 +64,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
             if (query != null) {
-                final int retries = Integer.valueOf(getProperty(Strings.RETRIES, "10"));
-                tryGetItem(youTrack.issues, Strings.EMPTY, retries);
+                tryGetItem(youTrack.issues, Strings.EMPTY, 2);
                 final StringBuilder rows = new StringBuilder();
                 final int pageSize = intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
                 final HttpServletRequest request = ServletActionContext.getRequest();
