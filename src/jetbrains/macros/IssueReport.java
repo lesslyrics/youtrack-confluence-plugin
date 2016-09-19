@@ -59,10 +59,11 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             throws MacroException {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
-            final String project = (String) params.get(Strings.PROJECT);
+            String project = (String) params.get(Strings.PROJECT);
+            if (project == null || project.trim().isEmpty()) project = Strings.ALL_PROJECTS;
             final String query = (String) params.get(Strings.QUERY);
             final StringBuilder result = new StringBuilder();
-            if (project != null && query != null) {
+            if (query != null) {
                 final StringBuilder rows = new StringBuilder();
                 final int pageSize = intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
                 final HttpServletRequest request = ServletActionContext.getRequest();
@@ -74,7 +75,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final String thisPageUrl = page.getUrlPath();
                 final Map<String, Object> myContext = new HashMap<String, Object>();
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
-                final List<Issue> issues = youTrack.issues.query(((project.isEmpty() || Strings.ALL_PROJECTS.equalsIgnoreCase(project)) ?
+                final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
                         Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
                 for (final Issue sIssue : issues) {
                     myContext.clear();
