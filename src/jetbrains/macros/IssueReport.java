@@ -15,10 +15,12 @@ import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
 import youtrack.Issue;
 import youtrack.issue.fields.BaseIssueField;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -116,6 +118,9 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     myContext.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                     myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     rows.append("<tr>");
+                    rows.append("<td>");
+                    rows.append(MessageFormat.format("<a href=\"{0}\">{1}</a>", getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY), issue.getId()));
+                    rows.append("</td>");
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
                         final BaseIssueField field = issue.getFields().get(desc.code);
