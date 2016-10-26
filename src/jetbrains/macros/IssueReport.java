@@ -16,10 +16,13 @@ import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import youtrack.Issue;
-import youtrack.Project;
+import youtrack.issue.fields.BaseIssueField;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class IssueReport extends YouTrackAuthAwareMacroBase {
     private static final Logger LOG = LoggerFactory.getLogger(IssueReport.class);
@@ -29,7 +32,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
         final String code;
         final String title;
 
-        public IssueFieldDescriptor(String src) {
+        IssueFieldDescriptor(String src) {
             final String[] parts = src.split(":");
             this.code = parts[0];
             this.title = parts.length > 1 ? parts[1] : parts[0];
@@ -115,7 +118,8 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     rows.append("<tr>");
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
-                        rows.append(String.valueOf(issue.getFields().get(desc.code).getValue()));
+                        final BaseIssueField field = issue.getFields().get(desc.code);
+                        rows.append(field == null ? Strings.EMPTY : String.valueOf(field.getValue()));
                         rows.append("</td>");
                     }
                     rows.append("</tr>");
