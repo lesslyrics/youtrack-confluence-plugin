@@ -41,7 +41,7 @@ public class Strings {
     public static final String ID_ONLY = "issueId";
     public static final String NORMAL = "normal";
     public static final String ALL_PROJECTS = "Everything";
-    public static final String DEFAULT_REPORT_FIELD_LIST = "id:Id,state:State,summary:Summary,assignee:Assignee";
+    public static final String DEFAULT_REPORT_FIELD_LIST = "State:State,Summary:Description,Assignee:Assigned to";
     public static String STYLE = "style";
     public static String ID = "id";
     public static String SUMMARY_FORMATTED = "summaryFormattedText";

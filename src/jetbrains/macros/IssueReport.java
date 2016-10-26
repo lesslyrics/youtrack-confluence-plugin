@@ -102,7 +102,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     fields.add(new IssueFieldDescriptor(fieldData));
                 }
                 StringBuilder header = new StringBuilder();
-
+                header.append("<th>Issue</th>");
                 for (final IssueFieldDescriptor desc : fields) {
                     header.append("<th>");
                     header.append(desc.title);
@@ -114,12 +114,11 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     myContext.putAll(context);
                     final Issue issue = sIssue.createSnapshot();
 
-                    myContext.put(Strings.ISSUE, issue.getId());
                     myContext.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                     myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     rows.append("<tr>");
                     rows.append("<td>");
-                    rows.append(MessageFormat.format("<a href=\"{0}\">{1}</a>", getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY), issue.getId()));
+                    rows.append(MessageFormat.format("<a href=\"{0}\">{1}</a>", getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY), sIssue.getId()));
                     rows.append("</td>");
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
