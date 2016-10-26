@@ -119,7 +119,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
                         final BaseIssueField field = issue.getFields().get(desc.code);
-                        rows.append(field == null ? Strings.EMPTY : String.valueOf(field.getValue()));
+                        rows.append(field == null ? Strings.EMPTY : String.valueOf(field.getStringValue()));
                         rows.append("</td>");
                     }
                     rows.append("</tr>");
