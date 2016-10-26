@@ -15,7 +15,6 @@ import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.MessageFormatter;
 import youtrack.Issue;
 import youtrack.issue.fields.BaseIssueField;
 
@@ -118,20 +117,16 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     rows.append("<tr>");
                     rows.append("<td>");
-                    rows.append(MessageFormat.format("<a href=\"{0}\">{1}</a>", getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY), sIssue.getId()));
+                    rows.append(MessageFormat.format("<a  href=\"{0}/issue/{1}\" target=\"blank\" style=\"text-decoration:{2};\">{1}</a>",
+                            getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY), sIssue.getId(), issue.isResolved() ? "line-through" : "normal"));
                     rows.append("</td>");
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
                         final BaseIssueField field = issue.getFields().get(desc.code);
-                        rows.append(field == null ? Strings.EMPTY : String.valueOf(field.getStringValue()));
+                        rows.append(field == null ? "?" : field.getStringValue());
                         rows.append("</td>");
                     }
                     rows.append("</tr>");
-
-
-              /*      myContext.put(Strings.STATE, issue.getState());
-                    myContext.put(Strings.SUMMARY, issue.getSummary());
-                    myContext.put(Strings.ASSIGNEE, issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED);*/
                 }
                 for (int i = 1; i <= numPages; i++) {
                     myContext.clear();

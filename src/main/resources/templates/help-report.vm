@@ -11,6 +11,10 @@
             <li><b>query</b> &mdash; requited. Query that will be used to retrieve issues. This is the same query you'd
                 enter in YouTrack UI.
             </li>
+            <li>
+                <b>reportFields</b> &mdash; required. Provides a list of issue fields to include in report.<br/>
+                Consists of comma-delimited pairs where the first part is YouTrack field name, and the second part is its report display name.
+            </li>
         </ul>
     </td>
 </tr>
