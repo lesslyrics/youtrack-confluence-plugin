@@ -72,7 +72,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             if (project == null || project.trim().isEmpty()) project = Strings.ALL_PROJECTS;
             final String query = (String) params.get(Strings.QUERY);
             String fieldList = (String) params.get(Strings.REPORT_FIELD_LIST);
-            if (fieldList.isEmpty()) fieldList = Strings.DEFAULT_REPORT_FIELD_LIST;
+            if (fieldList == null || fieldList.isEmpty()) fieldList = Strings.DEFAULT_REPORT_FIELD_LIST;
 
             final StringBuilder result = new StringBuilder();
             if (query != null) {
