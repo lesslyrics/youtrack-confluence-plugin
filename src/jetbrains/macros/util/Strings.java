@@ -19,7 +19,6 @@ public class Strings {
     public static final String QUERY = "query";
     public static final String TEMPLATES_ROOT = "templates/";
     public static final String BODY_REPORT = TEMPLATES_ROOT + "body-report.vm";
-    public static final String ROW = TEMPLATES_ROOT + "body-report-row.vm";
     public static final String DETAILED = "detailed";
     public static final String SHORT = "short";
     public static final String BODY_LINK = TEMPLATES_ROOT + "body-link-";
@@ -42,7 +41,9 @@ public class Strings {
     public static final String ID_ONLY = "issueId";
     public static final String NORMAL = "normal";
     public static final String ALL_PROJECTS = "Everything";
+    public static final String DEFAULT_REPORT_FIELD_LIST = "id:Id,state:State,summary:Summary,assignee:Assignee";
     public static String STYLE = "style";
     public static String ID = "id";
     public static String SUMMARY_FORMATTED = "summaryFormattedText";
+    public static String REPORT_FIELD_LIST = "reportFields";
 }

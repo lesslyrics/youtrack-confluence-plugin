@@ -21,7 +21,7 @@
                 <value name="short"/>
                 <value name="detailed"/>
             </parameter>
-            <parameter name="strikethru-resolved"  type="enum" required="false" default="issueId">
+            <parameter name="strikethru-resolved" type="enum" required="false" default="issueId">
                 <value name="all"/>
                 <value name="issueId"/>
                 <value name="none"/>
@@ -38,6 +38,7 @@
         <parameters>
             <parameter name="project" type="string" required="false" default="Everything"/>
             <parameter name="query" type="string" required="true"/>
+            <parameter name="reportFields" type="string" required="true" default="state:State,summary:Summary,assignee:Assignee"/>
             <parameter name="pageSize" type="string" required="false" default="25"/>
             <parameter name="numPages" type="string" required="false" default="10"/>
         </parameters>

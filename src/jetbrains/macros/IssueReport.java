@@ -19,13 +19,22 @@ import youtrack.Issue;
 import youtrack.Project;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IssueReport extends YouTrackAuthAwareMacroBase {
     private static final Logger LOG = LoggerFactory.getLogger(IssueReport.class);
     private final PageManager pageManager;
+
+    private class IssueFieldDescriptor {
+        final String code;
+        final String title;
+
+        public IssueFieldDescriptor(String src) {
+            final String[] parts = src.split(":");
+            this.code = parts[0];
+            this.title = parts.length > 1 ? parts[1] : parts[0];
+        }
+    }
 
     public IssueReport(PluginSettingsFactory pluginSettingsFactory,
                        TransactionTemplate transactionTemplate,
@@ -62,6 +71,9 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
             String project = (String) params.get(Strings.PROJECT);
             if (project == null || project.trim().isEmpty()) project = Strings.ALL_PROJECTS;
             final String query = (String) params.get(Strings.QUERY);
+            String fieldList = (String) params.get(Strings.REPORT_FIELD_LIST);
+            if (fieldList.isEmpty()) fieldList = Strings.DEFAULT_REPORT_FIELD_LIST;
+
             final StringBuilder result = new StringBuilder();
             if (query != null) {
                 tryGetItem(youTrack.issues, Strings.EMPTY, 2);
@@ -78,17 +90,40 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
                 final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
                         Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
+
+                final LinkedList<IssueFieldDescriptor> fields = new LinkedList<IssueFieldDescriptor>();
+
+                for (final String fieldData : fieldList.split(",")) {
+                    fields.add(new IssueFieldDescriptor(fieldData));
+                }
+                StringBuilder header = new StringBuilder();
+
+                for (final IssueFieldDescriptor desc : fields) {
+                    header.append("<th>");
+                    header.append(desc.title);
+                    header.append("</th>");
+                }
+
                 for (final Issue sIssue : issues) {
                     myContext.clear();
                     myContext.putAll(context);
                     final Issue issue = sIssue.createSnapshot();
-                    myContext.put(Strings.ISSUE, sIssue.getId());
+
+                    myContext.put(Strings.ISSUE, issue.getId());
                     myContext.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                     myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
-                    myContext.put(Strings.STATE, issue.getState());
+                    rows.append("<tr>");
+                    for (final IssueFieldDescriptor desc : fields) {
+                        rows.append("<td>");
+                        rows.append(String.valueOf(issue.getFields().get(desc.code).getValue()));
+                        rows.append("</td>");
+                    }
+                    rows.append("</tr>");
+
+
+              /*      myContext.put(Strings.STATE, issue.getState());
                     myContext.put(Strings.SUMMARY, issue.getSummary());
-                    myContext.put(Strings.ASSIGNEE, issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED);
-                    rows.append(VelocityUtils.getRenderedTemplate(Strings.ROW, myContext));
+                    myContext.put(Strings.ASSIGNEE, issue.getAssignee() != null ? issue.getAssignee().getFullName() : Strings.UNASSIGNED);*/
                 }
                 for (int i = 1; i <= numPages; i++) {
                     myContext.clear();
@@ -103,6 +138,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 context.put("rows", rows.toString());
                 context.put("hasIssues", issues.size() > 0 ? String.valueOf(true) : null);
                 context.put("title", query + " from " + project);
+                context.put("header", header);
                 result.append(VelocityUtils.getRenderedTemplate(Strings.BODY_REPORT, context));
             }
             return result.toString();

@@ -1,13 +1,11 @@
 <h3>$title</h3>
+#set($headerWithHtml =$header)
 #set($rowsWithHtml = $rows)
 #set($paginationWithHtml = $pagination)
 #if ($hasIssues)
 <table>
     <tr>
-        <th>Issue</th>
-        <th>State</th>
-        <th>Summary</th>
-        <th>Assignee</th>
+      $headerWithHtml
     </tr>
     $rowsWithHtml
 </table>

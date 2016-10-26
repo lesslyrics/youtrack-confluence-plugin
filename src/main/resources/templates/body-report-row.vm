@@ -1,6 +1,0 @@
-<tr>
-    <td><a href="$base/issue/$issue" style="text-decoration:$style;">$issue</a></td>
-    <td>$state</td>
-    <td>$summary</td>
-    <td>$assignee</td>
-</tr>
