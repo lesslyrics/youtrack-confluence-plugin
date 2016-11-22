@@ -120,9 +120,9 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     if(null!=linkbase && !linkbase.isEmpty()){
                         context.put(Strings.LINKBASE,linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
                     }
-                    rows.append("<tr>");
+                    rows.append("<tr class=\"yt yt-report-row\">");
                     rows.append("<td>");
-                    rows.append(MessageFormat.format("<a  href=\"{0}/issue/{1}\" target=\"blank\" style=\"text-decoration:{2};\">{1}</a>",
+                    rows.append(MessageFormat.format("<a class=\"yt yt-issuelink\" href=\"{0}/issue/{1}\" target=\"blank\" style=\"text-decoration:{2};\">{1}</a>",
                             context.get(Strings.LINKBASE), sIssue.getId(), issue.isResolved() ? "line-through" : "normal"));
                     rows.append("</td>");
                     for (final IssueFieldDescriptor desc : fields) {

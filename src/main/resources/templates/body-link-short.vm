@@ -1,6 +1,8 @@
+<span class="yt yt-issue yt-issue-short">
 #if ($issue)
     #set($issueLinkTextWithHtml = $issueLinkText)
-<a href="$linkbase/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>
+<a  class="yt yt-issuelink"  href="$linkbase/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>
 #else
 <span style="color:darkred;background-color:lightgrey">$error</span>
 #end
+</span>
