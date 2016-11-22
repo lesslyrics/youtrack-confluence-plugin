@@ -63,6 +63,11 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                     }
                     context.put(Strings.ISSUE, issueId);
                     context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    context.put(Strings.LINKBASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    String linkbase = getProperty(Strings.LINKBASE);
+                    if(null!=linkbase && !linkbase.isEmpty()){
+                        context.put(Strings.LINKBASE,linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    }
                     final String thru = (Strings.ALL.equals(strikeMode) || Strings.ID_ONLY.equals(strikeMode)) && issue.isResolved() ? "line-through" : Strings.NORMAL;
                     if (Strings.ID_ONLY.equals(strikeMode)) {
                         linkTextTemplate = linkTextTemplate.replace("$issue", MessageFormat.format(Strings.STRIKE_THRU, thru, "$issue"));

@@ -1,6 +1,6 @@
 #if ($issue)
     #set($issueLinkTextWithHtml = $issueLinkText)
-<a href="$base/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>
+<a href="$linkbase/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>
 #else
 <span style="color:darkred;background-color:lightgrey">$error</span>
 #end

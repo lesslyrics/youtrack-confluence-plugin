@@ -115,10 +115,15 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
 
                     myContext.put(Strings.STYLE, (issue.isResolved()) ? "line-through" : "normal");
                     myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    context.put(Strings.LINKBASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    String linkbase = getProperty(Strings.LINKBASE);
+                    if(null!=linkbase && !linkbase.isEmpty()){
+                        context.put(Strings.LINKBASE,linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    }
                     rows.append("<tr>");
                     rows.append("<td>");
                     rows.append(MessageFormat.format("<a  href=\"{0}/issue/{1}\" target=\"blank\" style=\"text-decoration:{2};\">{1}</a>",
-                            getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY), sIssue.getId(), issue.isResolved() ? "line-through" : "normal"));
+                            context.get(Strings.LINKBASE), sIssue.getId(), issue.isResolved() ? "line-through" : "normal"));
                     rows.append("</td>");
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");

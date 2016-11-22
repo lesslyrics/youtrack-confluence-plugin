@@ -1,7 +1,7 @@
 #if ($issue)
     #set($issueLinkTextWithHtml = $issueLinkText)
     #set($summaryWithHtml = $summaryFormattedText)
-<span>$summaryWithHtml</span>&nbsp;(<a href="$base/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>)
+<span>$summaryWithHtml</span>&nbsp;(<a href="$linkbase/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>)
 #else
 <span style="color:darkred;background-color:lightgrey">$error</span>
 #end
