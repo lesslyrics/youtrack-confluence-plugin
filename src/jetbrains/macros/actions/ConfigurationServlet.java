@@ -65,6 +65,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String password = req.getParameter(Strings.PASSWORD);
         final String login = req.getParameter(Strings.LOGIN);
         final String retries = req.getParameter(Strings.RETRIES);
+        final String linkbase = req.getParameter(Strings.LINKBASE);
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress);
         try {
             testYouTrack.login(login, password);
@@ -77,6 +78,7 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(Strings.LOGIN, login);
                     storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
                     storage.setProperty(Strings.PASSWORD, password);
+                    storage.setProperty(Strings.LINKBASE, linkbase);
                     storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
                     pluginSettings.put(Strings.MAIN_KEY, storage);
                     return null;
@@ -119,6 +121,7 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(Strings.RETRIES, storage.getProperty(Strings.RETRIES, "10"));
         params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
         params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
+        params.put(Strings.LINKBASE, storage.getProperty(Strings.LINKBASE, Strings.EMPTY));
         params.put("justSaved", justSaved);
         justSaved = -1;
         response.setContentType("text/html;charset=utf-8");

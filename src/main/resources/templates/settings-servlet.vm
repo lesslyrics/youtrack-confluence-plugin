@@ -24,6 +24,10 @@
         <input type="password" name="password" id="password" class="text" value="$password">
     </div>
     <div class="field-group">
+        <label for="youtracklinkbase">Link base:</label>
+        <input type="linkbase" name="linkbase" id="linkbase" class="text" value="$linkbase">
+    </div>
+    <div class="field-group">
         <input type="submit" value="Save Settings" class="button">
     </div>
     #if ($justSaved==0)

@@ -1,3 +1,4 @@
+<div class="yt yt-report">
 <h3>$title</h3>
 #set($headerWithHtml =$header)
 #set($rowsWithHtml = $rows)
@@ -15,3 +16,4 @@
 <p>
     $paginationWithHtml
 </p>
+</div>

@@ -1,7 +1,9 @@
+<span class="yt yt-issue yt-issue-detailed">
 #if ($issue)
     #set($issueLinkTextWithHtml = $issueLinkText)
     #set($summaryWithHtml = $summaryFormattedText)
-<span>$summaryWithHtml</span>&nbsp;(<a href="$base/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>)
+<span class="yt yt-summary">$summaryWithHtml</span>&nbsp;(<a class="yt yt-issuelink" href="$linkbase/issue/$issue" target="_blank" title="$title">$issueLinkTextWithHtml</a>)
 #else
-<span style="color:darkred;background-color:lightgrey">$error</span>
+<span class="yt yt-error" style="color:darkred;background-color:lightgrey">$error</span>
 #end
+</span>
