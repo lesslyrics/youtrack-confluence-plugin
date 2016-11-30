@@ -22,7 +22,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     }
 
     private void init() {
-        youTrack = YouTrack.getInstance(getProperty(Strings.HOST));
+        youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.valueOf(getProperty(Strings.TRUST_ALL)));
         youTrack.setAuthorization(Strings.AUTH_KEY);
     }
 

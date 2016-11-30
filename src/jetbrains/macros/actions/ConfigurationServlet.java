@@ -68,11 +68,14 @@ public class ConfigurationServlet extends HttpServlet {
         final String password = req.getParameter(Strings.PASSWORD);
         final String login = req.getParameter(Strings.LOGIN);
         final String retries = req.getParameter(Strings.RETRIES);
-        final String linkbase = req.getParameter(Strings.LINKBASE);
+        String linkbase = req.getParameter(Strings.LINKBASE);
+        if (linkbase == null || linkbase.isEmpty())
+            linkbase = hostAddress.substring(0, hostAddress.lastIndexOf(URL_SEPARATOR));
         final String trustAll = req.getParameter(Strings.TRUST_ALL) != null ? "true" : "false";
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress);
         try {
             testYouTrack.login(login, password);
+            final String finalLinkbase = linkbase;
             transactionTemplate.execute(new TransactionCallback<Properties>() {
                 @Override
                 public Properties doInTransaction() {
@@ -83,7 +86,7 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
                     storage.setProperty(Strings.TRUST_ALL, trustAll);
                     storage.setProperty(Strings.PASSWORD, password);
-                    storage.setProperty(Strings.LINKBASE, linkbase);
+                    storage.setProperty(Strings.LINKBASE, finalLinkbase);
                     storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
                     pluginSettings.put(Strings.MAIN_KEY, storage);
                     return null;
