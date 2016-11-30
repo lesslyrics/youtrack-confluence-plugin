@@ -29,7 +29,7 @@
     </div>
     <div class="field-group">
         <label for="youtracktrustall">Ignore YouTrack SSL certificate check</label>
-        <input type="checkbox" name="trustall" id="trustall" value="$trustall">
+        <input type="checkbox" name="trustall" id="trustall" #if($trustall=='true')checked#end>
         <p>Use this option when YouTrack SSL certificate is not recognized by your Confluence instance.</p>
     </div>
     <div class="field-group">
