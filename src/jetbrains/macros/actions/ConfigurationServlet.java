@@ -82,7 +82,7 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(Strings.LOGIN, login);
                     storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
                     storage.setProperty(Strings.TRUST_ALL, trustAll);
-                    LOG.info(trustAll);
+                    LOG.error(trustAll);
                     storage.setProperty(Strings.PASSWORD, password);
                     storage.setProperty(Strings.LINKBASE, linkbase);
                     storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
