@@ -38,6 +38,7 @@ public class ConfigurationServlet extends HttpServlet {
     private final PluginSettingsFactory pluginSettingsFactory;
     private final TransactionTemplate transactionTemplate;
     private int justSaved = -1;
+
     public ConfigurationServlet(UserManager userManager,
                                 LoginUriProvider loginUriProvider,
                                 TemplateRenderer renderer,
@@ -51,12 +52,14 @@ public class ConfigurationServlet extends HttpServlet {
         this.pluginSettingsFactory = pluginSettingsFactory;
         this.transactionTemplate = transactionTemplate;
     }
+
     private void checkAdminRights(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         final String username = userManager.getRemoteUsername(req);
-        if(username == null || !userManager.isSystemAdmin(username)) {
+        if (username == null || !userManager.isSystemAdmin(username)) {
             redirectToLogin(req, resp);
         }
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         checkAdminRights(req, resp);
@@ -66,6 +69,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String login = req.getParameter(Strings.LOGIN);
         final String retries = req.getParameter(Strings.RETRIES);
         final String linkbase = req.getParameter(Strings.LINKBASE);
+        final String trustAll = req.getParameter(Strings.TRUST_ALL);
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress);
         try {
             testYouTrack.login(login, password);
@@ -77,6 +81,7 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(Strings.HOST, hostAddress);
                     storage.setProperty(Strings.LOGIN, login);
                     storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
+                    storage.setProperty(Strings.TRUST_ALL, trustAll);
                     storage.setProperty(Strings.PASSWORD, password);
                     storage.setProperty(Strings.LINKBASE, linkbase);
                     storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
@@ -85,25 +90,27 @@ public class ConfigurationServlet extends HttpServlet {
                 }
             });
             justSaved = 0;
-        } catch(CommandExecutionException e) {
-            LOG.error("YouTrack integration command failed",e);
+        } catch (CommandExecutionException e) {
+            LOG.error("YouTrack integration command failed", e);
             e.printStackTrace();
             justSaved = -2;
-        } catch(AuthenticationErrorException e) {
-            LOG.error("YouTrack integration login failed.",e);
+        } catch (AuthenticationErrorException e) {
+            LOG.error("YouTrack integration login failed.", e);
             e.printStackTrace();
             justSaved = -2;
         }
         doGet(req, resp);
     }
+
     private String intValueOf(String retries, int defaultValue) {
         try {
             Integer i = Integer.parseInt(retries);
             return String.valueOf(i);
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             return String.valueOf(defaultValue);
         }
     }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         checkAdminRights(request, response);
@@ -116,23 +123,26 @@ public class ConfigurationServlet extends HttpServlet {
                 return (Properties) pluginSettings.get(Strings.MAIN_KEY);
             }
         });
-        if(storage == null) storage = new Properties();
+        if (storage == null) storage = new Properties();
         params.put(Strings.HOST, storage.getProperty(Strings.HOST, Strings.EMPTY));
         params.put(Strings.RETRIES, storage.getProperty(Strings.RETRIES, "10"));
         params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
         params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
+        params.put(Strings.TRUST_ALL, storage.getProperty(Strings.TRUST_ALL, Strings.EMPTY));
         params.put(Strings.LINKBASE, storage.getProperty(Strings.LINKBASE, Strings.EMPTY));
         params.put("justSaved", justSaved);
         justSaved = -1;
         response.setContentType("text/html;charset=utf-8");
         renderer.render("/templates/settings-servlet.vm", params, response.getWriter());
     }
+
     private void redirectToLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(loginUriProvider.getLoginUri(getUri(request)).toASCIIString());
     }
+
     private URI getUri(HttpServletRequest request) {
         final StringBuffer builder = request.getRequestURL();
-        if(request.getQueryString() != null) {
+        if (request.getQueryString() != null) {
             builder.append("?");
             builder.append(request.getQueryString());
         }
