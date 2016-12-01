@@ -26,11 +26,13 @@
     <div class="field-group">
         <label for="youtracklinkbase">Link base:</label>
         <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase">
+        <p>By default, all links to issues will use YouTrack host URL (without the /rest/ part),
+            but you can override that here.</p>
     </div>
     <div class="field-group">
         <label for="youtracktrustall">Ignore YouTrack SSL certificate check</label>
         <input type="checkbox" name="trustall" id="trustall" #if($trustall=='true')checked#end>
-        <p>Use this option when YouTrack SSL certificate is not recognized by your Confluence instance.</p>
+        <p>Use this option when YouTrack SSL certificate is not recognized by your Confluence instance. </p>
     </div>
     <div class="field-group">
         <input type="submit" value="Save Settings" class="button">
