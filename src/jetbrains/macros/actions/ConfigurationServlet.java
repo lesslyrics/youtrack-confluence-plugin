@@ -70,7 +70,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String retries = req.getParameter(Strings.RETRIES);
         String linkbase = req.getParameter(Strings.LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
-            linkbase = hostAddress.substring(0, hostAddress.lastIndexOf(URL_SEPARATOR));
+            linkbase = hostAddress.replace(Strings.REST_PREFIX, Strings.EMPTY) + URL_SEPARATOR;
         final String trustAll = req.getParameter(Strings.TRUST_ALL) != null ? "true" : "false";
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress);
         try {
