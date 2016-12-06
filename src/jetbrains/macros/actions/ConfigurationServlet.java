@@ -30,7 +30,6 @@ import java.util.Properties;
 
 public class ConfigurationServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationServlet.class);
-    public static final String URL_SEPARATOR = "/";
     private final UserManager userManager;
     private final LoginUriProvider loginUriProvider;
     private final TemplateRenderer renderer;
@@ -64,13 +63,13 @@ public class ConfigurationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         checkAdminRights(req, resp);
         final String hostAddressPassed = req.getParameter(Strings.HOST);
-        final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
+        final String hostAddress = hostAddressPassed.endsWith(Strings.URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + Strings.URL_SEPARATOR;
         final String password = req.getParameter(Strings.PASSWORD);
         final String login = req.getParameter(Strings.LOGIN);
         final String retries = req.getParameter(Strings.RETRIES);
         String linkbase = req.getParameter(Strings.LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
-            linkbase = hostAddress.replace(Strings.REST_PREFIX, Strings.EMPTY) + URL_SEPARATOR;
+            linkbase = hostAddress.replace(Strings.REST_PREFIX, Strings.EMPTY) + Strings.URL_SEPARATOR;
         final String trustAll = req.getParameter(Strings.TRUST_ALL) != null ? "true" : "false";
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress, Boolean.parseBoolean(trustAll));
         try {
@@ -97,10 +96,12 @@ public class ConfigurationServlet extends HttpServlet {
             LOG.error("YouTrack integration command failed", e);
             e.printStackTrace();
             justSaved = -2;
+            System.out.println("Cannot conect to YT");
         } catch (AuthenticationErrorException e) {
             LOG.error("YouTrack integration login failed.", e);
             e.printStackTrace();
             justSaved = -2;
+            System.out.println("Auth error");
         }
         doGet(req, resp);
     }

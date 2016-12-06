@@ -44,6 +44,7 @@ public class Strings {
     public static final String ALL_PROJECTS = "Everything";
     public static final String DEFAULT_REPORT_FIELD_LIST = "State:State,summary:Description,Assignee:Assigned to";
     public static final String TRUST_ALL = "trustall";
+    public static final String URL_SEPARATOR = "/";
     public static String STYLE = "style";
     public static String ID = "id";
     public static String SUMMARY_FORMATTED = "summaryFormattedText";
