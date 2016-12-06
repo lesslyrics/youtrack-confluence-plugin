@@ -2,7 +2,6 @@
 <head>
     <title>YouTrack Integration Settings</title>
     <meta name="decorator" content="atl.admin"/>
-    #requireResource("com.atlassian.auiplugin:aui-experimental-iconfont")
 </head>
 <body>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
