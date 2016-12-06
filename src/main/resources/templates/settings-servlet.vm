@@ -2,6 +2,7 @@
 <head>
     <title>YouTrack Integration Settings</title>
     <meta name="decorator" content="atl.admin"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">

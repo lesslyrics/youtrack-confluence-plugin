@@ -15,8 +15,6 @@ import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import youtrack.YouTrack;
-import youtrack.exceptions.AuthenticationErrorException;
-import youtrack.exceptions.CommandExecutionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -92,16 +90,10 @@ public class ConfigurationServlet extends HttpServlet {
                 }
             });
             justSaved = 0;
-        } catch (CommandExecutionException e) {
-            LOG.error("YouTrack integration command failed", e);
-            e.printStackTrace();
-            justSaved = -2;
-            System.out.println("Cannot conect to YT");
-        } catch (AuthenticationErrorException e) {
+        } catch (Exception e) {
             LOG.error("YouTrack integration login failed.", e);
             e.printStackTrace();
             justSaved = -2;
-            System.out.println("Auth error");
         }
         doGet(req, resp);
     }
