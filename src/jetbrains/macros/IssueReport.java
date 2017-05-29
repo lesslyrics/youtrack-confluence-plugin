@@ -134,7 +134,9 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                             final CommandBasedList<Issue, IssueComment> comments = sIssue.comments;
                             if (comments != null) for (final IssueComment comment : comments.list()) {
                                 final String commentText = comment.getText();
-                                if (commentText != null) rows.append(commentText).append("<br/>");
+                                if (commentText != null)
+                                    rows.append("<p style=\"font-size:80%\"><strong>").append(comment.getAuthor()).append("</strong>:&nbsp;")
+                                            .append(commentText).append("</p>");
                             }
                             else {
                                 rows.append("No comments.");
