@@ -15,6 +15,7 @@ import jetbrains.macros.base.YouTrackAuthAwareMacroBase;
 import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.IssueComment;
 import youtrack.issues.fields.BaseIssueField;
@@ -130,8 +131,13 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         rows.append("<td>");
                         final BaseIssueField field = issue.getFields().get(desc.code);
                         if (desc.code.equals("comments")) {
-                            for (final IssueComment comment : issue.comments.list()) {
-                                rows.append(comment.getText()).append("<br/>");
+                            final CommandBasedList<Issue, IssueComment> comments = issue.comments;
+                            if (comments != null) for (final IssueComment comment : comments.list()) {
+                                final String commentText = comment.getText();
+                                if (commentText != null) rows.append(commentText).append("<br/>");
+                            }
+                            else {
+                                rows.append("No comments.");
                             }
                         } else
                             rows.append(field == null ? "?" : field.getStringValue());
