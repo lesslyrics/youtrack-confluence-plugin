@@ -16,6 +16,7 @@ import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import youtrack.Issue;
+import youtrack.IssueComment;
 import youtrack.issues.fields.BaseIssueField;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,8 +118,8 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     myContext.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     context.put(Strings.LINKBASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     String linkbase = getProperty(Strings.LINKBASE);
-                    if(null!=linkbase && !linkbase.isEmpty()){
-                        context.put(Strings.LINKBASE,linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    if (null != linkbase && !linkbase.isEmpty()) {
+                        context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
                     }
                     rows.append("<tr class=\"yt yt-report-row\">");
                     rows.append("<td>");
@@ -128,7 +129,12 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
                         final BaseIssueField field = issue.getFields().get(desc.code);
-                        rows.append(field == null ? "?" : field.getStringValue());
+                        if (desc.code.equals("comments")) {
+                            for (final IssueComment comment : issue.comments.list()) {
+                                rows.append(comment.getText()).append("<br/>");
+                            }
+                        } else
+                            rows.append(field == null ? "?" : field.getStringValue());
                         rows.append("</td>");
                     }
                     rows.append("</tr>");
