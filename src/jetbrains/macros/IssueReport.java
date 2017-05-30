@@ -22,10 +22,8 @@ import youtrack.issues.fields.BaseIssueField;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class IssueReport extends YouTrackAuthAwareMacroBase {
     private static final Logger LOG = LoggerFactory.getLogger(IssueReport.class);
@@ -130,19 +128,29 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     for (final IssueFieldDescriptor desc : fields) {
                         rows.append("<td>");
                         final BaseIssueField field = issue.getFields().get(desc.code);
-                        if (desc.code.equals("comments")) {
+                        if ("comments".equals(desc.code) || "comments-verbose".equals(desc.code)) {
                             final CommandBasedList<Issue, IssueComment> comments = sIssue.comments;
-                            if (comments != null) for (final IssueComment comment : comments.list()) {
-                                final String commentText = comment.getText();
-                                if (commentText != null)
-                                    rows.append("<p style=\"font-size:80%\"><strong>").append(comment.getAuthor()).append("</strong>:&nbsp;")
-                                            .append(commentText).append("</p>");
+                            if (comments != null) {
+                                final List<IssueComment> issueComments = comments.list();
+                                for (int i = 0; i < issueComments.size(); i++) {
+                                    IssueComment comment = issueComments.get(i);
+                                    String commentText = comment.getText();
+                                    if (commentText != null) {
+                                        commentText = commentText.replace("(\\r|\\n)", Strings.EMPTY).replaceAll("\"<[^>]*>\"", Strings.EMPTY);
+                                        if ("comments-verbose".equals(desc.code)) {
+                                            rows.append("<span class=\"yt yt-comment-author\">").append(comment.getAuthor()).append("</span>")
+                                                    .append("&nbsp;").append("<span class=\"yt yt-comment-date\">")
+                                                    .append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(comment.getCreated())))
+                                                    .append("</span>").append("<br/>");
+                                        }
+                                        rows.append("<span class=\"yt yt-comment-body\">").append(commentText).append("</span>");
+                                    }
+                                    if (i != issueComments.size() - 2) rows.append("<hr/>");
+                                }
+                            } else {
+                                rows.append("No one commented yet.");
                             }
-                            else {
-                                rows.append("No comments.");
-                            }
-                        } else
-                            rows.append(field == null ? "?" : field.getStringValue());
+                        } else rows.append(field == null ? "?" : field.getStringValue());
                         rows.append("</td>");
                     }
                     rows.append("</tr>");
