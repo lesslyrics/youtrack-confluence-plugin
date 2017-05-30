@@ -133,7 +133,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                             if (comments != null) {
                                 final List<IssueComment> issueComments = comments.list();
                                 for (int i = 0; i < issueComments.size(); i++) {
-                                    IssueComment comment = issueComments.get(i);
+                                    final IssueComment comment = issueComments.get(i);
                                     String commentText = comment.getText();
                                     if (commentText != null) {
                                         commentText = commentText.replace("(\\r|\\n)", Strings.EMPTY).replaceAll("\"<[^>]*>\"", Strings.EMPTY);
@@ -141,7 +141,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                                             rows.append("<span class=\"yt yt-comment-author\">").append(comment.getAuthor()).append("</span>")
                                                     .append("&nbsp;").append("<span class=\"yt yt-comment-date\">")
                                                     .append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(comment.getCreated())))
-                                                    .append("</span>").append("<br/>");
+                                                    .append(":</span>").append("<br/>");
                                         }
                                         rows.append("<span class=\"yt yt-comment-body\">").append(commentText).append("</span>");
                                     }
