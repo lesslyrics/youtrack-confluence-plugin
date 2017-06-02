@@ -138,7 +138,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                                     if (commentText != null) {
                                         commentText = commentText.replace("(\\r|\\n)", Strings.EMPTY).replaceAll("\"<[^>]*>\"", Strings.EMPTY);
                                         commentContext.putAll(context);
-                                        commentContext.put("issue-id", issue.getId());
+                                        commentContext.put("issue-id", sIssue.getId());
                                         commentContext.put("body", commentText);
                                         commentContext.put("author", issueComment.getAuthor());
                                         commentContext.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(issueComment.getCreated())));
