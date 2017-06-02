@@ -132,20 +132,21 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                             final CommandBasedList<Issue, IssueComment> comments = sIssue.comments;
                             if (comments != null) {
                                 final List<IssueComment> issueComments = comments.list();
-                                for (int i = 0; i < issueComments.size(); i++) {
-                                    final IssueComment comment = issueComments.get(i);
-                                    String commentText = comment.getText();
+                                for (IssueComment issueComment : issueComments) {
+                                    final Map<String, Object> commentContext = new HashMap<String, Object>();
+                                    String commentText = issueComment.getText();
                                     if (commentText != null) {
                                         commentText = commentText.replace("(\\r|\\n)", Strings.EMPTY).replaceAll("\"<[^>]*>\"", Strings.EMPTY);
+                                        commentContext.putAll(context);
+                                        commentContext.put("body", commentText);
+                                        commentContext.put("author", issueComment.getAuthor());
+                                        commentContext.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(issueComment.getCreated())));
+                                        commentContext.put("comment-id", issueComment.getId());
                                         if ("comments-verbose".equals(desc.code)) {
-                                            rows.append("<span class=\"yt yt-comment-author\">").append(comment.getAuthor()).append("</span>")
-                                                    .append("&nbsp;").append("<span class=\"yt yt-comment-date\">")
-                                                    .append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(comment.getCreated())))
-                                                    .append(":</span>").append("<br/>");
+                                            rows.append((VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_HEAD, commentContext)));
                                         }
-                                        rows.append("<span class=\"yt yt-comment-body\">").append(commentText).append("</span>");
+                                        rows.append((VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_BODY, commentContext)));
                                     }
-                                    if (i != issueComments.size() - 2) rows.append("<hr/>");
                                 }
                             } else {
                                 rows.append("No one commented yet.");

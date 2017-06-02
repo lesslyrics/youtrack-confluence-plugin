@@ -1,0 +1,3 @@
+<div class="yt yt-comment-body">
+    <a href="$linkbase/issue/$issue#comment-$comment-id">#</a>&nbsp;$body
+</div>
