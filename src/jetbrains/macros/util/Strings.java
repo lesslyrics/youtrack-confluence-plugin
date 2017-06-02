@@ -22,6 +22,7 @@ public class Strings {
     public static final String BODY_REPORT = TEMPLATES_ROOT + "body-report.vm";
     public static final String REPORT_COMMENT_HEAD = TEMPLATES_ROOT + "comment-head.vm";
     public static final String REPORT_COMMENT_BODY = TEMPLATES_ROOT + "comment-body.vm";
+    public static final String REPORT_COMMENT_MORE = TEMPLATES_ROOT + "comment-more.vm";
     public static final String DETAILED = "detailed";
     public static final String SHORT = "short";
     public static final String BODY_LINK = TEMPLATES_ROOT + "body-link-";

@@ -133,8 +133,9 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         if ("comments".equals(desc.code) || "comments-verbose".equals(desc.code)) {
                             final CommandBasedList<Issue, IssueComment> comments = sIssue.comments;
                             if (comments != null) {
-                                final List<IssueComment> issueComments = comments.list();
-                                for (IssueComment issueComment : issueComments) {
+                                List<IssueComment> issueComments = comments.list();
+                                for (int i = 0; i < issueComments.size(); i++) {
+                                    IssueComment issueComment = issueComments.get(i);
                                     final Map<String, Object> commentContext = new HashMap<String, Object>();
                                     String commentText = issueComment.getText();
                                     if (commentText != null) {
@@ -146,9 +147,13 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                                         commentContext.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(issueComment.getCreated())));
                                         commentContext.put("comment-id", issueComment.getId());
                                         if ("comments-verbose".equals(desc.code)) {
-                                            rows.append((VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_HEAD, commentContext)));
+                                            rows.append(VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_HEAD, commentContext));
                                         }
-                                        rows.append((VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_BODY, commentContext)));
+                                        rows.append(VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_BODY, commentContext));
+                                    }
+                                    if (i == 10) {
+                                        rows.append(VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_MORE, commentContext));
+                                        break;
                                     }
                                 }
                             } else {
