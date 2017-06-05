@@ -141,11 +141,12 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                                     if (commentText != null) {
                                         commentText = commentText.replace("(\\r|\\n)", Strings.EMPTY).replaceAll("\"<[^>]*>\"", Strings.EMPTY);
                                         commentContext.putAll(context);
-                                        commentContext.put("issue-id", sIssue.getId());
+                                        commentContext.put("issue-id",issueComment.getIssueId());
                                         commentContext.put("body", commentText);
                                         commentContext.put("author", issueComment.getAuthor());
                                         commentContext.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(issueComment.getCreated())));
                                         commentContext.put("comment-id", issueComment.getId());
+
                                         if ("comments-verbose".equals(desc.code)) {
                                             rows.append(VelocityUtils.getRenderedTemplate(Strings.REPORT_COMMENT_HEAD, commentContext));
                                         }
