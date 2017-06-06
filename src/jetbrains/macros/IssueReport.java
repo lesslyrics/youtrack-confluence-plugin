@@ -89,7 +89,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final StringBuilder pagination = new StringBuilder();
                 final PageContext pageContext = (PageContext) renderContext;
                 final Page page = pageManager.getPage(pageContext.getSpaceKey(), pageContext.getPageTitle());
-                final String thisPageUrl = page.getUrlPath();
+                final String thisPageUrl = page == null ? null : page.getUrlPath();
                 final Map<String, Object> myContext = new HashMap<String, Object>();
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
                 final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
@@ -141,7 +141,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                                     if (commentText != null) {
                                         commentText = commentText.replace("(\\r|\\n)", Strings.EMPTY).replaceAll("\"<[^>]*>\"", Strings.EMPTY);
                                         commentContext.putAll(context);
-                                        commentContext.put("issue-id",issueComment.getIssueId());
+                                        commentContext.put("issue-id", issueComment.getIssueId());
                                         commentContext.put("body", commentText);
                                         commentContext.put("author", issueComment.getAuthor());
                                         commentContext.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(issueComment.getCreated())));
@@ -165,16 +165,19 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     }
                     rows.append("</tr>");
                 }
-                for (int i = 1; i <= numPages; i++) {
-                    myContext.clear();
-                    myContext.putAll(context);
-                    myContext.put("num", String.valueOf(i));
-                    myContext.put("param", Strings.PAGINATION_PARAM);
-                    myContext.put("url", thisPageUrl);
-                    myContext.put("style", i == currentPage ? "font-weight:bold;" : "font-weight:normal;");
-                    pagination.append(VelocityUtils.getRenderedTemplate(Strings.PAGINATION_SINGLE, myContext));
-                }
-                context.put("pagination", request != null ? pagination.toString() : Strings.EMPTY);
+                if (thisPageUrl != null && request != null) {
+                    for (int i = 1; i <= numPages; i++) {
+                        myContext.clear();
+                        myContext.putAll(context);
+                        myContext.put("num", String.valueOf(i));
+                        myContext.put("param", Strings.PAGINATION_PARAM);
+                        myContext.put("url", thisPageUrl);
+                        myContext.put("style", i == currentPage ? "font-weight:bold;" : "font-weight:normal;");
+                        pagination.append(VelocityUtils.getRenderedTemplate(Strings.PAGINATION_SINGLE, myContext));
+                    }
+                    context.put("pagination", pagination.toString());
+                } else context.put("pagination", Strings.EMPTY);
+
                 context.put("rows", rows.toString());
                 context.put("hasIssues", issues.size() > 0 ? String.valueOf(true) : null);
                 context.put("title", query + " from " + project);
