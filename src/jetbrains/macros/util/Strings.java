@@ -8,6 +8,7 @@ public class Strings {
     public static final String ALL = "all";
     public static final String STRIKE_THRU_PARAM = "strikethru-resolved";
     public static final String ISSUE = "issue";
+    public static final String ISSUE_ID = "issue-id";
     public static final String BASE = "base";
     public static final String LINKBASE = "linkbase";
     public static final String STATE = "state";
@@ -48,6 +49,12 @@ public class Strings {
     public static final String DEFAULT_REPORT_FIELD_LIST = "State:State,summary:Description,Assignee:Assigned to";
     public static final String TRUST_ALL = "trustall";
     public static final String URL_SEPARATOR = "/";
+    public static final String REPORT_ISSUE_LINK = TEMPLATES_ROOT + "report-issue-link.vm";
+    public static final String COMMENT_BODY = "body";
+    public static final String COMMENT_AUTHOR = "author";
+    public static final String COMMENT_DATE = "date";
+    public static final String COMMENT_ID = "comment-id";
+    public static final String UNKNOWN = "?";
     public static String STYLE = "style";
     public static String ID = "id";
     public static String SUMMARY_FORMATTED = "summaryFormattedText";
