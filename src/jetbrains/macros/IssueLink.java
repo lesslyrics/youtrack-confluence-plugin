@@ -53,7 +53,6 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = Strings.SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                final int retries = Integer.valueOf(getProperty(Strings.RETRIES, "10"));
                 Issue issue = tryGetItem(youTrack.issues, issueId, retries);
                 if (issue != null) {
                     issue = issue.createSnapshot();

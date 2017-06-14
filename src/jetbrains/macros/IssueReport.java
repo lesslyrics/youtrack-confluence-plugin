@@ -70,7 +70,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
 
             final StringBuilder result = new StringBuilder();
             if (query != null) {
-                tryGetItem(youTrack.issues, Strings.EMPTY, 2);
+
                 final StringBuilder rows = new StringBuilder();
                 final int pageSize = Service.intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
 
@@ -84,8 +84,8 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final String thisPageUrl = page == null ? null : page.getUrlPath();
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
 
-                final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
-                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
+                final List<Issue> issues = tryQuery(youTrack.issues, Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
+                        Strings.EMPTY : "project: " + project + " " + query, startIssue, pageSize, retries);
 
                 final LinkedList<IssueFieldDescriptor> reportFields = new LinkedList<IssueFieldDescriptor>();
 
@@ -109,14 +109,15 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
                 }
 
-                for (final Issue sIssue : issues) {
-                    final Issue issue = sIssue.createSnapshot();
+                for (final Issue originalIssue : issues) {
+
+                    final Issue snapshot = originalIssue.createSnapshot();
 
                     rows.append("<tr class=\"yt yt-report-row\">");
                     rows.append("<td>");
 
                     final Map<String, Object> issueLinkContext = Service.createContext(context,
-                            Strings.ISSUE_ID, sIssue.getId()
+                            Strings.ISSUE_ID, originalIssue.getId()
                     );
 
                     rows.append(VelocityUtils.getRenderedTemplate(Strings.REPORT_ISSUE_LINK, issueLinkContext));
@@ -125,13 +126,13 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     for (final IssueFieldDescriptor reportField : reportFields) {
                         rows.append("<td>");
 
-                        final HashMap<String, BaseIssueField> issueFields = issue.getFields();
+                        final HashMap<String, BaseIssueField> issueFields = snapshot.getFields();
                         if (issueFields != null && !issueFields.isEmpty()) {
                             final BaseIssueField field = issueFields.get(reportField.code);
                             final boolean verbose = "comments-verbose".equals(reportField.code);
 
                             if ("comments".equals(reportField.code) || verbose) {
-                                final CommandBasedList<Issue, IssueComment> comments = sIssue.comments;
+                                final CommandBasedList<Issue, IssueComment> comments = originalIssue.comments;
                                 if (comments != null) {
                                     final List<IssueComment> issueComments = comments.list();
 
