@@ -12,7 +12,7 @@ import youtrack.exceptions.CommandExecutionException;
 import youtrack.exceptions.CommandNotAvailableException;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
@@ -32,10 +32,9 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
-        I result = null;
         try {
             if (!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
-            result = list.item(id);
+            return list.item(id);
         } catch (CommandExecutionException e) {
             if (retry > 0) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
@@ -43,15 +42,14 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
                 return tryGetItem(list, id, retry - 1);
             }
         }
-        return result;
+        return null;
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
-        List<I> result = new ArrayList<I>();
         try {
             if (!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
-            result = list.query(query, start, pageSize);
+            return list.query(query, start, pageSize);
         } catch (CommandExecutionException e) {
             if (retry > 0) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
@@ -59,6 +57,6 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
                 return tryQuery(list, query, start, pageSize, retry - 1);
             }
         }
-        return result;
+        return Collections.emptyList();
     }
 }
