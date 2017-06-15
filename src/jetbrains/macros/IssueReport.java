@@ -175,7 +175,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                         int maxPages = Service.intValueOf((String) params.get(Strings.TOTAL_PAGES), 10);
 
                         if (currentPage > 1) {
-                            if (issues.size() < pageSize) maxPages = currentPage + 1;
+                            if (issues.size() < pageSize) maxPages = currentPage;
                         }
 
                         for (int i = 1; i <= maxPages; i++) {
