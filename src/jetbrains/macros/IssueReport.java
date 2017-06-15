@@ -84,9 +84,6 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final String thisPageUrl = page == null ? null : page.getUrlPath();
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
 
-                final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
-                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
-
                 final LinkedList<IssueFieldDescriptor> reportFields = new LinkedList<IssueFieldDescriptor>();
 
                 for (final String fieldData : fieldList.split(",")) {
@@ -108,6 +105,9 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 } else linkbase = getProperty(Strings.HOST);
 
                 context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
+
+                final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
+                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
 
                 for (final Issue originalIssue : issues) {
 
@@ -184,7 +184,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 } else context.put("pagination", Strings.EMPTY);
 
                 context.put("rows", rows.toString());
-                context.put("hasIssues", issues.size() > 0 ? String.valueOf(true) : null);
+                context.put("hasIssues", issues.isEmpty() ? null : String.valueOf(true));
                 context.put("title", query + " from " + project);
                 context.put("header", header);
                 result.append(VelocityUtils.getRenderedTemplate(Strings.BODY_REPORT, context));
