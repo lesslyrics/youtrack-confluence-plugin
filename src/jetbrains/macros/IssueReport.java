@@ -70,7 +70,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
 
             final StringBuilder result = new StringBuilder();
             if (query != null) {
-
+                tryGetItem(youTrack.issues, Strings.EMPTY, 2);
                 final StringBuilder rows = new StringBuilder();
                 final int pageSize = Service.intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
 
@@ -100,7 +100,6 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     header.append(desc.title);
                     header.append("</th>");
                 }
-
 
                 String linkbase = getProperty(Strings.LINKBASE);
 
