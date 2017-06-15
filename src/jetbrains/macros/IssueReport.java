@@ -170,7 +170,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     }
                     rows.append("</tr>");
                 }
-                if (thisPageUrl != null && request != null) {
+                if (thisPageUrl != null && request != null && issues.size() >= pageSize) {
                     for (int i = 1; i <= numPages; i++) {
                         final Map<String, Object> paginationContext = Service.createContext(context,
                                 "num", String.valueOf(i),
