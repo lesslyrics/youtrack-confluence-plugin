@@ -77,7 +77,6 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final HttpServletRequest request = ServletActionContext.getRequest();
                 final int currentPage = request == null ? 1 : Service.intValueOf(request.getParameter(Strings.PAGINATION_PARAM), 1);
 
-                final int numPages = Service.intValueOf((String) params.get(Strings.TOTAL_PAGES), 10);
                 final StringBuilder pagination = new StringBuilder();
                 final PageContext pageContext = (PageContext) renderContext;
                 final Page page = pageManager.getPage(pageContext.getSpaceKey(), pageContext.getPageTitle());
@@ -170,19 +169,27 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     }
                     rows.append("</tr>");
                 }
-                if (thisPageUrl != null && request != null && issues.size() >= pageSize) {
-                    for (int i = 1; i <= numPages; i++) {
-                        final Map<String, Object> paginationContext = Service.createContext(context,
-                                "num", String.valueOf(i),
-                                "param", Strings.PAGINATION_PARAM,
-                                "url", thisPageUrl,
-                                "style", i == currentPage ? "font-weight:bold;" : "font-weight:normal;"
-                        );
-                        pagination.append(VelocityUtils.getRenderedTemplate(Strings.PAGINATION_SINGLE, paginationContext));
-                    }
-                    context.put("pagination", pagination.toString());
-                } else context.put("pagination", Strings.EMPTY);
+                if (thisPageUrl != null && request != null) {
+                    if (currentPage != 1 || issues.size() >= pageSize) {
 
+                        int maxPages = Service.intValueOf((String) params.get(Strings.TOTAL_PAGES), 10);
+
+                        if (currentPage > 1) {
+                            if (issues.size() < pageSize) maxPages = currentPage + 1;
+                        }
+
+                        for (int i = 1; i <= maxPages; i++) {
+                            final Map<String, Object> paginationContext = Service.createContext(context,
+                                    "num", String.valueOf(i),
+                                    "param", Strings.PAGINATION_PARAM,
+                                    "url", thisPageUrl,
+                                    "style", i == currentPage ? "font-weight:bold;" : "font-weight:normal;"
+                            );
+                            pagination.append(VelocityUtils.getRenderedTemplate(Strings.PAGINATION_SINGLE, paginationContext));
+                        }
+                    }
+                }
+                context.put("pagination", pagination.toString());
                 context.put("rows", rows.toString());
                 context.put("hasIssues", issues.isEmpty() ? null : String.valueOf(true));
                 context.put("title", query + " from " + project);
