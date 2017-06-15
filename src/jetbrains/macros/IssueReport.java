@@ -84,8 +84,8 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final String thisPageUrl = page == null ? null : page.getUrlPath();
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
 
-                final List<Issue> issues = tryQuery(youTrack.issues, Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
-                        Strings.EMPTY : "project: " + project + " " + query, startIssue, pageSize, retries);
+                final List<Issue> issues = tryQuery(youTrack.issues, (Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
+                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize, retries);
 
                 final LinkedList<IssueFieldDescriptor> reportFields = new LinkedList<IssueFieldDescriptor>();
 
@@ -100,14 +100,15 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     header.append(desc.title);
                     header.append("</th>");
                 }
-                context.put(Strings.LINKBASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
+
 
                 String linkbase = getProperty(Strings.LINKBASE);
 
-                if (null != linkbase && !linkbase.isEmpty()) {
+                if (Service.isEmpty(linkbase)) {
                     if (linkbase.endsWith("/")) linkbase = linkbase.substring(0, linkbase.lastIndexOf("/"));
-                    context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
-                }
+                } else linkbase = getProperty(Strings.HOST);
+
+                context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
 
                 for (final Issue originalIssue : issues) {
 
@@ -161,7 +162,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                                         }
                                     }
                                 } else {
-                                    rows.append("No one commented yet.");
+                                    rows.append("No commentes so far.");
                                 }
                             } else
                                 rows.append(field == null ? Strings.UNKNOWN : Service.defaultIfNull(field.getStringValue(), Strings.UNKNOWN));

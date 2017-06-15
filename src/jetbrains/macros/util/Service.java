@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class Service {
 
-    public static Map<String, Object> createContext(String... src) {
+    public static Map<String, Object> createContext(final String... src) {
         final Map<String, Object> result = new HashMap<String, Object>();
         for (int j = 0; j < src.length; j++) {
             result.put(defaultIfNull(src[j], Strings.UNKNOWN), j + 1 < src.length ? defaultIfNull(src[j + 1], Strings.EMPTY) : Strings.EMPTY);
@@ -25,14 +25,14 @@ public class Service {
         return defaultIfNull(value, defaultValue).isEmpty() ? defaultValue : value;
     }
 
-    public static Map<String, Object> createContext(Map<String, Object> base, String... src) {
+    public static Map<String, Object> createContext(final Map<String, Object> base, final String... src) {
         final Map<String, Object> result = new HashMap<String, Object>();
         result.putAll(base);
         result.putAll(createContext(src));
         return result;
     }
 
-    public static int intValueOf(final String str, int defaultValue) {
+    public static int intValueOf(final String str, final int defaultValue) {
         if (str == null) return defaultValue;
         try {
             return Integer.valueOf(str);
@@ -41,4 +41,7 @@ public class Service {
         }
     }
 
+    public static boolean isEmpty(final String s) {
+        return s == null || s.trim().isEmpty();
+    }
 }
