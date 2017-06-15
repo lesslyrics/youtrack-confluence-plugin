@@ -84,8 +84,8 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 final String thisPageUrl = page == null ? null : page.getUrlPath();
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
 
-                final List<Issue> issues = tryQuery(youTrack.issues, (Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
-                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize, retries);
+                final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
+                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
 
                 final LinkedList<IssueFieldDescriptor> reportFields = new LinkedList<IssueFieldDescriptor>();
 
