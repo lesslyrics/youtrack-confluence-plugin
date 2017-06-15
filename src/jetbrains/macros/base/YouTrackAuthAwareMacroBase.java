@@ -35,7 +35,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         try {
             if (!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
             return list.item(id);
-        } catch (CommandExecutionException e) {
+        } catch (Exception e) {
             if (retry > 0) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
@@ -49,8 +49,10 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
         try {
             if (!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
-            return list.query(query, start, pageSize);
-        } catch (CommandExecutionException e) {
+            final List<I> result = list.query(query, start, pageSize);
+            if (result.isEmpty() && retries > 0) throw new Exception();
+            return result;
+        } catch (Exception e) {
             if (retry > 0) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
