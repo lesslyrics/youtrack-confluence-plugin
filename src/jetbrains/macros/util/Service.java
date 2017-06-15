@@ -22,7 +22,7 @@ public class Service {
     }
 
     public static String defaultIfNullOrEmpty(final String value, final String defaultValue) {
-        return defaultIfNull(value, defaultValue).isEmpty() ? defaultValue : value;
+        return isEmpty(value) ? defaultValue : value;
     }
 
     public static Map<String, Object> createContext(final Map<String, Object> base, final String... src) {
