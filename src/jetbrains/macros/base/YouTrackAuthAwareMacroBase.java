@@ -27,6 +27,10 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         init();
     }
 
+    protected abstract String getLoggingPrefix();
+
+    protected abstract Logger getLogger();
+
     private void init() {
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
         youTrack.setAuthorization(Strings.AUTH_KEY);
@@ -47,8 +51,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         return null;
     }
 
-    protected void logMessage(final Logger logger, final String msg) {
-        if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) logger.info(msg);
+    protected void logMessage(final String msg) {
+        if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) getLogger().debug(getLoggingPrefix() + msg);
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)

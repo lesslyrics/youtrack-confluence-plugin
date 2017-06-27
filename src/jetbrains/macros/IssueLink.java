@@ -21,9 +21,20 @@ import java.util.Map;
 
 public class IssueLink extends YouTrackAuthAwareMacroBase {
     private static final Logger LOG = LoggerFactory.getLogger(IssueLink.class);
+    private static final String logPrefix = "YTMacro-LinkDebug: ";
 
     public IssueLink(PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
+    }
+
+    @Override
+    protected String getLoggingPrefix() {
+        return logPrefix;
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return LOG;
     }
 
     public boolean isInline() {
@@ -64,8 +75,8 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                     context.put(Strings.BASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     context.put(Strings.LINKBASE, getProperty(Strings.HOST).replace(Strings.REST_PREFIX, Strings.EMPTY));
                     String linkbase = getProperty(Strings.LINKBASE);
-                    if(null!=linkbase && !linkbase.isEmpty()){
-                        context.put(Strings.LINKBASE,linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
+                    if (null != linkbase && !linkbase.isEmpty()) {
+                        context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
                     }
                     final String thru = (Strings.ALL.equals(strikeMode) || Strings.ID_ONLY.equals(strikeMode)) && issue.isResolved() ? "line-through" : Strings.NORMAL;
                     if (Strings.ID_ONLY.equals(strikeMode)) {
