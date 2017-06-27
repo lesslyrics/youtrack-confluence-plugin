@@ -47,8 +47,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         return null;
     }
 
-    protected void debugMessage(final Logger logger, final String msg) {
-        if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) logger.debug(msg);
+    protected void logMessage(final Logger logger, final String msg) {
+        if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) logger.info(msg);
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)

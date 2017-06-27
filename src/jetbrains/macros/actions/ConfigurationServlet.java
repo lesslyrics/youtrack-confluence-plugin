@@ -65,11 +65,11 @@ public class ConfigurationServlet extends HttpServlet {
         final String password = req.getParameter(Strings.PASSWORD);
         final String login = req.getParameter(Strings.LOGIN);
         final String retries = req.getParameter(Strings.RETRIES);
-        final String extendedDebug = req.getParameter(Strings.EXTENDED_DEBUG);
         String linkbase = req.getParameter(Strings.LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
             linkbase = hostAddress.replace(Strings.REST_PREFIX, Strings.EMPTY) + Strings.URL_SEPARATOR;
         final String trustAll = req.getParameter(Strings.TRUST_ALL) != null ? "true" : "false";
+        final String extendedDebug = req.getParameter(Strings.EXTENDED_DEBUG) != null ? "true" : "false";
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress, Boolean.parseBoolean(trustAll));
         try {
             testYouTrack.login(login, password);
