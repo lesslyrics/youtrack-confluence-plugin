@@ -11,6 +11,7 @@ public class Strings {
     public static final String ISSUE_ID = "issue-id";
     public static final String BASE = "base";
     public static final String LINKBASE = "linkbase";
+    public static final String EXTENDED_DEBUG = "extendedDebug";
     public static final String STATE = "state";
     public static final String STRIKE_THRU = "<span style=\"text-decoration:{0};\">{1}</span>";
     public static final String SUMMARY = "summary";

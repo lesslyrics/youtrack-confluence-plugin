@@ -65,6 +65,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String password = req.getParameter(Strings.PASSWORD);
         final String login = req.getParameter(Strings.LOGIN);
         final String retries = req.getParameter(Strings.RETRIES);
+        final String extendedDebug = req.getParameter(Strings.EXTENDED_DEBUG);
         String linkbase = req.getParameter(Strings.LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
             linkbase = hostAddress.replace(Strings.REST_PREFIX, Strings.EMPTY) + Strings.URL_SEPARATOR;
@@ -79,6 +80,7 @@ public class ConfigurationServlet extends HttpServlet {
                     final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
                     final Properties storage = new Properties();
                     storage.setProperty(Strings.HOST, hostAddress);
+                    storage.setProperty(Strings.EXTENDED_DEBUG, extendedDebug);
                     storage.setProperty(Strings.LOGIN, login);
                     storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
                     storage.setProperty(Strings.TRUST_ALL, trustAll);
@@ -124,6 +126,7 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(Strings.RETRIES, storage.getProperty(Strings.RETRIES, "10"));
         params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
         params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
+        params.put(Strings.EXTENDED_DEBUG, storage.getProperty(Strings.EXTENDED_DEBUG, "false"));
         params.put(Strings.TRUST_ALL, storage.getProperty(Strings.TRUST_ALL, "false"));
         params.put(Strings.LINKBASE, storage.getProperty(Strings.LINKBASE, Strings.EMPTY));
         params.put("justSaved", justSaved);

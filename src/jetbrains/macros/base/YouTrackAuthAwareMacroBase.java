@@ -4,6 +4,7 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.macros.util.Service;
 import jetbrains.macros.util.Strings;
+import org.slf4j.Logger;
 import youtrack.BaseItem;
 import youtrack.CommandBasedList;
 import youtrack.YouTrack;
@@ -14,6 +15,7 @@ import youtrack.exceptions.CommandNotAvailableException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
     protected YouTrack youTrack;
@@ -43,6 +45,10 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             }
         }
         return null;
+    }
+
+    protected void debugMessage(final Logger logger, final String msg) {
+        if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) logger.debug(msg);
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)

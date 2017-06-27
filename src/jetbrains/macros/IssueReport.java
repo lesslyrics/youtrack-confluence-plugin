@@ -22,12 +22,14 @@ import youtrack.IssueComment;
 import youtrack.issues.fields.BaseIssueField;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class IssueReport extends YouTrackAuthAwareMacroBase {
     private static final Logger LOG = LoggerFactory.getLogger(IssueReport.class);
     private final PageManager pageManager;
+    private static final String logPrefix = "YTMacro-ReportDebug: ";
 
     private class IssueFieldDescriptor {
         final String code;
@@ -62,33 +64,55 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
     public String execute(Map params, String body, RenderContext renderContext)
             throws MacroException {
         try {
+            debugMessage(LOG, logPrefix + "Report macro invoked.");
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
+            debugMessage(LOG, logPrefix + "Processing parameters.");
 
             final String project = Service.defaultIfNullOrEmpty((String) params.get(Strings.PROJECT), Strings.ALL_PROJECTS);
             final String query = (String) params.get(Strings.QUERY);
             final String fieldList = Service.defaultIfNullOrEmpty((String) params.get(Strings.REPORT_FIELD_LIST), Strings.DEFAULT_REPORT_FIELD_LIST);
 
+            debugMessage(LOG, logPrefix + MessageFormat.format(" Project: {0} Query: {1} Fields: {2}", project, query, fieldList));
+
             final StringBuilder result = new StringBuilder();
             if (query != null) {
+
+                debugMessage(LOG, logPrefix + "Starting to query YouTrack.");
+
                 tryGetItem(youTrack.issues, Strings.EMPTY, 2);
+
+                debugMessage(LOG, logPrefix + "Access token updated.");
+
                 final StringBuilder rows = new StringBuilder();
                 final int pageSize = Service.intValueOf((String) params.get(Strings.PAGE_SIZE), 25);
 
+                debugMessage(LOG, logPrefix + "Page size determined: " + pageSize);
+
                 final HttpServletRequest request = ServletActionContext.getRequest();
                 final int currentPage = request == null ? 1 : Service.intValueOf(request.getParameter(Strings.PAGINATION_PARAM), 1);
+
+                debugMessage(LOG, logPrefix + "Current page determined: " + currentPage);
 
                 final StringBuilder pagination = new StringBuilder();
                 final PageContext pageContext = (PageContext) renderContext;
                 final Page page = pageManager.getPage(pageContext.getSpaceKey(), pageContext.getPageTitle());
                 final String thisPageUrl = page == null ? null : page.getUrlPath();
+
+                debugMessage(LOG, logPrefix + "Page URL is (null for new, not saved pages): " + thisPageUrl);
+
                 final int startIssue = currentPage == 1 ? 0 : (currentPage - 1) * pageSize + 1;
 
+                debugMessage(LOG, logPrefix + "Start issue: " + startIssue);
+
+                debugMessage(LOG, logPrefix + "Preparing field info.");
                 final LinkedList<IssueFieldDescriptor> reportFields = new LinkedList<IssueFieldDescriptor>();
 
                 for (final String fieldData : fieldList.split(",")) {
+                    debugMessage(LOG, logPrefix + "Reading field: " + fieldData);
                     reportFields.add(new IssueFieldDescriptor(fieldData));
                 }
 
+                debugMessage(LOG, logPrefix + "Building report header.");
                 final StringBuilder header = new StringBuilder();
                 header.append("<th>Issue</th>");
                 for (final IssueFieldDescriptor desc : reportFields) {
@@ -103,12 +127,21 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     if (linkbase.endsWith("/")) linkbase = linkbase.substring(0, linkbase.lastIndexOf("/"));
                 } else linkbase = getProperty(Strings.HOST);
 
+                debugMessage(LOG, logPrefix + "Determining linkbase: " + linkbase);
+
                 context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
 
-                final List<Issue> issues = youTrack.issues.query((Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
-                        Strings.EMPTY : "project: " + project + " ") + query, startIssue, pageSize);
+                final String finalQuery = (Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
+                        Strings.EMPTY : "project: " + project + "") + query;
 
+                debugMessage(LOG, logPrefix + "Running query: " + finalQuery);
+
+                final List<Issue> issues = youTrack.issues.query(finalQuery, startIssue, pageSize);
+
+                debugMessage(LOG, logPrefix + "Number of isses in query result: " + issues.size());
                 for (final Issue originalIssue : issues) {
+
+                    debugMessage(LOG, logPrefix + "Rendering report row for " + originalIssue.getId());
 
                     final Issue snapshot = originalIssue.createSnapshot();
 
@@ -123,6 +156,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     rows.append("</td>");
 
                     for (final IssueFieldDescriptor reportField : reportFields) {
+                        debugMessage(LOG, logPrefix + "Rendering field " + reportField.code);
                         rows.append("<td>");
 
                         final HashMap<String, BaseIssueField> issueFields = snapshot.getFields();
@@ -131,11 +165,16 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                             final boolean verbose = "comments-verbose".equals(reportField.code);
 
                             if ("comments".equals(reportField.code) || verbose) {
+
+                                debugMessage(LOG, logPrefix + "Rendering comments.");
+
                                 final CommandBasedList<Issue, IssueComment> comments = originalIssue.comments;
                                 if (comments != null) {
                                     final List<IssueComment> issueComments = comments.list();
+                                    debugMessage(LOG, logPrefix + "Total comments: " + issueComments.size());
 
                                     for (int i = 0; i < issueComments.size(); i++) {
+                                        debugMessage(LOG, logPrefix + "Adding comment: " + i);
                                         final IssueComment issueComment = issueComments.get(i);
                                         String commentText = issueComment.getText();
 
@@ -170,6 +209,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                     rows.append("</tr>");
                 }
                 if (thisPageUrl != null && request != null) {
+                    debugMessage(LOG, logPrefix + "Processing pagination");
                     if (currentPage != 1 || issues.size() >= pageSize) {
 
                         int maxPages = Service.intValueOf((String) params.get(Strings.TOTAL_PAGES), 10);
@@ -192,10 +232,12 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 context.put("pagination", pagination.toString());
                 context.put("rows", rows.toString());
                 context.put("hasIssues", issues.isEmpty() ? null : String.valueOf(true));
-                context.put("title", query + " from " + project);
+                context.put("title", query + "from " + project);
                 context.put("header", header);
+                debugMessage(LOG, logPrefix + "Final rendering.");
                 result.append(VelocityUtils.getRenderedTemplate(Strings.BODY_REPORT, context));
             }
+            debugMessage(LOG, logPrefix + "Returning results.");
             return result.toString();
         } catch (Exception ex) {
             LOG.error("YouTrack report macro encounters error", ex);
