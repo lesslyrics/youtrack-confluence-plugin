@@ -216,7 +216,6 @@
             <zipfileset src="${basedir}/lib/commons-io-2.5.jar"/>
             <zipfileset src="${basedir}/lib/commons-lang-2.1.jar"/>
             <zipfileset src="${basedir}/lib/commons-logging-1.2.jar"/>
-            <zipfileset src="${basedir}/lib/confluence-5.4.1.jar"/>
 <!--
             <zipfileset src="${basedir}/lib/fluent-hc-4.5.2.jar"/>
             <zipfileset src="${basedir}/lib/javax.annotation.jar"/>
