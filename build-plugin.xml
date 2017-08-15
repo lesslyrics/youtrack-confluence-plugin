@@ -164,13 +164,13 @@
             <patternset refid="excluded.from.compilation.youtrack-confluence-plugin"/>
         </javac>
 
-       <!-- <copy todir="${youtrack-confluence-plugin.output.dir}">
-            <fileset dir="${module.youtrack-confluence-plugin.basedir}/src">
-                <patternset refid="compiler.resources"/>
-                <type type="file"/>
-                <patternset refid="excluded.from.compilation.youtrack-confluence-plugin"/>
-            </fileset>
-        </copy>-->
+        <!-- <copy todir="${youtrack-confluence-plugin.output.dir}">
+             <fileset dir="${module.youtrack-confluence-plugin.basedir}/src">
+                 <patternset refid="compiler.resources"/>
+                 <type type="file"/>
+                 <patternset refid="excluded.from.compilation.youtrack-confluence-plugin"/>
+             </fileset>
+         </copy>-->
     </target>
 
     <target name="compile.module.youtrack-confluence-plugin.tests"
@@ -207,6 +207,10 @@
             <zipfileset dir="${youtrack-confluence-plugin.output.dir}"/>
             <zipfileset dir="${basedir}/src/main/resources/templates" prefix="templates"/>
             <zipfileset src="${basedir}/lib/YouTrackRestApi.jar"/>
+            <zipfileset src="${basedir}/lib/httpcore-4.4.4.jar"/>
+            <zipfileset src="${basedir}/lib/httpclient-4.5.2.jar"/>
+            <zipfileset src="${basedir}/lib/httpclient-cache-4.5.2.jar"/>
+            <zipfileset src="${basedir}/lib/httpmime-4.5.2.jar"/>
         </jar>
         <copy file="${temp.jar.path.plugin-bundle.jar}"
               tofile="${artifact.temp.output.plugin-bundle}/plugin-bundle.jar"/>
