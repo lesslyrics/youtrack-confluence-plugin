@@ -242,7 +242,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 context.put("pagination", pagination.toString());
                 context.put("rows", rows.toString());
                 context.put("hasIssues", issues.isEmpty() ? null : String.valueOf(true));
-                context.put("title", query + "from " + project);
+                context.put("title", query + " from " + project);
                 context.put("header", header);
                 logMessage("Final rendering.");
                 result.append(VelocityUtils.getRenderedTemplate(Strings.BODY_REPORT, context));
