@@ -142,7 +142,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 context.put(Strings.LINKBASE, linkbase.replace(Strings.REST_PREFIX, Strings.EMPTY));
 
                 final String finalQuery = (Strings.ALL_PROJECTS.equalsIgnoreCase(project) ?
-                        Strings.EMPTY : "project: " + project + "") + query;
+                        Strings.EMPTY : "project: " + project + " ") + query;
 
                 logMessage("Running query: " + finalQuery);
 
