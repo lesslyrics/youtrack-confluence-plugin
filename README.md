@@ -1,3 +1,5 @@
+![official JetBrains project](http://jb.gg/badges/official-flat-square.svg)
+
 youtrack-confluence-plugin
 ==========================
 
