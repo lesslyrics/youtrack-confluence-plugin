@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<atlassian-plugin key="youtrack.integration.plugin" name="YouTrack Integration" plugins-version="2">
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
     <plugin-info>
         <description>Plugin that enables integration between Confluence and YouTrack via macros that allow inserting
             dynamic links and query-based reports.
@@ -8,13 +7,13 @@
         <vendor name="JetBrains" url="http://www.jetbrains.com"/>
         <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>
-    <!-- Macro modules  -->
-    <macro name="issue" class="jetbrains.macros.IssueLink" key="youtrack.integration.plugin.issue">
+
+    <xhtml-macro name="issue" class="com.jetbrains.plugins.macro.IssueLink" key="youtrack.integration.plugin.issue">
         <description>Inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
-        <category name="confluence-content"/>
+        <category name="formatting"/>
         <parameters>
             <parameter name="id" type="string" required="true"/>
             <parameter name="style" type="enum" required="false" default="short">
@@ -28,8 +27,8 @@
             </parameter>
             <parameter name="link-text-template" type="string" required="false" default="$issue"/>
         </parameters>
-    </macro>
-    <macro name="report" class="jetbrains.macros.IssueReport" key="youtrack.integration.plugin.report">
+    </xhtml-macro>
+    <xhtml-macro name="report" class="com.jetbrains.plugins.macro.IssueReport" key="youtrack.integration.plugin.report">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
@@ -43,17 +42,24 @@
             <parameter name="pageSize" type="string" required="false" default="25"/>
             <parameter name="numPages" type="string" required="false" default="10"/>
         </parameters>
-    </macro>
-    <!-- Stuff required for support of Admin panel settings -->
-    <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
-    <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider"/>
-    <component-import key="renderer"
-                      interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer"/>
-    <component-import key="pluginSettingsFactory"
-                      interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"/>
-    <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate"/>
-    <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.macros.actions.ConfigurationServlet">
+    </xhtml-macro>
+
+    <servlet key="youtrack.integration.plugin.settings.servlet" class="com.jetbrains.plugins.actions.ConfigurationServlet">
         <url-pattern>/youtrack-integration/settings</url-pattern>
     </servlet>
-    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="youtrack"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="youtrack" name="youtrack Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+
+        <resource type="download" name="youtrack.css" location="/css/youtrack.css"/>
+        <resource type="download" name="youtrack.js" location="/js/youtrack.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>youtrack</context>
+    </web-resource>
+    
 </atlassian-plugin>

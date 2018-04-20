@@ -1,6 +1,6 @@
 ![official JetBrains project](http://jb.gg/badges/official-flat-square.svg)
 
-youtrack-confluence-plugin
+youtrack
 ==========================
 
 Allows inserting dynamic YouTrack issue links to Confluence pages via {issue} macro. 
