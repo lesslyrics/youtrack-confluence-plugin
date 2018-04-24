@@ -1,4 +1,4 @@
-<atlassian-plugin key="youtrack.integration.plugin" name="YouTrack Integration" plugins-version="2">
+<atlassian-plugin key="${atlassian.plugin.key}" name="YouTrack Integration" plugins-version="2">
     <plugin-info>
         <description>Plugin that enables integration between Confluence and YouTrack via macros that allow inserting
             dynamic links and query-based reports.
