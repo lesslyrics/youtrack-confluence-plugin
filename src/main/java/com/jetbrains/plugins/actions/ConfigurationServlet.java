@@ -59,7 +59,7 @@ public class ConfigurationServlet extends HttpServlet {
 
     private void checkAdminRights(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         final String username = userManager.getRemoteUsername(req);
-        if (username == null || !userManager.isSystemAdmin(username)) {
+        if (username == null || !userManager.isAdmin(username)) {
             redirectToLogin(req, resp);
         }
     }

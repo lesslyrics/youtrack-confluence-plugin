@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>http://central.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>atlassian-public</id>
+            <url>https://packages.atlassian.com/maven/repository/public</url>
+        </repository>
+        <repository>
+            <id>webteam</id>
+            <name>repo.labs.intellij.net-releases</name>
+            <url>https://repo.labs.intellij.net/webteam</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <confluence.version>6.1.0</confluence.version>
+        <confluence.data.version>6.1.0</confluence.data.version>
+        <amps.version>6.1.0</amps.version>
+        <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
+        <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
+        <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
+        <atlassian.plugin.key>youtrack.integration.plugin</atlassian.plugin.key>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jetbrains.plugins</groupId>
     <artifactId>youtrack-confluence-plugin</artifactId>
@@ -12,6 +41,7 @@
     <name>youtrack-confluence-plugin</name>
     <description>This is the com.jetbrains.plugins:youtrack-confluence-plugin for Atlassian Confluence.</description>
     <packaging>atlassian-plugin</packaging>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -85,9 +115,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.jetbrains</groupId>
+            <groupId>org.jetbrains.webteam</groupId>
             <artifactId>youtrack-rest</artifactId>
-            <version>1.0.0</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -150,16 +180,4 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-        <confluence.version>6.1.0</confluence.version>
-        <confluence.data.version>6.1.0</confluence.data.version>
-        <amps.version>6.1.0</amps.version>
-        <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
-        <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
-        <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
-        <atlassian.plugin.key>youtrack.integration.plugin</atlassian.plugin.key>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>
