@@ -5,7 +5,7 @@
     <repositories>
         <repository>
             <id>maven-central</id>
-            <url>http://central.maven.org/maven2/</url>
+            <url>http://central.maven.org/maven2</url>
         </repository>
         <repository>
             <id>atlassian-public</id>
@@ -136,7 +136,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-confluence-plugin</artifactId>
-                <version>${amps.version}</version>
+                <version>5.0.18</version>
                 <extensions>true</extensions>
                 <configuration>
                     <productVersion>${confluence.version}</productVersion>
