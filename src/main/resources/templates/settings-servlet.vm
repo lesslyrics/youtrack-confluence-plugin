@@ -1,11 +1,19 @@
+#set($spaceSelectorOptionsWithHtml = $spaceSelectorOptions)
 <html>
 <head>
     <title>YouTrack Integration Settings</title>
     <meta name="decorator" content="atl.admin"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
+
+    <div class="field-group">
+        <label for="youtrackconfluencespace">Use these settings for the following Confluence spaces:</label>
+        <select name="space" id="space" class="text">
+            $spaceSelectorOptions
+        </select>
+    </div>
 
     <div class="field-group">
         <label for="youtrackhost">YouTrack host REST address:</label>

@@ -1,6 +1,6 @@
 <div class="yt yt-report">
 <h3>$title</h3>
-#set($headerWithHtml =$header)
+#set($headerWithHtml = $header)
 #set($rowsWithHtml = $rows)
 #set($paginationWithHtml = $pagination)
 #if ($hasIssues)
