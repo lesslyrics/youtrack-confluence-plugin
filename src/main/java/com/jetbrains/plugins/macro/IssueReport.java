@@ -89,7 +89,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
 
                 logMessage("Starting to query YouTrack.");
 
-                tryGetItem(youTrack.issues, EMPTY, 2);
+                tryGetItem(youTrack.issues, EMPTY, 2, conversionContext.getSpaceKey());
 
                 logMessage("Access token updated.");
 
@@ -255,7 +255,11 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
         }
     }
 
-    public BodyType getBodyType() { return BodyType.NONE; }
+    public BodyType getBodyType() {
+        return BodyType.NONE;
+    }
 
-    public OutputType getOutputType() { return OutputType.BLOCK; }
+    public OutputType getOutputType() {
+        return OutputType.BLOCK;
+    }
 }

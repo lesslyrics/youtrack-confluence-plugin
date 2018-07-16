@@ -1,7 +1,6 @@
 package com.jetbrains.plugins.macro;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
-import com.atlassian.confluence.macro.Macro;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
@@ -57,7 +56,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                Issue issue = tryGetItem(youTrack.issues, issueId, retries);
+                Issue issue = tryGetItem(youTrack.issues, issueId, retries, conversionContext.getSpaceKey());
                 if (issue != null) {
                     issue = issue.createSnapshot();
                     final HashMap<String, BaseIssueField> fields = issue.getFields();
@@ -96,7 +95,11 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
         }
     }
 
-    public BodyType getBodyType() { return BodyType.NONE; }
+    public BodyType getBodyType() {
+        return BodyType.NONE;
+    }
 
-    public OutputType getOutputType() { return OutputType.BLOCK; }
+    public OutputType getOutputType() {
+        return OutputType.BLOCK;
+    }
 }

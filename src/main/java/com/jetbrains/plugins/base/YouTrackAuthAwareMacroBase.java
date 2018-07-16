@@ -25,28 +25,29 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     public YouTrackAuthAwareMacroBase(@ComponentImport PluginSettingsFactory pluginSettingsFactory,
                                       @ComponentImport TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
-        init();
     }
 
     protected abstract String getLoggingPrefix();
 
     protected abstract Logger getLogger();
 
-    private void init() {
+    private void init(String forSpace) {
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
-        youTrack.setAuthorization(Strings.AUTH_KEY);
+        String authKey = getProperty(forSpace + Strings.AUTH_KEY);
+        if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
+        youTrack.setAuthorization(authKey);
     }
 
-    protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry)
+    protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry, final String forSpace)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
         try {
-            if (!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
+            init(forSpace);
             return list.item(id);
         } catch (CommandExecutionException e) {
             if (retry > 0) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
-                return tryGetItem(list, id, retry - 1);
+                return tryGetItem(list, id, retry - 1, forSpace);
             }
         }
         return null;
@@ -56,16 +57,16 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) getLogger().warn(getLoggingPrefix() + msg);
     }
 
-    protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)
+    protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry, final String forSpace)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
         try {
-            if (!getProperty(Strings.HOST).equals(youTrack.getHostAddress())) init();
+            init(forSpace);
             return list.query(query, start, pageSize);
         } catch (CommandExecutionException e) {
             if (retry > 0) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
-                return tryQuery(list, query, start, pageSize, retry - 1);
+                return tryQuery(list, query, start, pageSize, retry - 1, forSpace);
             }
         }
         return Collections.emptyList();
