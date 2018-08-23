@@ -76,6 +76,8 @@ public class ConfigurationServlet extends HttpServlet {
         final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
         final String password = req.getParameter(PASSWORD);
         final String login = req.getParameter(LOGIN);
+        final String token = req.getParameter(TOKEN);
+        final String useToken = "on".equals(req.getParameter(USE_TOKEN)) ? "true" : "false";
         final String retries = req.getParameter(RETRIES);
         final String forSpace = req.getParameter("forSpace");
         String linkbase = req.getParameter(LINKBASE);
@@ -85,7 +87,12 @@ public class ConfigurationServlet extends HttpServlet {
         final String extendedDebug = req.getParameter(EXTENDED_DEBUG) != null ? "true" : "false";
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress, Boolean.parseBoolean(trustAll));
         try {
-            testYouTrack.login(login, password);
+            final boolean useTokenAuthorization = Boolean.parseBoolean(useToken);
+            testYouTrack.setUseTokenAuthorization(useTokenAuthorization);
+            testYouTrack.setAuthorization(token);
+            if (!useTokenAuthorization) {
+                testYouTrack.login(login, password);
+            }
             final String finalLinkbase = linkbase;
             transactionTemplate.execute(new TransactionCallback<Properties>() {
                 @Override
@@ -94,10 +101,15 @@ public class ConfigurationServlet extends HttpServlet {
                     final Properties storage = new Properties();
                     storage.setProperty(HOST, hostAddress);
                     storage.setProperty(EXTENDED_DEBUG, extendedDebug);
-                    storage.setProperty(forSpace + LOGIN, login);
+                    if (useTokenAuthorization) {
+                        storage.setProperty(forSpace + TOKEN, token);
+                    } else {
+                        storage.setProperty(forSpace + LOGIN, login);
+                        storage.setProperty(forSpace + PASSWORD, password);
+                    }
+                    storage.setProperty(USE_TOKEN, useToken);
                     storage.setProperty(RETRIES, intValueOf(retries, 10));
                     storage.setProperty(TRUST_ALL, trustAll);
-                    storage.setProperty(forSpace + PASSWORD, password);
                     storage.setProperty(LINKBASE, finalLinkbase);
                     storage.setProperty(forSpace + AUTH_KEY, testYouTrack.getAuthorization());
                     pluginSettings.put(MAIN_KEY, storage);
@@ -142,6 +154,8 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(RETRIES, storage.getProperty(RETRIES, "10"));
         params.put(PASSWORD, storage.getProperty(forSpace + PASSWORD, EMPTY));
         params.put(LOGIN, storage.getProperty(forSpace + LOGIN, EMPTY));
+        params.put(TOKEN, storage.getProperty(forSpace + TOKEN, EMPTY));
+        params.put(USE_TOKEN, storage.getProperty(USE_TOKEN, "true"));
         params.put(EXTENDED_DEBUG, storage.getProperty(EXTENDED_DEBUG, "false"));
         params.put(TRUST_ALL, storage.getProperty(forSpace + TRUST_ALL, "false"));
         params.put(LINKBASE, storage.getProperty(LINKBASE, EMPTY));
