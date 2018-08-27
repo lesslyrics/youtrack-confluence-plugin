@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import static com.jetbrains.plugins.util.Strings.USE_TOKEN;
+
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
     protected YouTrack youTrack;
@@ -33,8 +35,13 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     private void init(String forSpace) {
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
-        String authKey = getProperty(forSpace + Strings.AUTH_KEY);
-        if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
+        String authKey;
+        if ("true".equals(getProperty(USE_TOKEN))) {
+            authKey = getProperty(forSpace + Strings.TOKEN);
+        } else {
+            authKey = getProperty(forSpace + Strings.AUTH_KEY);
+            if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
+        }
         youTrack.setAuthorization(authKey);
     }
 
@@ -44,7 +51,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             init(forSpace);
             return list.item(id);
         } catch (CommandExecutionException e) {
-            if (retry > 0) {
+            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryGetItem(list, id, retry - 1, forSpace);
@@ -63,7 +70,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             init(forSpace);
             return list.query(query, start, pageSize);
         } catch (CommandExecutionException e) {
-            if (retry > 0) {
+            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryQuery(list, query, start, pageSize, retry - 1, forSpace);

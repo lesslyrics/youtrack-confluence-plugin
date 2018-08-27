@@ -15,10 +15,12 @@
             var loginPassword = document.getElementById('loginPasswordBlock');
             if (useTokenElem.checked) {
                 loginPassword.style.display = "none";
-                tokenElem.removeAttribute("style");;
+                tokenElem.removeAttribute("style");
+                ;
             } else {
                 tokenElem.style.display = "none";
-                loginPassword.removeAttribute("style");;
+                loginPassword.removeAttribute("style");
+                ;
             }
         }
     </script>
@@ -54,13 +56,14 @@
     <div class="field-group">
         <label for="forSpace">The following settings will apply to this Confluence space:</label>
         <select name="forSpace" id="forSpace" class="text">
-            $spaceSelectorOptions
+            $spaceSelectorOptionsWithHtml
         </select>
     </div>
 
     <div class="field-group">
         <label for="youtrackusetoken">Use token authorization</label>
-        <input onclick="displayTokenInput()" type="checkbox" name="useToken" id="useToken" #if($useToken=='true')checked#end>
+        <input onclick="displayTokenInput()" type="checkbox" name="useToken" id="useToken"
+               #if($useToken=='true')checked#end>
     </div>
 
     <div id="tokenBlock" class="field-group">
