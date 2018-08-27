@@ -36,13 +36,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     private void init(String forSpace) {
         youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
         String authKey;
-        if ("true".equals(getProperty(USE_TOKEN))) {
-            authKey = getProperty(forSpace + Strings.TOKEN);
-            if (authKey.isEmpty()) authKey = getProperty(Strings.TOKEN);
-        } else {
-            authKey = getProperty(forSpace + Strings.AUTH_KEY);
-            if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
-        }
+        authKey = getProperty(forSpace + Strings.AUTH_KEY);
+        if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
         youTrack.setAuthorization(authKey);
     }
 

@@ -68,7 +68,7 @@
 
     <div id="tokenBlock" class="field-group">
         <label for="youtracktoken">Token:</label>
-        <input type="text" class="text" name="token" id="token" value="$token">
+        <input type="text" class="text" name="AUTH_KEY" id="AUTH_KEY" value="$token">
     </div>
 
     <div id="loginPasswordBlock" style="display: none">

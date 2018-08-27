@@ -82,8 +82,8 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                     context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issue.getPriority() + ", State: " +
                             issue.getState() + ", Assignee: " + (assignee == null ? UNASSIGNED : assignee.getFullName()) +
                             ", Votes: " + issue.getVotes() + ", Type: " + issue.getType());
-                    context.put(ISSUE_LINK_TEXT, VelocityUtils.getRenderedContent(linkTextTemplate, context));
-                    context.put(SUMMARY_FORMATTED, VelocityUtils.getRenderedContent(summaryTextTemplate, context));
+                    context.put(ISSUE_LINK_TEXT, VelocityUtils.getRenderedContent((CharSequence) linkTextTemplate, context));
+                    context.put(SUMMARY_FORMATTED, VelocityUtils.getRenderedContent((CharSequence) summaryTextTemplate, context));
                 } else context.put(ERROR, "Issue not found: " + issueId);
             } else {
                 context.put(ERROR, "Issue not specified.");

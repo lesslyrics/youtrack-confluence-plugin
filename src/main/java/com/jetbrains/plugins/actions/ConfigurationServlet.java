@@ -76,7 +76,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
         final String password = req.getParameter(PASSWORD);
         final String login = req.getParameter(LOGIN);
-        final String token = req.getParameter(TOKEN);
+        final String token = req.getParameter(AUTH_KEY);
         final String useToken = "on".equals(req.getParameter(USE_TOKEN)) ? "true" : "false";
         final String retries = req.getParameter(RETRIES);
         final String forSpace = req.getParameter("forSpace");
@@ -102,16 +102,16 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(HOST, hostAddress);
                     storage.setProperty(EXTENDED_DEBUG, extendedDebug);
                     if (useTokenAuthorization) {
-                        storage.setProperty(forSpace + TOKEN, token);
+                        storage.setProperty(forSpace + AUTH_KEY, token);
                     } else {
                         storage.setProperty(forSpace + LOGIN, login);
                         storage.setProperty(forSpace + PASSWORD, password);
+                        storage.setProperty(forSpace + AUTH_KEY, testYouTrack.getAuthorization());
                     }
                     storage.setProperty(USE_TOKEN, useToken);
                     storage.setProperty(RETRIES, intValueOf(retries, 10));
                     storage.setProperty(TRUST_ALL, trustAll);
                     storage.setProperty(LINKBASE, finalLinkbase);
-                    storage.setProperty(forSpace + AUTH_KEY, testYouTrack.getAuthorization());
                     pluginSettings.put(MAIN_KEY, storage);
                     return null;
                 }
@@ -154,7 +154,7 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(RETRIES, storage.getProperty(RETRIES, "10"));
         params.put(PASSWORD, storage.getProperty(forSpace + PASSWORD, EMPTY));
         params.put(LOGIN, storage.getProperty(forSpace + LOGIN, EMPTY));
-        params.put(TOKEN, storage.getProperty(forSpace + TOKEN, EMPTY));
+        params.put(AUTH_KEY, storage.getProperty(forSpace + AUTH_KEY, EMPTY));
         params.put(USE_TOKEN, storage.getProperty(USE_TOKEN, "true"));
         params.put(EXTENDED_DEBUG, storage.getProperty(EXTENDED_DEBUG, "false"));
         params.put(TRUST_ALL, storage.getProperty(forSpace + TRUST_ALL, "false"));
