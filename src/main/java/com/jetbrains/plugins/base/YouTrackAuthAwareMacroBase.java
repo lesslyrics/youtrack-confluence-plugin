@@ -38,6 +38,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         String authKey;
         if ("true".equals(getProperty(USE_TOKEN))) {
             authKey = getProperty(forSpace + Strings.TOKEN);
+            if (authKey.isEmpty()) authKey = getProperty(Strings.TOKEN);
         } else {
             authKey = getProperty(forSpace + Strings.AUTH_KEY);
             if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
