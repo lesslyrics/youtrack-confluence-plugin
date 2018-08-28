@@ -79,7 +79,8 @@ public class ConfigurationServlet extends HttpServlet {
         final String token = req.getParameter(AUTH_KEY);
         final String useToken = "on".equals(req.getParameter(USE_TOKEN)) ? "true" : "false";
         final String retries = req.getParameter(RETRIES);
-        final String forSpace = req.getParameter("forSpace");
+        String forSpace = req.getParameter("forSpace");
+        if (forSpace == null) forSpace = EMPTY;
         String linkbase = req.getParameter(LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
             linkbase = hostAddress.replace(REST_PREFIX, EMPTY) + URL_SEPARATOR;
@@ -94,6 +95,7 @@ public class ConfigurationServlet extends HttpServlet {
                 testYouTrack.login(login, password);
             }
             final String finalLinkbase = linkbase;
+            String finalForSpace = forSpace;
             transactionTemplate.execute(new TransactionCallback<Properties>() {
                 @Override
                 public Properties doInTransaction() {
@@ -102,11 +104,11 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(HOST, hostAddress);
                     storage.setProperty(EXTENDED_DEBUG, extendedDebug);
                     if (useTokenAuthorization) {
-                        storage.setProperty(forSpace + AUTH_KEY, token);
+                        storage.setProperty(finalForSpace + AUTH_KEY, token);
                     } else {
-                        storage.setProperty(forSpace + LOGIN, login);
-                        storage.setProperty(forSpace + PASSWORD, password);
-                        storage.setProperty(forSpace + AUTH_KEY, testYouTrack.getAuthorization());
+                        storage.setProperty(finalForSpace + LOGIN, login);
+                        storage.setProperty(finalForSpace + PASSWORD, password);
+                        storage.setProperty(finalForSpace + AUTH_KEY, testYouTrack.getAuthorization());
                     }
                     storage.setProperty(USE_TOKEN, useToken);
                     storage.setProperty(RETRIES, intValueOf(retries, 10));
