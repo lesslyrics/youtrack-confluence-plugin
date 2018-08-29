@@ -27,6 +27,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     public YouTrackAuthAwareMacroBase(@ComponentImport PluginSettingsFactory pluginSettingsFactory,
                                       @ComponentImport TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
+        youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
     }
 
     protected abstract String getLoggingPrefix();
@@ -34,9 +35,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     protected abstract Logger getLogger();
 
     private void init(String forSpace) {
-        youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
-        String authKey;
-        authKey = getProperty(forSpace + Strings.AUTH_KEY);
+        String authKey = getProperty(forSpace + Strings.AUTH_KEY);
         if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
         youTrack.setAuthorization(authKey);
     }
