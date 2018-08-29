@@ -46,9 +46,9 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             init(forSpace);
             return list.item(id);
         } catch (CommandExecutionException e) {
-            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
-                youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
-                setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
+            if (retry > 0 && !"true".equals(getProperty(forSpace + USE_TOKEN))) {
+                youTrack.login(getProperty(forSpace + Strings.LOGIN), getProperty(forSpace + Strings.PASSWORD));
+                setProperty(forSpace + Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryGetItem(list, id, retry - 1, forSpace);
             }
         }
@@ -65,9 +65,9 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             init(forSpace);
             return list.query(query, start, pageSize);
         } catch (CommandExecutionException e) {
-            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
-                youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
-                setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
+            if (retry > 0 && !"true".equals(getProperty(forSpace + USE_TOKEN))) {
+                youTrack.login(getProperty(forSpace + Strings.LOGIN), getProperty(forSpace + Strings.PASSWORD));
+                setProperty(forSpace + Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryQuery(list, query, start, pageSize, retry - 1, forSpace);
             }
         }
