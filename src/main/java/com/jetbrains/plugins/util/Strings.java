@@ -4,7 +4,7 @@ package com.jetbrains.plugins.util;
  * Created by Egor.Malyshev on 06.03.2015.
  */
 public class Strings {
-    public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#981";
+    public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#979";
     public static final String ALL = "all";
     public static final String STRIKE_THRU_PARAM = "strikethru-resolved";
     public static final String ISSUE = "issue";
