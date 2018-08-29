@@ -77,7 +77,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String password = req.getParameter(PASSWORD);
         final String login = req.getParameter(LOGIN);
         final String token = req.getParameter(AUTH_KEY);
-        final String useToken = "on".equals(req.getParameter(USE_TOKEN)) ? "true" : "false";
+        final String useToken = req.getParameter(USE_TOKEN) != null ? "true" : "false";
         final String retries = req.getParameter(RETRIES);
         String forSpace = req.getParameter("forSpace");
         if (forSpace == null) forSpace = EMPTY;
@@ -103,6 +103,9 @@ public class ConfigurationServlet extends HttpServlet {
                     final Properties storage = new Properties();
                     storage.setProperty(HOST, hostAddress);
                     storage.setProperty(EXTENDED_DEBUG, extendedDebug);
+
+                    storage.setProperty(finalForSpace + USE_TOKEN, useToken);
+
                     if (useTokenAuthorization) {
                         storage.setProperty(finalForSpace + AUTH_KEY, token);
                     } else {
@@ -110,7 +113,7 @@ public class ConfigurationServlet extends HttpServlet {
                         storage.setProperty(finalForSpace + PASSWORD, password);
                         storage.setProperty(finalForSpace + AUTH_KEY, testYouTrack.getAuthorization());
                     }
-                    storage.setProperty(USE_TOKEN, useToken);
+
                     storage.setProperty(RETRIES, intValueOf(retries, 10));
                     storage.setProperty(TRUST_ALL, trustAll);
                     storage.setProperty(LINKBASE, finalLinkbase);
@@ -148,6 +151,7 @@ public class ConfigurationServlet extends HttpServlet {
                 return (Properties) pluginSettings.get(MAIN_KEY);
             }
         });
+
         String forSpace = request.getParameter("forSpace");
         if (StringUtils.isBlank(forSpace)) forSpace = Strings.EMPTY;
         if (storage == null) storage = new Properties();
@@ -157,7 +161,7 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(PASSWORD, storage.getProperty(forSpace + PASSWORD, EMPTY));
         params.put(LOGIN, storage.getProperty(forSpace + LOGIN, EMPTY));
         params.put(AUTH_KEY, storage.getProperty(forSpace + AUTH_KEY, EMPTY));
-        params.put(USE_TOKEN, storage.getProperty(USE_TOKEN, "true"));
+        params.put(USE_TOKEN, storage.getProperty(forSpace + USE_TOKEN, "true"));
         params.put(EXTENDED_DEBUG, storage.getProperty(EXTENDED_DEBUG, "false"));
         params.put(TRUST_ALL, storage.getProperty(forSpace + TRUST_ALL, "false"));
         params.put(LINKBASE, storage.getProperty(LINKBASE, EMPTY));

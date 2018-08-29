@@ -62,7 +62,7 @@
 
     <div class="field-group">
         <label for="youtrackusetoken">Use token authorization</label>
-        <input onclick="displayTokenInput()" type="checkbox" name="useToken" id="useToken"
+        <input onclick="displayTokenInput()" type="checkbox" name="useToken" id="useToken" value="on"
                #if($useToken=='true')checked#end>
     </div>
 
