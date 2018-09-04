@@ -3,8 +3,6 @@ package com.jetbrains.plugins.actions;
  * Created by Egor.Malyshev on 12.03.2015.
  */
 
-import com.atlassian.confluence.spaces.SpaceManager;
-import com.atlassian.confluence.spaces.SpaceStatus;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.auth.LoginUriProvider;
@@ -13,7 +11,6 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
-import com.atlassian.spring.container.ContainerManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,10 +74,7 @@ public class ConfigurationServlet extends HttpServlet {
         final String token = req.getParameter(AUTH_KEY);
         final String useToken = req.getParameter(USE_TOKEN) != null ? "true" : "false";
         final String retries = req.getParameter(RETRIES);
-/*
-        String forSpace = req.getParameter("forSpace");
-        if (forSpace == null) forSpace = EMPTY;
-*/
+
         String linkbase = req.getParameter(LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
             linkbase = hostAddress.replace(REST_PREFIX, EMPTY) + URL_SEPARATOR;
@@ -95,7 +89,7 @@ public class ConfigurationServlet extends HttpServlet {
                 testYouTrack.login(login, password);
             }
             final String finalLinkbase = linkbase;
-            String finalForSpace = EMPTY;
+
             transactionTemplate.execute(new TransactionCallback<Properties>() {
                 @Override
                 public Properties doInTransaction() {
@@ -104,14 +98,14 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(HOST, hostAddress);
                     storage.setProperty(EXTENDED_DEBUG, extendedDebug);
 
-                    storage.setProperty(finalForSpace + USE_TOKEN, useToken);
+                    storage.setProperty(USE_TOKEN, useToken);
 
                     if (useTokenAuthorization) {
-                        storage.setProperty(finalForSpace + AUTH_KEY, token);
+                        storage.setProperty(AUTH_KEY, token);
                     } else {
-                        storage.setProperty(finalForSpace + LOGIN, login);
-                        storage.setProperty(finalForSpace + PASSWORD, password);
-                        storage.setProperty(finalForSpace + AUTH_KEY, testYouTrack.getAuthorization());
+                        storage.setProperty(LOGIN, login);
+                        storage.setProperty(PASSWORD, password);
+                        storage.setProperty(AUTH_KEY, testYouTrack.getAuthorization());
                     }
 
                     storage.setProperty(RETRIES, intValueOf(retries, 10));
@@ -152,39 +146,17 @@ public class ConfigurationServlet extends HttpServlet {
             }
         });
 
-/*
-        String forSpace = request.getParameter("forSpace");
-        if (StringUtils.isBlank(forSpace)) forSpace = Strings.EMPTY;
-*/
-        String forSpace = EMPTY;
         if (storage == null) storage = new Properties();
 
         params.put(HOST, storage.getProperty(HOST, EMPTY));
         params.put(RETRIES, storage.getProperty(RETRIES, "10"));
-        params.put(PASSWORD, storage.getProperty(forSpace + PASSWORD, EMPTY));
-        params.put(LOGIN, storage.getProperty(forSpace + LOGIN, EMPTY));
-        params.put(AUTH_KEY, storage.getProperty(forSpace + AUTH_KEY, EMPTY));
-        params.put(USE_TOKEN, storage.getProperty(forSpace + USE_TOKEN, "true"));
+        params.put(PASSWORD, storage.getProperty(PASSWORD, EMPTY));
+        params.put(LOGIN, storage.getProperty(LOGIN, EMPTY));
+        params.put(AUTH_KEY, storage.getProperty(AUTH_KEY, EMPTY));
+        params.put(USE_TOKEN, storage.getProperty(USE_TOKEN, "true"));
         params.put(EXTENDED_DEBUG, storage.getProperty(EXTENDED_DEBUG, "false"));
-        params.put(TRUST_ALL, storage.getProperty(forSpace + TRUST_ALL, "false"));
+        params.put(TRUST_ALL, storage.getProperty(TRUST_ALL, "false"));
         params.put(LINKBASE, storage.getProperty(LINKBASE, EMPTY));
-
-/*
-        final SpaceManager spMgr = (SpaceManager) ContainerManager.getComponent("spaceManager");
-        final StringBuilder spaceSelector = new StringBuilder();
-
-        spaceSelector.append("<option value=\"\">All Spaces</option>");
-
-        for (final String spaceKey : spMgr.getAllSpaceKeys(SpaceStatus.CURRENT)) {
-            spaceSelector.append("<option value=\"\"").append(spaceKey);
-            if (spaceKey.equals(forSpace)) {
-                spaceSelector.append(" selected ");
-            }
-            spaceSelector.append("\">").append(spaceKey).append("</option>");
-        }
-
-        params.put("spaceSelectorOptions", spaceSelector.toString());
-*/
 
         params.put("justSaved", justSaved);
         justSaved = -1;

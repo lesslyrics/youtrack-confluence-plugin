@@ -89,7 +89,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
 
                 logMessage("Starting to query YouTrack.");
 
-                tryGetItem(youTrack.issues, EMPTY, 2, conversionContext.getSpaceKey());
+                tryGetItem(youTrack.issues, EMPTY, 2);
 
                 logMessage("Access token updated.");
 

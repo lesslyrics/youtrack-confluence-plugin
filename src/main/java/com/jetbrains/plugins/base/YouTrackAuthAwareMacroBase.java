@@ -34,22 +34,25 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected abstract Logger getLogger();
 
-    private void init(String forSpace) {
-        String authKey = getProperty(forSpace + Strings.AUTH_KEY);
-        if (authKey.isEmpty()) authKey = getProperty(Strings.AUTH_KEY);
-        youTrack.setAuthorization(authKey);
+    private void init() throws AuthenticationErrorException, IOException, CommandExecutionException {
+        if (!"true".equals(getProperty(USE_TOKEN))) {
+            youTrack.setUseTokenAuthorization(false);
+            youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
+        } else
+            youTrack.setUseTokenAuthorization(true);
+        youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
     }
 
-    protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry, final String forSpace)
+    protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
         try {
-            init(forSpace);
+            init();
             return list.item(id);
         } catch (CommandExecutionException e) {
-            if (retry > 0 && !"true".equals(getProperty(forSpace + USE_TOKEN))) {
-                youTrack.login(getProperty(forSpace + Strings.LOGIN), getProperty(forSpace + Strings.PASSWORD));
-                setProperty(forSpace + Strings.AUTH_KEY, youTrack.getAuthorization());
-                return tryGetItem(list, id, retry - 1, forSpace);
+            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
+                youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
+                setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
+                return tryGetItem(list, id, retry - 1);
             }
         }
         return null;
@@ -59,16 +62,16 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         if (getProperty(Strings.EXTENDED_DEBUG, "false").equals("true")) getLogger().warn(getLoggingPrefix() + msg);
     }
 
-    protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry, final String forSpace)
+    protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
         try {
-            init(forSpace);
+            init();
             return list.query(query, start, pageSize);
         } catch (CommandExecutionException e) {
-            if (retry > 0 && !"true".equals(getProperty(forSpace + USE_TOKEN))) {
-                youTrack.login(getProperty(forSpace + Strings.LOGIN), getProperty(forSpace + Strings.PASSWORD));
-                setProperty(forSpace + Strings.AUTH_KEY, youTrack.getAuthorization());
-                return tryQuery(list, query, start, pageSize, retry - 1, forSpace);
+            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
+                youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
+                setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
+                return tryQuery(list, query, start, pageSize, retry - 1);
             }
         }
         return Collections.emptyList();

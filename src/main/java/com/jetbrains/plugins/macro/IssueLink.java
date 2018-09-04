@@ -56,7 +56,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = SHORT;
             }
             if (issueId != null && !issueId.isEmpty()) {
-                Issue issue = tryGetItem(youTrack.issues, issueId, retries, conversionContext.getSpaceKey());
+                Issue issue = tryGetItem(youTrack.issues, issueId, retries);
                 if (issue != null) {
                     issue = issue.createSnapshot();
                     final HashMap<String, BaseIssueField> fields = issue.getFields();
