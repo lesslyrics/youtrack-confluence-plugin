@@ -34,13 +34,18 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected abstract Logger getLogger();
 
+    private boolean isLoginAuth() {
+        return !"true".equals(getProperty(USE_TOKEN));
+    }
+
     private void init() throws AuthenticationErrorException, IOException, CommandExecutionException {
-        if (!"true".equals(getProperty(USE_TOKEN))) {
+        if (isLoginAuth()) {
             youTrack.setUseTokenAuthorization(false);
             youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
-        } else
+        } else {
             youTrack.setUseTokenAuthorization(true);
-        youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
+            youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
+        }
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry)
@@ -49,7 +54,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             init();
             return list.item(id);
         } catch (CommandExecutionException e) {
-            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
+            if (retry > 0 && isLoginAuth()) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryGetItem(list, id, retry - 1);
@@ -68,7 +73,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             init();
             return list.query(query, start, pageSize);
         } catch (CommandExecutionException e) {
-            if (retry > 0 && !"true".equals(getProperty(USE_TOKEN))) {
+            if (retry > 0 && isLoginAuth()) {
                 youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
                 setProperty(Strings.AUTH_KEY, youTrack.getAuthorization());
                 return tryQuery(list, query, start, pageSize, retry - 1);
