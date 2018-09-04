@@ -15,8 +15,6 @@ import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.spring.container.ContainerManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
-import com.jetbrains.plugins.util.Strings;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import youtrack.YouTrack;
@@ -79,8 +77,10 @@ public class ConfigurationServlet extends HttpServlet {
         final String token = req.getParameter(AUTH_KEY);
         final String useToken = req.getParameter(USE_TOKEN) != null ? "true" : "false";
         final String retries = req.getParameter(RETRIES);
+/*
         String forSpace = req.getParameter("forSpace");
         if (forSpace == null) forSpace = EMPTY;
+*/
         String linkbase = req.getParameter(LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
             linkbase = hostAddress.replace(REST_PREFIX, EMPTY) + URL_SEPARATOR;
@@ -95,7 +95,7 @@ public class ConfigurationServlet extends HttpServlet {
                 testYouTrack.login(login, password);
             }
             final String finalLinkbase = linkbase;
-            String finalForSpace = forSpace;
+            String finalForSpace = EMPTY;
             transactionTemplate.execute(new TransactionCallback<Properties>() {
                 @Override
                 public Properties doInTransaction() {
@@ -152,8 +152,11 @@ public class ConfigurationServlet extends HttpServlet {
             }
         });
 
+/*
         String forSpace = request.getParameter("forSpace");
         if (StringUtils.isBlank(forSpace)) forSpace = Strings.EMPTY;
+*/
+        String forSpace = EMPTY;
         if (storage == null) storage = new Properties();
 
         params.put(HOST, storage.getProperty(HOST, EMPTY));
