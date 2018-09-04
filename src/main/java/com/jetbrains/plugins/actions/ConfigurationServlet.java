@@ -169,6 +169,7 @@ public class ConfigurationServlet extends HttpServlet {
         params.put(TRUST_ALL, storage.getProperty(forSpace + TRUST_ALL, "false"));
         params.put(LINKBASE, storage.getProperty(LINKBASE, EMPTY));
 
+/*
         final SpaceManager spMgr = (SpaceManager) ContainerManager.getComponent("spaceManager");
         final StringBuilder spaceSelector = new StringBuilder();
 
@@ -183,6 +184,7 @@ public class ConfigurationServlet extends HttpServlet {
         }
 
         params.put("spaceSelectorOptions", spaceSelector.toString());
+*/
 
         params.put("justSaved", justSaved);
         justSaved = -1;
