@@ -118,7 +118,7 @@ public class ConfigurationServlet extends HttpServlet {
                     storage.setProperty(TRUST_ALL, trustAll);
                     storage.setProperty(LINKBASE, finalLinkbase);
                     pluginSettings.put(MAIN_KEY, storage);
-                    return null;
+                    return storage;
                 }
             });
             justSaved = 0;
