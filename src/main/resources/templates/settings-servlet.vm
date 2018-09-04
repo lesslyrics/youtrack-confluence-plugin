@@ -53,15 +53,6 @@
         <p>Use this option to make macros dump very detailed information to Confluence log.</p>
     </div>
 
-#*
-    <div class="field-group">
-        <label for="forSpace">The following settings will apply to this Confluence space:</label>
-        <select name="forSpace" id="forSpace" class="text">
-            $spaceSelectorOptionsWithHtml
-        </select>
-    </div>
-*#
-
     <div class="field-group">
         <label for="youtrackusetoken">Use token authorization</label>
         <input onclick="displayTokenInput()" type="checkbox" name="useToken" id="useToken" value="on"
