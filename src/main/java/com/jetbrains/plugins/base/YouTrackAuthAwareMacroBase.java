@@ -39,6 +39,9 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     }
 
     private void init() throws AuthenticationErrorException, IOException, CommandExecutionException {
+        if (youTrack.getHostAddress().isEmpty()) {
+            youTrack = YouTrack.getInstance(getProperty(Strings.HOST), Boolean.parseBoolean(getProperty(Strings.TRUST_ALL)));
+        }
         if (isLoginAuth()) {
             youTrack.setUseTokenAuthorization(false);
             youTrack.login(getProperty(Strings.LOGIN), getProperty(Strings.PASSWORD));
