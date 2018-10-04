@@ -132,10 +132,7 @@ public class IssueReport extends YouTrackAuthAwareMacroBase {
                 }
 
                 String linkbase = getProperty(LINKBASE);
-
-                if (isEmpty(linkbase)) {
-                    if (linkbase.endsWith("/")) linkbase = linkbase.substring(0, linkbase.lastIndexOf("/"));
-                } else linkbase = getProperty(HOST);
+                if (linkbase.endsWith("/")) linkbase = linkbase.substring(0, linkbase.lastIndexOf("/"));
 
                 logMessage("Determining linkbase: " + linkbase);
 
