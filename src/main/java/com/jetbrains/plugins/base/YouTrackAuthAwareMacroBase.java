@@ -8,6 +8,7 @@ import com.jetbrains.plugins.util.Strings;
 import org.slf4j.Logger;
 import youtrack.BaseItem;
 import youtrack.CommandBasedList;
+import youtrack.Issue;
 import youtrack.YouTrack;
 import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
@@ -48,6 +49,16 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         } else {
             youTrack.setUseTokenAuthorization(true);
             youTrack.setAuthorization(getProperty(Strings.AUTH_KEY));
+        }
+    }
+
+    protected <O extends BaseItem, I extends BaseItem<O>> I tryCreateItem(final CommandBasedList<O, I> list, I issue)
+            throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
+        try {
+            init();
+            return list.add(issue);
+        } catch (CommandExecutionException e) {
+            throw e;
         }
     }
 
