@@ -6,6 +6,8 @@ package com.jetbrains.plugins.util;
 public class Strings {
     public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#979";
     public static final String ALL = "all";
+    public static final String DESCRIPTION = "description";
+    public static final String PROJECT_ID = "projectId";
     public static final String STRIKE_THRU_PARAM = "strikethru-resolved";
     public static final String ISSUE = "issue";
     public static final String ISSUE_ID = "issue-id";

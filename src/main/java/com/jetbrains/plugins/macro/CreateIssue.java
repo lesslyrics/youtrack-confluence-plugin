@@ -4,6 +4,7 @@ import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
+import com.atlassian.confluence.xhtml.api.MacroDefinition;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
@@ -18,13 +19,14 @@ import java.util.Map;
 
 import static com.jetbrains.plugins.util.Strings.*;
 
-@Named("IssueLink")
-public class IssueLink extends YouTrackAuthAwareMacroBase {
-    private static final Logger LOG = LoggerFactory.getLogger(IssueLink.class);
+@Named("CreateIssue")
+public class CreateIssue extends YouTrackAuthAwareMacroBase {
+    private static final Logger LOG = LoggerFactory.getLogger(CreateIssue.class);
     private static final String logPrefix = "YTMacro-LinkDebug: ";
 
     @Inject
-    public IssueLink(@ComponentImport PluginSettingsFactory pluginSettingsFactory, @ComponentImport TransactionTemplate transactionTemplate) {
+    public CreateIssue(@ComponentImport PluginSettingsFactory pluginSettingsFactory,
+                       @ComponentImport TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
     }
 
@@ -41,7 +43,11 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
     public String execute(Map<String, String> params, String s, ConversionContext conversionContext) throws MacroExecutionException {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
-            final String issueId = params.get(ID);
+
+            String projectId = params.get(PROJECT_ID);
+            String summary = params.get(SUMMARY);
+            String description = params.get(DESCRIPTION);
+
             String strikeMode = params.get(STRIKE_THRU_PARAM);
             if (strikeMode == null) strikeMode = ID_ONLY;
             String linkTextTemplate = params.get(TEMPLATE_PARAM);
@@ -51,17 +57,32 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
                 style = SHORT;
             }
 
-            if (issueId != null && !issueId.isEmpty()) {
-                Issue issue = tryGetItem(youTrack.issues, issueId, retries);
+            MacroDefinition macroDefinition = (MacroDefinition) conversionContext.getProperty("macroDefinition");
+            Issue issue = null;
+            if (macroDefinition.getMacroId().isDefined()) {
+                String macroId = macroDefinition.getMacroId().get().getId();
+                String issueId = conversionContext.getEntity().getProperties().getStringProperty(macroId);
+
+                if (issueId == null) {
+                    issue = tryCreateItem(youTrack.issues, Issue.createIssue(projectId, summary, description));
+                } else {
+                    issue = tryGetItem(youTrack.issues, issueId, retries);
+                }
+
+                conversionContext.getEntity().getProperties().setStringProperty(macroId, issue.getId());
+
                 if (issue != null) {
-                    setContext(context, issueId, strikeMode, linkTextTemplate, issue);
-                } else context.put(ERROR, "Issue not found: " + issueId);
+                    setContext(context, issue.getId(), strikeMode, linkTextTemplate, issue);
+                } else {
+                    context.put(ERROR, "Something went wrong.");
+                }
             } else {
-                context.put(ERROR, "Issue not specified.");
+                return "New task";
             }
+
             return VelocityUtils.getRenderedTemplate(BODY_LINK + style + TEMPLATE_EXT, context);
         } catch (Exception ex) {
-            LOG.error("YouTrack link macro encounters error", ex);
+            LOG.error("Something went wrong", ex);
             throw new MacroExecutionException(ex);
         }
     }

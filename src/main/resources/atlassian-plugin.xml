@@ -8,6 +8,28 @@
         <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>
 
+    <xhtml-macro name="create" class="com.jetbrains.plugins.macro.CreateIssue" key="youtrack.integration.plugin.create">
+        <description>Create issue and inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
+        <resource type="velocity" name="help" location="templates/help-link.vm">
+            <param name="help-section" value="confluence"/>
+        </resource>
+        <category name="formatting"/>
+        <parameters>
+            <parameter name="projectId" type="string" required="true"/>
+            <parameter name="summary" type="string" required="true"/>
+            <parameter name="description" type="string" required="true"/>
+            <parameter name="style" type="enum" required="false" default="short">
+                <value name="short"/>
+                <value name="detailed"/>
+            </parameter>
+            <parameter name="strikethru-resolved" type="enum" required="false" default="issueId">
+                <value name="all"/>
+                <value name="issueId"/>
+                <value name="none"/>
+            </parameter>
+            <parameter name="link-text-template" type="string" required="false" default="$issue"/>
+        </parameters>
+    </xhtml-macro>
     <xhtml-macro name="issue" class="com.jetbrains.plugins.macro.IssueLink" key="youtrack.integration.plugin.issue">
         <description>Inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
         <resource type="velocity" name="help" location="templates/help-link.vm">
