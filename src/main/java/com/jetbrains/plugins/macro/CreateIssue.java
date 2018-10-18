@@ -1,6 +1,8 @@
 package com.jetbrains.plugins.macro;
 
+import com.atlassian.confluence.content.ContentProperties;
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
+import com.atlassian.confluence.core.ContentEntityObject;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
@@ -58,10 +60,15 @@ public class CreateIssue extends YouTrackAuthAwareMacroBase {
             }
 
             MacroDefinition macroDefinition = (MacroDefinition) conversionContext.getProperty("macroDefinition");
-            Issue issue = null;
-            if (macroDefinition.getMacroId().isDefined()) {
+            final ContentEntityObject entity = conversionContext.getEntity();
+            Issue issue;
+
+            if (macroDefinition.getMacroId().isDefined() && entity != null) {
+
+                final ContentProperties properties = entity.getProperties();
+
                 String macroId = macroDefinition.getMacroId().get().getId();
-                String issueId = conversionContext.getEntity().getProperties().getStringProperty(macroId);
+                String issueId = properties.getStringProperty(macroId);
 
                 if (issueId == null) {
                     issue = tryCreateItem(youTrack.issues, Issue.createIssue(projectId, summary, description));
@@ -69,13 +76,10 @@ public class CreateIssue extends YouTrackAuthAwareMacroBase {
                     issue = tryGetItem(youTrack.issues, issueId, retries);
                 }
 
-                conversionContext.getEntity().getProperties().setStringProperty(macroId, issue.getId());
+                properties.setStringProperty(macroId, issue.getId());
 
-                if (issue != null) {
-                    setContext(context, issue.getId(), strikeMode, linkTextTemplate, issue);
-                } else {
-                    context.put(ERROR, "Something went wrong.");
-                }
+                setContext(context, issue.getId(), strikeMode, linkTextTemplate, issue);
+
             } else {
                 return "New task";
             }
