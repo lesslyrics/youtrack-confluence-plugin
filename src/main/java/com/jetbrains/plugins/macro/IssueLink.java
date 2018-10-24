@@ -54,7 +54,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             if (issueId != null && !issueId.isEmpty()) {
                 Issue issue = tryGetItem(youTrack.issues, issueId, retries);
                 if (issue != null) {
-                    setContext(context, issueId, strikeMode, linkTextTemplate, issue);
+                    setContext(context, strikeMode, linkTextTemplate, issue);
                 } else context.put(ERROR, "Issue not found: " + issueId);
             } else {
                 context.put(ERROR, "Issue not specified.");

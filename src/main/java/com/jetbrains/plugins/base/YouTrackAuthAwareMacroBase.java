@@ -60,12 +60,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected <O extends BaseItem, I extends BaseItem<O>> I tryCreateItem(final CommandBasedList<O, I> list, I issue)
             throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
-        try {
-            init();
-            return list.add(issue);
-        } catch (CommandExecutionException e) {
-            throw e;
-        }
+        init();
+        return list.add(issue);
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry)
@@ -102,19 +98,23 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         return Collections.emptyList();
     }
 
-    protected void setContext(Map<String, Object> context, String issueId, String strikeMode, String linkTextTemplate, Issue issue) throws IOException, CommandExecutionException {
+    protected void setContext(Map<String, Object> context, String strikeMode, String linkTextTemplate, Issue issueModel) throws IOException, CommandExecutionException {
         String summaryTextTemplate;
-        issue = issue.createSnapshot();
+        Issue issue = issueModel.createSnapshot();
         final HashMap<String, BaseIssueField> fields = issue.getFields();
         for (final String fieldName : fields.keySet()) {
             context.put(fieldName, fields.get(fieldName).getStringValue());
         }
-        context.put(ISSUE, issueId);
+        if (issueModel.getId() != null) {
+            context.put(ISSUE, issueModel.getId());
+        } else {
+            context.put(ISSUE, issueModel.getProjectId() + "-???");
+        }
         context.put(BASE, getProperty(HOST).replace(REST_PREFIX, EMPTY));
         context.put(LINKBASE, getProperty(HOST).replace(REST_PREFIX, EMPTY));
-        String linkbase = getProperty(LINKBASE);
-        if (null != linkbase && !linkbase.isEmpty()) {
-            context.put(LINKBASE, linkbase.replace(REST_PREFIX, EMPTY));
+        String linkBase = getProperty(LINKBASE);
+        if (null != linkBase && !linkBase.isEmpty()) {
+            context.put(LINKBASE, linkBase.replace(REST_PREFIX, EMPTY));
         }
         final String thru = (ALL.equals(strikeMode) || ID_ONLY.equals(strikeMode)) && issue.isResolved() ? "line-through" : NORMAL;
         if (ID_ONLY.equals(strikeMode)) {
