@@ -9,7 +9,7 @@
     </plugin-info>
 
     <xhtml-macro name="create" class="com.jetbrains.plugins.macro.CreateIssue" key="youtrack.integration.plugin.create">
-        <description>Create issue and inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
+        <description>Creates a new issue and inserts a dynamic link it that lets track the issue state. Please note that every modification to this macro after it's saved for the first time will create a new issue.</description>
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
