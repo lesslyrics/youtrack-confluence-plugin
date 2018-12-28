@@ -6,6 +6,8 @@ package jetbrains.macros.util;
 public class Strings {
     public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#979";
     public static final String ALL = "all";
+    public static final String DESCRIPTION = "description";
+    public static final String PROJECT_ID = "projectId";
     public static final String STRIKE_THRU_PARAM = "strikethru-resolved";
     public static final String ISSUE = "issue";
     public static final String ISSUE_ID = "issue-id";
@@ -34,7 +36,8 @@ public class Strings {
     public static final String EMPTY = "";
     public static final String PASSWORD = "password";
     public static final String LOGIN = "login";
-    public static final String AUTH_KEY = "AUTH_KEY";
+    public static final String USE_TOKEN = "useToken";
+    public static final String AUTH_KEY = "authKey";
     public static final String RETRIES = "retries";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TOTAL_PAGES = "numPages";

@@ -11,7 +11,6 @@ import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
-import jetbrains.macros.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import youtrack.YouTrack;
@@ -25,6 +24,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import static jetbrains.macros.util.Strings.*;
 
 public class ConfigurationServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationServlet.class);
@@ -52,7 +53,7 @@ public class ConfigurationServlet extends HttpServlet {
 
     private void checkAdminRights(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         final String username = userManager.getRemoteUsername(req);
-        if (username == null || !userManager.isSystemAdmin(username)) {
+        if (username == null || !userManager.isAdmin(username)) {
             redirectToLogin(req, resp);
         }
     }
@@ -60,35 +61,52 @@ public class ConfigurationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         checkAdminRights(req, resp);
-        final String hostAddressPassed = req.getParameter(Strings.HOST);
-        final String hostAddress = hostAddressPassed.endsWith(Strings.URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + Strings.URL_SEPARATOR;
-        final String password = req.getParameter(Strings.PASSWORD);
-        final String login = req.getParameter(Strings.LOGIN);
-        final String retries = req.getParameter(Strings.RETRIES);
-        String linkbase = req.getParameter(Strings.LINKBASE);
+        final String hostAddressPassed = req.getParameter(HOST);
+        final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
+        final String password = req.getParameter(PASSWORD);
+        final String login = req.getParameter(LOGIN);
+        final String token = req.getParameter(AUTH_KEY);
+        final String useToken = req.getParameter(USE_TOKEN) != null ? "true" : "false";
+        final String retries = req.getParameter(RETRIES);
+
+        String linkbase = req.getParameter(LINKBASE);
         if (linkbase == null || linkbase.isEmpty())
-            linkbase = hostAddress.replace(Strings.REST_PREFIX, Strings.EMPTY) + Strings.URL_SEPARATOR;
-        final String trustAll = req.getParameter(Strings.TRUST_ALL) != null ? "true" : "false";
-        final String extendedDebug = req.getParameter(Strings.EXTENDED_DEBUG) != null ? "true" : "false";
+            linkbase = hostAddress.replace(REST_PREFIX, EMPTY) + URL_SEPARATOR;
+        final String trustAll = req.getParameter(TRUST_ALL) != null ? "true" : "false";
+        final String extendedDebug = req.getParameter(EXTENDED_DEBUG) != null ? "true" : "false";
         final YouTrack testYouTrack = YouTrack.getInstance(hostAddress, Boolean.parseBoolean(trustAll));
         try {
-            testYouTrack.login(login, password);
+            final boolean useTokenAuthorization = Boolean.parseBoolean(useToken);
+            testYouTrack.setUseTokenAuthorization(useTokenAuthorization);
+            testYouTrack.setAuthorization(token);
+            if (!useTokenAuthorization) {
+                testYouTrack.login(login, password);
+            }
             final String finalLinkbase = linkbase;
+
             transactionTemplate.execute(new TransactionCallback<Properties>() {
                 @Override
                 public Properties doInTransaction() {
                     final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
                     final Properties storage = new Properties();
-                    storage.setProperty(Strings.HOST, hostAddress);
-                    storage.setProperty(Strings.EXTENDED_DEBUG, extendedDebug);
-                    storage.setProperty(Strings.LOGIN, login);
-                    storage.setProperty(Strings.RETRIES, intValueOf(retries, 10));
-                    storage.setProperty(Strings.TRUST_ALL, trustAll);
-                    storage.setProperty(Strings.PASSWORD, password);
-                    storage.setProperty(Strings.LINKBASE, finalLinkbase);
-                    storage.setProperty(Strings.AUTH_KEY, testYouTrack.getAuthorization());
-                    pluginSettings.put(Strings.MAIN_KEY, storage);
-                    return null;
+                    storage.setProperty(HOST, hostAddress);
+                    storage.setProperty(EXTENDED_DEBUG, extendedDebug);
+
+                    storage.setProperty(USE_TOKEN, useToken);
+
+                    if (useTokenAuthorization) {
+                        storage.setProperty(AUTH_KEY, token);
+                    } else {
+                        storage.setProperty(LOGIN, login);
+                        storage.setProperty(PASSWORD, password);
+                        storage.setProperty(AUTH_KEY, testYouTrack.getAuthorization());
+                    }
+
+                    storage.setProperty(RETRIES, intValueOf(retries, 10));
+                    storage.setProperty(TRUST_ALL, trustAll);
+                    storage.setProperty(LINKBASE, finalLinkbase);
+                    pluginSettings.put(MAIN_KEY, storage);
+                    return storage;
                 }
             });
             justSaved = 0;
@@ -118,17 +136,22 @@ public class ConfigurationServlet extends HttpServlet {
             @Override
             public Properties doInTransaction() {
                 final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                return (Properties) pluginSettings.get(Strings.MAIN_KEY);
+                return (Properties) pluginSettings.get(MAIN_KEY);
             }
         });
+
         if (storage == null) storage = new Properties();
-        params.put(Strings.HOST, storage.getProperty(Strings.HOST, Strings.EMPTY));
-        params.put(Strings.RETRIES, storage.getProperty(Strings.RETRIES, "10"));
-        params.put(Strings.PASSWORD, storage.getProperty(Strings.PASSWORD, Strings.EMPTY));
-        params.put(Strings.LOGIN, storage.getProperty(Strings.LOGIN, Strings.EMPTY));
-        params.put(Strings.EXTENDED_DEBUG, storage.getProperty(Strings.EXTENDED_DEBUG, "false"));
-        params.put(Strings.TRUST_ALL, storage.getProperty(Strings.TRUST_ALL, "false"));
-        params.put(Strings.LINKBASE, storage.getProperty(Strings.LINKBASE, Strings.EMPTY));
+
+        params.put(HOST, storage.getProperty(HOST, EMPTY));
+        params.put(RETRIES, storage.getProperty(RETRIES, "10"));
+        params.put(PASSWORD, storage.getProperty(PASSWORD, EMPTY));
+        params.put(LOGIN, storage.getProperty(LOGIN, EMPTY));
+        params.put(AUTH_KEY, storage.getProperty(AUTH_KEY, EMPTY));
+        params.put(USE_TOKEN, storage.getProperty(USE_TOKEN, "true"));
+        params.put(EXTENDED_DEBUG, storage.getProperty(EXTENDED_DEBUG, "false"));
+        params.put(TRUST_ALL, storage.getProperty(TRUST_ALL, "false"));
+        params.put(LINKBASE, storage.getProperty(LINKBASE, EMPTY));
+
         params.put("justSaved", justSaved);
         justSaved = -1;
         response.setContentType("text/html;charset=utf-8");
