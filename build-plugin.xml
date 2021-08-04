@@ -60,26 +60,22 @@
 
     <!-- Project Libraries -->
 
-    <path id="library.java_ee_6-java_ee_6.classpath">
-        <pathelement location="${basedir}/lib/javax.annotation.jar"/>
-        <pathelement location="${basedir}/lib/javax.ejb.jar"/>
-        <pathelement location="${basedir}/lib/javax.jms.jar"/>
-        <pathelement location="${basedir}/lib/javax.persistence.jar"/>
-        <pathelement location="${basedir}/lib/javax.resource.jar"/>
-        <pathelement location="${basedir}/lib/javax.servlet.jar"/>
-        <pathelement location="${basedir}/lib/javax.servlet.jsp.jar"/>
-        <pathelement location="${basedir}/lib/javax.servlet.jsp.jstl.jar"/>
-        <pathelement location="${basedir}/lib/javax.transaction.jar"/>
+    <path id="library.java_ee_8-java_ee_8.classpath">
+<!--        <pathelement location="${basedir}/lib/javax.annotation.jar"/>-->
+<!--        <pathelement location="${basedir}/lib/javax.ejb.jar"/>-->
+<!--        <pathelement location="${basedir}/lib/javax.jms.jar"/>-->
+<!--        <pathelement location="${basedir}/lib/javax.persistence.jar"/>-->
+<!--        <pathelement location="${basedir}/lib/javax.resource.jar"/>-->
+        <pathelement location="${basedir}/lib/javax.servlet-api-3.1.0.jar"/>
+<!--        <pathelement location="${basedir}/lib/javax.servlet.jsp.jar"/>-->
+<!--        <pathelement location="${basedir}/lib/javax.servlet.jsp.jstl.jar"/>-->
+<!--        <pathelement location="${basedir}/lib/javax.transaction.jar"/>-->
     </path>
 
     <path id="library.lib.classpath">
         <fileset dir="${basedir}/lib">
             <patternset refid="library.patterns"/>
         </fileset>
-    </path>
-
-    <path id="library.youtrackrestapi.classpath">
-        <pathelement location="${basedir}/lib/YouTrackRestApi.jar"/>
     </path>
 
     <!-- Application Server Libraries -->
@@ -105,30 +101,26 @@
 
     <path id="youtrack-confluence-plugin.module.production.classpath">
         <path refid="library.lib.classpath"/>
-        <path refid="library.youtrackrestapi.classpath"/>
-        <path refid="library.java_ee_6-java_ee_6.classpath"/>
+        <path refid="library.java_ee_8-java_ee_8.classpath"/>
     </path>
 
     <path id="youtrack-confluence-plugin.runtime.production.module.classpath">
         <pathelement location="${youtrack-confluence-plugin.output.dir}"/>
         <path refid="library.lib.classpath"/>
-        <path refid="library.youtrackrestapi.classpath"/>
-        <path refid="library.java_ee_6-java_ee_6.classpath"/>
+        <path refid="library.java_ee_8-java_ee_8.classpath"/>
     </path>
 
     <path id="youtrack-confluence-plugin.module.classpath">
         <pathelement location="${youtrack-confluence-plugin.output.dir}"/>
         <path refid="library.lib.classpath"/>
-        <path refid="library.youtrackrestapi.classpath"/>
-        <path refid="library.java_ee_6-java_ee_6.classpath"/>
+        <path refid="library.java_ee_8-java_ee_8.classpath"/>
     </path>
 
     <path id="youtrack-confluence-plugin.runtime.module.classpath">
         <pathelement location="${youtrack-confluence-plugin.testoutput.dir}"/>
         <pathelement location="${youtrack-confluence-plugin.output.dir}"/>
         <path refid="library.lib.classpath"/>
-        <path refid="library.youtrackrestapi.classpath"/>
-        <path refid="library.java_ee_6-java_ee_6.classpath"/>
+        <path refid="library.java_ee_8-java_ee_8.classpath"/>
     </path>
 
 
@@ -206,7 +198,6 @@
             <zipfileset file="${basedir}/src/main/resources/atlassian-plugin.xml"/>
             <zipfileset dir="${youtrack-confluence-plugin.output.dir}"/>
             <zipfileset dir="${basedir}/src/main/resources/templates" prefix="templates"/>
-            <zipfileset src="${basedir}/lib/YouTrackRestApi.jar"/>
             <zipfileset src="${basedir}/lib/httpcore-4.4.4.jar"/>
             <zipfileset src="${basedir}/lib/httpclient-4.5.2.jar"/>
             <zipfileset src="${basedir}/lib/httpclient-cache-4.5.2.jar"/>
