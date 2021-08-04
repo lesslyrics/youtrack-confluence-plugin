@@ -6,40 +6,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
-<script>
-    window.onload = function () {
-        displayTokenInput();
-    }
-
-    function displayTokenInput() {
-        var useTokenElem = document.getElementById('useToken');
-        var tokenElem = document.getElementById('tokenBlock');
-        var loginPassword = document.getElementById('loginPasswordBlock');
-        if (useTokenElem.checked) {
-            loginPassword.style.display = "none";
-            tokenElem.removeAttribute("style");
-            ;
-        } else {
-            tokenElem.style.display = "none";
-            loginPassword.removeAttribute("style");
-            ;
-        }
-    }
-</script>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
 
     <div class="field-group">
-        <label for="youtrackhost">YouTrack host REST address:</label>
+        <label for="youtrackhost">YouTrack host address:</label>
         <input type="text" name="host" id="host" class="text" value="$host">
     </div>
-    <div class="field-group">
-        <label for="youtrackretries">Number of consecutive connection attempts:</label>
-        <input type="text" name="retries" id="retries" class="text" value="$retries">
-    </div>
+
     <div class="field-group">
         <label for="youtracklinkbase">Link base:</label>
         <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase">
-        <p>By default, all links to issues will use YouTrack host URL (without the /rest/ part),
+        <p>By default, all links to issues will use YouTrack host URL,
             but you can override that here.</p>
     </div>
     <div class="field-group">
@@ -53,26 +30,9 @@
         <p>Use this option to make macros dump very detailed information to Confluence log.</p>
     </div>
 
-    <div class="field-group">
-        <label for="youtrackusetoken">Use token authorization</label>
-        <input onclick="displayTokenInput()" type="checkbox" name="useToken" id="useToken" value="on"
-               #if($useToken=='true')checked#end>
-    </div>
-
     <div id="tokenBlock" class="field-group">
         <label for="youtracktoken">Token:</label>
         <input type="text" class="text" name="authKey" id="authKey" value="$authKey">
-    </div>
-
-    <div id="loginPasswordBlock" style="display: none">
-        <div class="field-group">
-            <label for="youtracklogin">Login:</label>
-            <input type="text" name="login" id="login" class="text" value="$login">
-        </div>
-        <div class="field-group">
-            <label for="youtrackpassword">Password:</label>
-            <input type="password" name="password" id="password" class="text" value="$password">
-        </div>
     </div>
 
     <div class="field-group">

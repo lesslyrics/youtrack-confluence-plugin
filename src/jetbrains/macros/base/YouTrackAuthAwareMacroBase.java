@@ -9,7 +9,6 @@ import youtrack.BaseItem;
 import youtrack.CommandBasedList;
 import youtrack.Issue;
 import youtrack.YouTrack;
-import youtrack.exceptions.AuthenticationErrorException;
 import youtrack.exceptions.CommandExecutionException;
 import youtrack.exceptions.CommandNotAvailableException;
 import youtrack.issues.fields.BaseIssueField;
@@ -17,9 +16,7 @@ import youtrack.issues.fields.values.MultiUserFieldValue;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static jetbrains.macros.util.Strings.*;
@@ -39,61 +36,22 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
 
     protected abstract Logger getLogger();
 
-    private boolean isLoginAuth() {
-        return !"true".equals(getProperty(USE_TOKEN));
-    }
-
-    private void init() throws AuthenticationErrorException, IOException, CommandExecutionException {
+    private void init() {
         if (youTrack.getHostAddress().isEmpty()) {
             youTrack = YouTrack.getInstance(getProperty(HOST), Boolean.parseBoolean(getProperty(TRUST_ALL)));
         }
-        if (isLoginAuth()) {
-            youTrack.setUseTokenAuthorization(false);
-            youTrack.login(getProperty(LOGIN), getProperty(PASSWORD));
-        } else {
-            youTrack.setUseTokenAuthorization(true);
-            youTrack.setAuthorization(getProperty(AUTH_KEY));
-        }
-    }
-
-    protected <O extends BaseItem, I extends BaseItem<O>> I tryCreateItem(final CommandBasedList<O, I> list, I issue)
-            throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
-        init();
-        return list.add(issue);
+        youTrack.setUseTokenAuthorization(true);
+        youTrack.setAuthorization(getProperty(AUTH_KEY));
     }
 
     protected <O extends BaseItem, I extends BaseItem<O>> I tryGetItem(final CommandBasedList<O, I> list, final String id, final int retry)
-            throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
-        try {
-            init();
-            return list.item(id);
-        } catch (CommandExecutionException e) {
-            if (retry > 0 && isLoginAuth()) {
-                youTrack.login(getProperty(LOGIN), getProperty(PASSWORD));
-                setProperty(AUTH_KEY, youTrack.getAuthorization());
-                return tryGetItem(list, id, retry - 1);
-            }
-        }
-        return null;
+            throws CommandExecutionException, IOException, CommandNotAvailableException {
+        init();
+        return list.item(id);
     }
 
     protected void logMessage(final String msg) {
         if (getProperty(EXTENDED_DEBUG, "false").equals("true")) getLogger().warn(getLoggingPrefix() + msg);
-    }
-
-    protected <O extends BaseItem, I extends BaseItem<O>> List<I> tryQuery(final CommandBasedList<O, I> list, final String query, final int start, final int pageSize, final int retry)
-            throws CommandExecutionException, AuthenticationErrorException, IOException, CommandNotAvailableException {
-        try {
-            init();
-            return list.query(query, start, pageSize);
-        } catch (CommandExecutionException e) {
-            if (retry > 0 && isLoginAuth()) {
-                youTrack.login(getProperty(LOGIN), getProperty(PASSWORD));
-                setProperty(AUTH_KEY, youTrack.getAuthorization());
-                return tryQuery(list, query, start, pageSize, retry - 1);
-            }
-        }
-        return Collections.emptyList();
     }
 
     protected void setContext(Map<String, Object> context, String strikeMode, String linkTextTemplate, Issue issueModel) throws IOException, CommandExecutionException {
