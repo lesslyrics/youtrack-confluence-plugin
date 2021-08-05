@@ -14,6 +14,7 @@ import jetbrains.youtrack.base.YouTrackAuthAwareMacroBase;
 import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.IssueComment;
+import jetbrains.youtrack.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +26,8 @@ import java.util.*;
 import static jetbrains.youtrack.util.Service.*;
 import static jetbrains.youtrack.util.Strings.*;
 
-public class IssuesReport extends YouTrackAuthAwareMacroBase {
-    private static final Logger LOG = LoggerFactory.getLogger(IssuesReport.class);
+public class IssuesList extends YouTrackAuthAwareMacroBase {
+    private static final Logger LOG = LoggerFactory.getLogger(IssuesList.class);
     private final PageManager pageManager;
     private static final String logPrefix = "YTMacro-ReportDebug: ";
 
@@ -41,9 +42,9 @@ public class IssuesReport extends YouTrackAuthAwareMacroBase {
         }
     }
 
-    public IssuesReport(PluginSettingsFactory pluginSettingsFactory,
-                        TransactionTemplate transactionTemplate,
-                        PageManager pageManager) {
+    public IssuesList(PluginSettingsFactory pluginSettingsFactory,
+                      TransactionTemplate transactionTemplate,
+                      PageManager pageManager) {
         super(pluginSettingsFactory, transactionTemplate);
         this.pageManager = pageManager;
     }
@@ -86,7 +87,7 @@ public class IssuesReport extends YouTrackAuthAwareMacroBase {
                 logMessage("Start issue: " + startIssue);
 
                 logMessage("Preparing field info.");
-                final LinkedList<IssueFieldDescriptor> reportFields = new LinkedList<IssueFieldDescriptor>();
+                final List<IssueFieldDescriptor> reportFields = new ArrayList<>();
 
                 for (final String fieldData : fieldList.split(",")) {
                     logMessage("Reading field: " + fieldData);
@@ -105,13 +106,11 @@ public class IssuesReport extends YouTrackAuthAwareMacroBase {
                 String linkbase = getProperty(LINKBASE);
                 if (isEmpty(linkbase)) {
                     linkbase = getProperty(HOST);
-                } else {
-                    if (linkbase.endsWith("/")) linkbase = linkbase.substring(0, linkbase.lastIndexOf("/"));
                 }
-
+                linkbase = Strings.fixURL(linkbase);
                 logMessage("Determining linkbase: " + linkbase);
 
-                context.put(LINKBASE, linkbase.replace(REST_PREFIX, EMPTY));
+                context.put(LINKBASE, linkbase);
 
                 final String finalQuery = (ALL_PROJECTS.equalsIgnoreCase(project) ?
                         EMPTY : "project: " + project + " ") + query;
@@ -130,7 +129,7 @@ public class IssuesReport extends YouTrackAuthAwareMacroBase {
                     rows.append("<td>");
 
                     final Map<String, Object> issueLinkContext = createContext(context,
-                            ISSUE_ID, originalIssue.getId()
+                            ISSUE_ID, originalIssue.getIdReadable()
                     );
 
                     rows.append(VelocityUtils.getRenderedTemplate(REPORT_ISSUE_LINK, issueLinkContext));

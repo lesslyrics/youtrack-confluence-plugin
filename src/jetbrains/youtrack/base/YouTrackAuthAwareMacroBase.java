@@ -7,6 +7,7 @@ import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
 import jetbrains.youtrack.client.api.Issue;
+import jetbrains.youtrack.util.Strings;
 import org.slf4j.Logger;
 
 import java.text.MessageFormat;
@@ -40,20 +41,20 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         for (final String fieldName : fields.keySet()) {
             context.put(fieldName, fields.get(fieldName));
         }
-
         String idReadable = issue.getIdReadable();
         if (idReadable != null) {
             context.put(ISSUE, idReadable);
         } else {
             context.put(ISSUE, issue.getProject().getShortName() + "-???");
         }
-        context.put(BASE, getProperty(HOST).replace(REST_PREFIX, EMPTY));
-        context.put(LINKBASE, getProperty(HOST).replace(REST_PREFIX, EMPTY));
+        context.put(BASE, Strings.fixURL(getProperty(HOST)));
         String linkBase = getProperty(LINKBASE);
         if (null != linkBase && !linkBase.isEmpty()) {
-            context.put(LINKBASE, linkBase.replace(REST_PREFIX, EMPTY));
+            context.put(LINKBASE, Strings.fixURL(linkBase));
+        } else {
+            context.put(LINKBASE, Strings.fixURL(getProperty(HOST)));
         }
-        final String thru = (ALL.equals(strikeMode) || ID_ONLY.equals(strikeMode)) && issue.getResolved() > 0 ? "line-through" : NORMAL;
+        final String thru = (ALL.equals(strikeMode) || ID_ONLY.equals(strikeMode)) && issue.getResolved() != null ? "line-through" : NORMAL;
         if (ID_ONLY.equals(strikeMode)) {
             linkTextTemplate = linkTextTemplate.replace("$issue", MessageFormat.format(STRIKE_THRU, thru, "$issue"));
             summaryTextTemplate = MessageFormat.format(STRIKE_THRU, NORMAL, "$summary");

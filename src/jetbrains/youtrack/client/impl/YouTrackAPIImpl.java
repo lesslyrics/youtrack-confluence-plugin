@@ -12,28 +12,61 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLSocket;
 import java.io.InputStream;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.http.util.EntityUtils.consumeQuietly;
 
 public class YouTrackAPIImpl implements YouTrackAPI {
 
-    private static final String FIELDS = "$type,comments(id,text),customFields($type,id,name,projectCustomField($type,bundle(id),emptyFieldText,id),value($type,archived,avatarUrl,fullName,id,localizedName,login,minutes,name,presentation,ringId,text)),id,idReadable,created,id,isDraft,numberInProject,project(id,ringId,shortName),reporter(id),resolved,summary";
+    private static final Logger LOG = LoggerFactory.getLogger(YouTrackAPIImpl.class);
+    private static final String FIELDS = "$type,comments(id,text,created,author(fullName)),customFields($type,id,name,projectCustomField($type,field(name),emptyFieldText,id),value($type,archived,avatarUrl,fullName,id,localizedName,login,minutes,name,presentation,ringId,text)),id,idReadable,created,id,isDraft,numberInProject,project(id,ringId,shortName),reporter(id),resolved,summary";
 
     private final String token;
     private final String url;
-    private final boolean trustAll;
-    private final HttpClient client;
+    private HttpClient client;
     private final ObjectMapper mapper;
 
     public YouTrackAPIImpl(String token, String url, boolean trustAll) {
         this.token = token;
         this.url = url;
-        this.trustAll = trustAll;
-        this.client = HttpClientBuilder.create().build();
+
+        try {
+            SSLContextBuilder sslBuilder = new SSLContextBuilder();
+            if (trustAll) {
+                sslBuilder.loadTrustMaterial((KeyStore) null, new TrustSelfSignedStrategy());
+            }
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslBuilder.build()) {
+                protected void prepareSocket(SSLSocket socket) {
+                    String[] enabledCipherSuites = socket.getEnabledCipherSuites();
+                    String version = System.getProperty("java.version");
+                    List<String> list = new ArrayList<>(Arrays.asList(enabledCipherSuites));
+                    if (!version.startsWith("1.8")) {
+                        list.remove("TLS_DHE_RSA_WITH_AES_128_CBC_SHA");
+                        list.remove("SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA");
+                        list.remove("TLS_DHE_RSA_WITH_AES_256_CBC_SHA");
+                    }
+                    socket.setEnabledCipherSuites(list.toArray(new String[0]));
+                }
+            };
+            this.client = HttpClients.custom().setSSLSocketFactory(sslsf).setRedirectStrategy(new LaxRedirectStrategy()).useSystemProperties().build();
+        } catch (Exception e) {
+            LOG.error("exception creating youtrack client", e);
+
+            this.client = HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).useSystemProperties().build();
+        }
         mapper = new ObjectMapper()
                 .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -83,7 +116,7 @@ public class YouTrackAPIImpl implements YouTrackAPI {
     }
 
     private HttpGet withAuth(HttpGet get) {
-        get.addHeader("Authorization", token);
+        get.addHeader("Authorization", "Bearer " + token);
         return get;
     }
 
@@ -95,6 +128,9 @@ public class YouTrackAPIImpl implements YouTrackAPI {
             }
         } else {
             consumeQuietly(response.getEntity());
+            if (response.getStatusLine().getStatusCode() == 404) {
+                return null;
+            }
             throw new IllegalStateException("GET " + get.getURI() + "\n received result is " + response.getStatusLine().getStatusCode());
         }
     }

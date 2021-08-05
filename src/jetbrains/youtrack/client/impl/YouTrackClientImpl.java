@@ -1,7 +1,10 @@
 package jetbrains.youtrack.client.impl;
 
+import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.YouTrackClient;
+import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.YouTrackAPI;
+import jetbrains.youtrack.util.Strings;
 import org.apache.commons.lang3.StringUtils;
 
 public class YouTrackClientImpl implements YouTrackClient {
@@ -15,13 +18,7 @@ public class YouTrackClientImpl implements YouTrackClient {
         if (url == null) {
             throw new IllegalStateException("token should be not null");
         }
-        String fixedUrl;
-        if (url.contains("/rest")) {
-            fixedUrl = url.substring(0, url.indexOf("/rest"));
-        } else {
-            fixedUrl = StringUtils.removeEnd(url, "/");
-        }
-        this.api = new YouTrackAPIImpl(token, fixedUrl, trustAll);
+        this.api = new YouTrackAPIImpl(token, Strings.fixURL(url), trustAll);
     }
 
     @Override
@@ -39,4 +36,10 @@ public class YouTrackClientImpl implements YouTrackClient {
         return api;
     }
 
+    public static void main(String[] args) {
+        YouTrackClientImpl client = new YouTrackClientImpl("http://localhost:8085", "perm:cm9vdA==.NjMtOQ==.imnIOlOJTolhzsvnUeKMoNgpQ5u8ik", false);
+        Issue issues = client.api.getIssue("ZND-1");
+        System.out.println(issues.getIdReadable());
+        System.out.println(new IssuePresentation(issues).getFieldValues());
+    }
 }

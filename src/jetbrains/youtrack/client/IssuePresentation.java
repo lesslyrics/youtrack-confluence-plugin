@@ -56,6 +56,9 @@ public class IssuePresentation {
                 fields.put(cf.getField().getName(), presentation);
             }
         }
+        fields.put("summary", target.getSummary());
+        fields.put("description", target.getDescription());
+
     }
 
     public Issue getIssue() {

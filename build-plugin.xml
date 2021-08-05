@@ -88,7 +88,7 @@
     <dirname property="module.youtrack-confluence-plugin.basedir" file="${ant.file}"/>
 
 
-    <property name="compiler.args.youtrack-confluence-plugin" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+    <property name="compiler.args.youtrack-confluence-plugin" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
 
     <property name="youtrack-confluence-plugin.output.dir"
               value="${module.youtrack-confluence-plugin.basedir}/out/production/youtrack-confluence-plugin"/>
@@ -207,6 +207,9 @@
             <zipfileset src="${basedir}/lib/commons-io-2.5.jar"/>
             <zipfileset src="${basedir}/lib/commons-lang-2.1.jar"/>
             <zipfileset src="${basedir}/lib/commons-logging-1.2.jar"/>
+            <zipfileset src="${basedir}/lib/jackson-annotations-2.9.10.jar"/>
+            <zipfileset src="${basedir}/lib/jackson-core-2.9.10.jar"/>
+            <zipfileset src="${basedir}/lib/jackson-databind-2.9.10.jar"/>
 <!--
             <zipfileset src="${basedir}/lib/fluent-hc-4.5.2.jar"/>
             <zipfileset src="${basedir}/lib/javax.annotation.jar"/>

@@ -29,7 +29,23 @@
             <parameter name="link-text-template" type="string" required="false" default="$issue"/>
         </parameters>
     </macro>
-    <macro name="report" class="jetbrains.youtrack.IssuesReport" key="youtrack.integration.plugin.report">
+    <macro name="report" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.report">
+        <description>Inserts a table report based on YouTrack query.</description>
+        <resource type="velocity" name="help" location="templates/help-report.vm">
+            <param name="help-section" value="confluence"/>
+        </resource>
+        <category name="confluence-content"/>
+        <parameters>
+            <parameter name="project" type="string" required="false" default="Everything"/>
+            <parameter name="query" type="string" required="true"/>
+            <parameter name="reportFields" type="string" required="true"
+                       default="State:State,summary:Description,Assignee:Assigned to"/>
+            <parameter name="pageSize" type="string" required="false" default="25"/>
+            <parameter name="numPages" type="string" required="false" default="10"/>
+        </parameters>
+    </macro>
+
+    <macro name="Issues list" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.issuesList">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
