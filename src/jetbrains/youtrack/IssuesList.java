@@ -179,8 +179,9 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
                                 } else {
                                     rows.append("No commentes so far.");
                                 }
-                            } else
+                            } else {
                                 rows.append(fieldValue == null ? UNKNOWN : defaultIfNull(fieldValue, UNKNOWN));
+                            }
                             rows.append("</td>");
                         }
                     }
