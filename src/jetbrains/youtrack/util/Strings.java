@@ -2,9 +2,6 @@ package jetbrains.youtrack.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Created by Egor.Malyshev on 06.03.2015.
- */
 public class Strings {
     public static final String MAIN_KEY = "youtrack.integration.plugin.settings.storage#979";
     public static final String ALL = "all";

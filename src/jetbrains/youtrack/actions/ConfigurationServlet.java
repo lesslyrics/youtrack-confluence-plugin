@@ -1,13 +1,9 @@
 package jetbrains.youtrack.actions;
-/**
- * Created by Egor.Malyshev on 12.03.2015.
- */
 
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
@@ -82,20 +78,17 @@ public class ConfigurationServlet extends HttpServlet {
             }
             final String finalLinkbase = linkbase;
 
-            transactionTemplate.execute(new TransactionCallback<Properties>() {
-                @Override
-                public Properties doInTransaction() {
-                    final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                    final Properties storage = new Properties();
-                    storage.setProperty(HOST, hostAddress);
-                    storage.setProperty(EXTENDED_DEBUG, extendedDebug);
-                    storage.setProperty(AUTH_KEY, token);
-                    storage.setProperty(RETRIES, intValueOf(retries, 10));
-                    storage.setProperty(TRUST_ALL, trustAll);
-                    storage.setProperty(LINKBASE, finalLinkbase);
-                    pluginSettings.put(MAIN_KEY, storage);
-                    return storage;
-                }
+            transactionTemplate.execute(() -> {
+                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+                final Properties storage = new Properties();
+                storage.setProperty(HOST, hostAddress);
+                storage.setProperty(EXTENDED_DEBUG, extendedDebug);
+                storage.setProperty(AUTH_KEY, token);
+                storage.setProperty(RETRIES, intValueOf(retries, 10));
+                storage.setProperty(TRUST_ALL, trustAll);
+                storage.setProperty(LINKBASE, finalLinkbase);
+                pluginSettings.put(MAIN_KEY, storage);
+                return storage;
             });
             justSaved = 0;
         } catch (Exception e) {
@@ -118,14 +111,11 @@ public class ConfigurationServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         checkAdminRights(request, response);
-        final Map<String, Object> params = new HashMap<String, Object>();
+        final Map<String, Object> params = new HashMap<>();
         params.put("baseUrl", applicationProperties.getBaseUrl());
-        Properties storage = transactionTemplate.execute(new TransactionCallback<Properties>() {
-            @Override
-            public Properties doInTransaction() {
-                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                return (Properties) pluginSettings.get(MAIN_KEY);
-            }
+        Properties storage = transactionTemplate.execute(() -> {
+            final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+            return (Properties) pluginSettings.get(MAIN_KEY);
         });
 
         if (storage == null) storage = new Properties();

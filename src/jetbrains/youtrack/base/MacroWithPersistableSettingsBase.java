@@ -25,24 +25,18 @@ public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
     }
 
     private void persist() {
-        transactionTemplate.execute(new TransactionCallback<Properties>() {
-            @Override
-            public Properties doInTransaction() {
-                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                pluginSettings.put(Strings.MAIN_KEY, storage);
-                return null;
-            }
+        transactionTemplate.execute((TransactionCallback<Properties>) () -> {
+            final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+            pluginSettings.put(Strings.MAIN_KEY, storage);
+            return null;
         });
     }
 
     private void load() {
-        storage = transactionTemplate.execute(new TransactionCallback<Properties>() {
-            @Override
-            public Properties doInTransaction() {
-                final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-                final Object o = pluginSettings.get(Strings.MAIN_KEY);
-                return o instanceof Properties ? (Properties) o : null;
-            }
+        storage = transactionTemplate.execute(() -> {
+            final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
+            final Object o = pluginSettings.get(Strings.MAIN_KEY);
+            return o instanceof Properties ? (Properties) o : null;
         });
         if (storage == null) storage = new Properties();
     }

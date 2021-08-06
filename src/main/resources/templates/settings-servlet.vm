@@ -32,7 +32,7 @@
 
     <div id="tokenBlock" class="field-group">
         <label for="youtracktoken">Token:</label>
-        <input type="text" class="text" name="authKey" id="authKey" value="$authKey">
+        <input type="text" class="text" name="authKey" id="authKey" value="$authKey" autocomplete="off">
     </div>
 
     <div class="field-group">

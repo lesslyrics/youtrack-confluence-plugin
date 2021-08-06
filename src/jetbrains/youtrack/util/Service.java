@@ -3,13 +3,10 @@ package jetbrains.youtrack.util;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Egor.Malyshev on 6/14/2017.
- */
 public class Service {
 
     public static Map<String, Object> createContext(final String... src) {
-        final Map<String, Object> result = new HashMap<String, Object>();
+        final Map<String, Object> result = new HashMap<>();
         for (int j = 0; j < src.length; j++) {
             result.put(defaultIfNull(src[j], Strings.UNKNOWN), j + 1 < src.length ? defaultIfNull(src[j + 1], Strings.EMPTY) : Strings.EMPTY);
             if (j < src.length) j++;
@@ -26,7 +23,7 @@ public class Service {
     }
 
     public static Map<String, Object> createContext(final Map<String, Object> base, final String... src) {
-        final Map<String, Object> result = new HashMap<String, Object>();
+        final Map<String, Object> result = new HashMap<>();
         result.putAll(base);
         result.putAll(createContext(src));
         return result;
@@ -35,7 +32,7 @@ public class Service {
     public static int intValueOf(final String str, final int defaultValue) {
         if (str == null) return defaultValue;
         try {
-            return Integer.valueOf(str);
+            return Integer.parseInt(str);
         } catch (NumberFormatException nfe) {
             return defaultValue;
         }

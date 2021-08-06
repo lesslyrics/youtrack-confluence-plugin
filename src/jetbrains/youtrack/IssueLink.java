@@ -31,7 +31,9 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             String strikeMode = (String) params.get(STRIKE_THRU_PARAM);
             if (strikeMode == null) strikeMode = ID_ONLY;
             String linkTextTemplate = (String) params.get(TEMPLATE_PARAM);
-            if (linkTextTemplate == null || linkTextTemplate.isEmpty()) linkTextTemplate = DEFAULT_TEMPLATE;
+            if (linkTextTemplate == null || linkTextTemplate.isEmpty()) {
+                linkTextTemplate = DEFAULT_TEMPLATE;
+            }
             String style = (String) params.get(STYLE);
             if (!DETAILED.equals(style)) {
                 style = SHORT;

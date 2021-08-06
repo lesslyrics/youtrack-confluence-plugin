@@ -10,7 +10,7 @@ public class IssuePresentation {
 
     private final Issue target;
 
-    private final Map<String, String> fields = new HashMap<String, String>();
+    private final Map<String, String> fields = new HashMap<>();
 
     public IssuePresentation(Issue target) {
         this.target = target;
@@ -38,22 +38,29 @@ public class IssuePresentation {
                         return null;
                     }).filter(Objects::nonNull).collect(Collectors.joining(", "));
                 }
-                if (field instanceof DateIssueCustomField) {
-                    Object date = ((DateIssueCustomField) field).getValue();
-                    if (date != null) {
-                        long timestampt = Long.parseLong(date.toString());
-                        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                        presentation = isoFormat.format(timestampt);
-                    }
-                }
                 if (field instanceof SimpleIssueCustomField) {
                     Object fieldValue = ((SimpleIssueCustomField) field).getValue();
-                    if (fieldValue != null) {
-                        presentation = fieldValue.toString();
+                    String type = cf.getField().getFieldType().getId();
+                    if ("date".equals(type) || "date and time".equals(type)) {
+                        boolean isDateTime = "date and time".equals(cf.getField().getFieldType().getId());
+                        if (fieldValue != null) {
+                            long timestampt = Long.parseLong(fieldValue.toString());
+                            SimpleDateFormat isoFormat = new SimpleDateFormat(isDateTime ? "yyyy-MM-dd HH:mm:ss" : "yyyy-MM-dd");
+
+                            if(!isDateTime) {
+                                isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                            }
+                            presentation = isoFormat.format(timestampt);
+                        }
+
+                    } else {
+                        if (fieldValue != null) {
+                            presentation = fieldValue.toString();
+                        }
                     }
                 }
-                fields.put(cf.getField().getName(), presentation);
+                String name = cf.getField().getName();
+                fields.put(name.replaceAll("[^\\w]", "_"), presentation);
             }
         }
         fields.put("summary", target.getSummary());
