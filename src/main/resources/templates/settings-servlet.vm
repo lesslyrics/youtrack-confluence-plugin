@@ -10,19 +10,22 @@
 
     <div class="field-group">
         <label for="youtrackhost">YouTrack host address:</label>
-        <input type="text" name="host" id="host" class="text" value="$host" onchange="syncYouTrackURL()">
+        <input type="text" name="host" id="host" class="text" value="$host" onkeydown="syncYouTrackURL()">
     </div>
 
     <div class="field-group">
         <label for="youtracklinkbase">Link base:</label>
-        <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase" onchange="syncYouTrackURL()">
+        <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase" onkeydown="syncYouTrackURL()">
         <div class="description">By default, all links to issues will use YouTrack host URL,
-            but you can override that here.</div>
+            but you can override that here.
+        </div>
     </div>
     <div class="field-group">
         <label for="youtracktrustall">Ignore YouTrack SSL certificate check</label>
         <input type="checkbox" name="trustall" id="trustall" #if($trustall=='true')checked#end>
-        <div class="description">Use this option when YouTrack SSL certificate is not recognized by your Confluence instance. </div>
+        <div class="description">Use this option when YouTrack SSL certificate is not recognized by your Confluence
+            instance.
+        </div>
     </div>
     <div class="field-group">
         <label for="extendedDebug">Log extended debug info</label>
@@ -34,7 +37,7 @@
         <label for="youtracktoken">Token:</label>
         <input type="text" class="text" name="authKey" id="authKey" value="$authKey" autocomplete="off">
         <div class="description">Generate <a id="generateTokenLink" target="_blank">token</a></div>
-        </div>
+    </div>
 
     <div class="field-group">
         <input type="submit" value="Save Settings" class="button">
@@ -61,14 +64,16 @@
 
     <script>
         function syncYouTrackURL() {
-            const linkbase = document.getElementById('linkbase');
-            const host = document.getElementById('host');
-            const tokenGenerationLink = (linkbase.value || host.value);
-            if (tokenGenerationLink) {
-                const url = tokenGenerationLink.replaceAll('/rest', '').replace(/\/$/, "");
-                const generateTokenLink = document.getElementById('generateTokenLink');
-                generateTokenLink.setAttribute('href', url + 'admin/hub/users/root?tab=authentification');
-            }
+            setTimeout(function () {
+                const linkbase = document.getElementById('linkbase');
+                const host = document.getElementById('host');
+                const tokenGenerationLink = (linkbase.value || host.value);
+                if (tokenGenerationLink) {
+                    const url = tokenGenerationLink.replaceAll('/rest', '').replace(/\/$/, "");
+                    const generateTokenLink = document.getElementById('generateTokenLink');
+                    generateTokenLink.setAttribute('href', url + '/admin/hub/users/root?tab=authentification');
+                }
+            }, 50);
         }
 
         AJS.toInit(syncYouTrackURL);
