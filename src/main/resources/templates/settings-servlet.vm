@@ -10,30 +10,31 @@
 
     <div class="field-group">
         <label for="youtrackhost">YouTrack host address:</label>
-        <input type="text" name="host" id="host" class="text" value="$host">
+        <input type="text" name="host" id="host" class="text" value="$host" onchange="syncYouTrackURL()">
     </div>
 
     <div class="field-group">
         <label for="youtracklinkbase">Link base:</label>
-        <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase">
-        <p>By default, all links to issues will use YouTrack host URL,
-            but you can override that here.</p>
+        <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase" onchange="syncYouTrackURL()">
+        <div class="description">By default, all links to issues will use YouTrack host URL,
+            but you can override that here.</div>
     </div>
     <div class="field-group">
         <label for="youtracktrustall">Ignore YouTrack SSL certificate check</label>
         <input type="checkbox" name="trustall" id="trustall" #if($trustall=='true')checked#end>
-        <p>Use this option when YouTrack SSL certificate is not recognized by your Confluence instance. </p>
+        <div class="description">Use this option when YouTrack SSL certificate is not recognized by your Confluence instance. </div>
     </div>
     <div class="field-group">
         <label for="extendedDebug">Log extended debug info</label>
         <input type="checkbox" name="extendedDebug" id="extendedDebug" #if($extendedDebug=='true')checked#end>
-        <p>Use this option to make macros dump very detailed information to Confluence log.</p>
+        <div class="description">Use this option to make macros dump very detailed information to Confluence log.</div>
     </div>
 
     <div id="tokenBlock" class="field-group">
         <label for="youtracktoken">Token:</label>
         <input type="text" class="text" name="authKey" id="authKey" value="$authKey" autocomplete="off">
-    </div>
+        <div class="description">Generate <a id="generateTokenLink" target="_blank">token</a></div>
+        </div>
 
     <div class="field-group">
         <input type="submit" value="Save Settings" class="button">
@@ -57,6 +58,22 @@
             <p>Settings have not been updated.</p>
         </div>
     #end
+
+    <script>
+        function syncYouTrackURL() {
+            const linkbase = document.getElementById('linkbase');
+            const host = document.getElementById('host');
+            const tokenGenerationLink = (linkbase.value || host.value);
+            if (tokenGenerationLink) {
+                const url = tokenGenerationLink.replaceAll('/rest', '').replace(/\/$/, "");
+                const generateTokenLink = document.getElementById('generateTokenLink');
+                generateTokenLink.setAttribute('href', url + 'admin/hub/users/root?tab=authentification');
+            }
+        }
+
+        AJS.toInit(syncYouTrackURL);
+        window.syncYouTrackURL = syncYouTrackURL;
+    </script>
 </form>
 </body>
 </html>

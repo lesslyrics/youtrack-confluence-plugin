@@ -198,6 +198,7 @@
             <zipfileset file="${basedir}/src/main/resources/atlassian-plugin.xml"/>
             <zipfileset dir="${youtrack-confluence-plugin.output.dir}"/>
             <zipfileset dir="${basedir}/src/main/resources/templates" prefix="templates"/>
+<!--            <zipfileset dir="${basedir}/src/main/resources/js" prefix="js"/>-->
             <zipfileset src="${basedir}/lib/httpcore-4.4.4.jar"/>
             <zipfileset src="${basedir}/lib/httpclient-4.5.2.jar"/>
             <zipfileset src="${basedir}/lib/httpclient-cache-4.5.2.jar"/>

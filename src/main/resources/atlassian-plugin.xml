@@ -45,7 +45,7 @@
         </parameters>
     </macro>
 
-    <macro name="Issues list" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.issuesList">
+    <macro name="issues" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.issues">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
@@ -69,15 +69,10 @@
     <resource type="i18n" name="i18n" location="youtrack"/>
 
     <!-- add our web resources -->
-    <web-resource key="youtrack" name="youtrack Web Resources">
-        <dependency>com.atlassian.auiplugin:ajs</dependency>
-
-        <resource type="download" name="youtrack.css" location="/css/youtrack.css"/>
-        <resource type="download" name="youtrack.js" location="/js/youtrack.js"/>
-        <resource type="download" name="images/" location="/images"/>
-
-        <context>youtrack</context>
-    </web-resource>
+<!--    <web-resource key="youtrack.web.resources" name="youtrack Web Resources">-->
+<!--        <dependency>com.atlassian.auiplugin:ajs</dependency>-->
+<!--        <resource type="download" name="youtrack.js" location="js/youtrack.js"/>-->
+<!--    </web-resource>-->
 
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
     <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>

@@ -9,6 +9,7 @@ import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
+import jetbrains.youtrack.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,7 @@ public class ConfigurationServlet extends HttpServlet {
 
         String linkbase = req.getParameter(LINKBASE);
         if (linkbase == null || linkbase.isEmpty()) {
-            linkbase = hostAddress.replace(REST_PREFIX, EMPTY) + URL_SEPARATOR;
+            linkbase = Strings.fixURL(hostAddress.replace(REST_PREFIX, EMPTY));
         }
         final String trustAll = req.getParameter(TRUST_ALL) != null ? "true" : "false";
         final String extendedDebug = req.getParameter(EXTENDED_DEBUG) != null ? "true" : "false";
