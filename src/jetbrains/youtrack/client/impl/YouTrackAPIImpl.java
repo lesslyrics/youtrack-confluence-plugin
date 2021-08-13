@@ -32,7 +32,7 @@ import static org.apache.http.util.EntityUtils.consumeQuietly;
 public class YouTrackAPIImpl implements YouTrackAPI {
 
     private static final Logger LOG = LoggerFactory.getLogger(YouTrackAPIImpl.class);
-    private static final String FIELDS = "$type,comments(id,text,created,author(fullName)),customFields($type,id,name,projectCustomField($type,field(name,fieldType(id)),emptyFieldText,id),value($type,archived,avatarUrl,fullName,id,localizedName,login,minutes,name,presentation,ringId,text)),id,idReadable,created,id,isDraft,numberInProject,project(id,ringId,shortName),reporter(id),resolved,summary";
+    private static final String FIELDS = "$type,comments(id,text,created,author(fullName)),customFields($type,id,name,projectCustomField($type,field(name,fieldType(id)),emptyFieldText,id),value($type,archived,avatarUrl,fullName,id,localizedName,login,minutes,name,presentation,ringId,text)),id,idReadable,created,id,isDraft,numberInProject,project(id,ringId,shortName),reporter(id,login,fullName),resolved,summary,votes";
 
     private final String token;
     private final String url;

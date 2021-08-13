@@ -7,6 +7,7 @@ import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
 import jetbrains.youtrack.client.api.Issue;
+import jetbrains.youtrack.client.api.User;
 import jetbrains.youtrack.util.Strings;
 import org.slf4j.Logger;
 
@@ -63,7 +64,8 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
             summaryTextTemplate = MessageFormat.format(STRIKE_THRU, thru, "$summary");
         }
         final String assignee = issuePresentation.getAssignee();
-        context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + issue.getReporter() + ", Priority: " + issuePresentation.getPriority() + ", State: " +
+        User reporter = issue.getReporter();
+        context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + (reporter.getFullName() == null ? reporter.getLogin() : reporter.getFullName()) + ", Priority: " + issuePresentation.getPriority() + ", State: " +
                 issuePresentation.getState() + ", Assignee: " + (assignee == null ? UNASSIGNED : assignee) +
                 ", Votes: " + issue.getVotes() + ", Type: " + issuePresentation.getType());
         context.put(ISSUE_LINK_TEXT, VelocityUtils.getRenderedContent(linkTextTemplate, context));
