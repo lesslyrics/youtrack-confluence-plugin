@@ -29,6 +29,7 @@
             <parameter name="link-text-template" type="string" required="false" default="$issue"/>
         </parameters>
     </macro>
+
     <macro name="report" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.report">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
@@ -45,28 +46,13 @@
         </parameters>
     </macro>
 
-    <macro name="issues" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.issues">
-        <description>Inserts a table report based on YouTrack query.</description>
-        <resource type="velocity" name="help" location="templates/help-report.vm">
-            <param name="help-section" value="confluence"/>
-        </resource>
-        <category name="confluence-content"/>
-        <parameters>
-            <parameter name="project" type="string" required="false" default="Everything"/>
-            <parameter name="query" type="string" required="true"/>
-            <parameter name="reportFields" type="string" required="true"
-                       default="State:State,summary:Description,Assignee:Assigned to"/>
-            <parameter name="pageSize" type="string" required="false" default="25"/>
-            <parameter name="numPages" type="string" required="false" default="10"/>
-        </parameters>
-    </macro>
 
     <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.youtrack.actions.ConfigurationServlet">
         <url-pattern>/youtrack-integration/settings</url-pattern>
     </servlet>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="youtrack"/>
+    <resource type="i18n" name="i18n" location="i18n/plugin"/>
 
     <!-- add our web resources -->
 <!--    <web-resource key="youtrack.web.resources" name="youtrack Web Resources">-->
