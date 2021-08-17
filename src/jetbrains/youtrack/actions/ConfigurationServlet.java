@@ -60,15 +60,18 @@ public class ConfigurationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         checkAdminRights(req, resp);
-        final String hostAddressPassed = req.getParameter(HOST);
-        final String hostAddress = hostAddressPassed.endsWith(URL_SEPARATOR) ? hostAddressPassed : hostAddressPassed + URL_SEPARATOR;
         final String token = req.getParameter(AUTH_KEY);
         final String retries = req.getParameter(RETRIES);
 
-        String linkbase = req.getParameter(LINKBASE);
-        if (linkbase == null || linkbase.isEmpty()) {
-            linkbase = Strings.fixURL(hostAddress.replace(REST_PREFIX, EMPTY));
+        String baseURL = req.getParameter(LINKBASE);
+        if (baseURL == null || baseURL.isEmpty()) {
+            resp.sendError(400);
+            return;
         }
+
+        final String hostAddressPassed = req.getParameter(HOST);
+        final String hostAddress = Strings.fixURL((hostAddressPassed == null || hostAddressPassed.isEmpty()) ? baseURL : hostAddressPassed);
+
         final String trustAll = req.getParameter(TRUST_ALL) != null ? "true" : "false";
         final String extendedDebug = req.getParameter(EXTENDED_DEBUG) != null ? "true" : "false";
         try {
@@ -77,7 +80,7 @@ public class ConfigurationServlet extends HttpServlet {
                 resp.sendError(400);
                 return;
             }
-            final String finalLinkbase = linkbase;
+            final String finalLinkbase = baseURL;
 
             transactionTemplate.execute(() -> {
                 final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();

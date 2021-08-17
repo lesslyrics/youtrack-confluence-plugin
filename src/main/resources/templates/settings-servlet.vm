@@ -1,42 +1,46 @@
 #set($spaceSelectorOptionsWithHtml = $spaceSelectorOptions)
 <html>
 <head>
-    <title>YouTrack Integration Settings</title>
+    <title>YouTrack Integration Plugin Settings</title>
     <meta name="decorator" content="atl.admin"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
-
-    <div class="field-group">
-        <label for="youtrackhost">YouTrack host address:</label>
-        <input type="text" name="host" id="host" class="text" value="$host" onkeydown="syncYouTrackURL()">
-    </div>
-
-    <div class="field-group">
-        <label for="youtracklinkbase">Link base:</label>
+    <fieldset class="group">
+        <legend for="youtracklinkbase">YouTrack site</legend>
         <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase" onkeydown="syncYouTrackURL()">
-        <div class="description">By default, all links to issues will use YouTrack host URL,
-            but you can override that here.
+        <div class="description">The base URL for your YouTrack site. For YouTrack InCloud, include the trailing /youtrack</div>
+    </fieldset>
+
+    <fieldset class="group">
+        <legend for="youtrackhost">REST API endpoint</legend>
+        <input type="text" name="host" id="host" class="text" value="$host" onkeydown="syncYouTrackURL()">
+        <div class="description">Use only when Confluence is unable to connect to the YouTrack backend using the base URL</div>
+    </fieldset>
+
+    <fieldset class="group">
+        <legend>Security</legend>
+        <div class="checkbox">
+            <input type="checkbox" class="checkbox" name="trustall" id="trustall" #if($trustall=='true')checked#end>
+            <label for="youtracktrustall">Ignore SSL certificate check</label>
+
+            <div class="description">Use only when Confluence doesn’t recognize the SSL certificate for your YouTrack site</div>
         </div>
-    </div>
-    <div class="field-group">
-        <label for="youtracktrustall">Ignore YouTrack SSL certificate check</label>
-        <input type="checkbox" name="trustall" id="trustall" #if($trustall=='true')checked#end>
-        <div class="description">Use this option when YouTrack SSL certificate is not recognized by your Confluence
-            instance.
+    </fieldset>
+    <fieldset class="group">
+        <legend>Logging</legend>
+        <div class="checkbox">
+            <input type="checkbox" class="checkbox" name="extendedDebug" id="extendedDebug" #if($extendedDebug=='true')checked#end>
+            <label for="extendedDebug">Enable debug level</label>
+            <div class="description">Use to write detailed macro activity to Confluence logs</div>
         </div>
-    </div>
-    <div class="field-group">
-        <label for="extendedDebug">Log extended debug info</label>
-        <input type="checkbox" name="extendedDebug" id="extendedDebug" #if($extendedDebug=='true')checked#end>
-        <div class="description">Use this option to make macros dump very detailed information to Confluence log.</div>
-    </div>
+    </fieldset>
 
     <div id="tokenBlock" class="field-group">
-        <label for="youtracktoken">Token:</label>
+        <label for="youtracktoken">Access token</label>
         <input type="text" class="text" name="authKey" id="authKey" value="$authKey" autocomplete="off">
-        <div class="description">Generate <a id="generateTokenLink" target="_blank">token</a></div>
+        <div class="description">To authorize access to YouTrack, <a id="generateTokenLink" target="_blank">generate a permanent token</a></div>
     </div>
 
     <div class="field-group">

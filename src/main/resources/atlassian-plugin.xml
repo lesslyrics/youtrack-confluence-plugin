@@ -10,7 +10,6 @@
     </plugin-info>
 
     <macro name="issue" class="jetbrains.youtrack.IssueLink" key="youtrack.integration.plugin.issue">
-        <description>Inserts dynamic link to a YouTrack issue that displays its state via tooltip.</description>
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
