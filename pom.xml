@@ -154,6 +154,8 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>youtrack-confluence-plugin</finalName>
+
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>

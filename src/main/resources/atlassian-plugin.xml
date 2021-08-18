@@ -13,7 +13,7 @@
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
-        <category name="formating"/>
+        <category name="formatting"/>
         <parameters>
             <parameter name="id" type="string" required="true"/>
             <parameter name="style" type="enum" required="false" default="short">
