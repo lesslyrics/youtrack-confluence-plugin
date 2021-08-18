@@ -9,11 +9,11 @@
         <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>
 
-    <macro name="issue" class="jetbrains.youtrack.IssueLink" key="youtrack.integration.plugin.issue">
+    <xhtml-macro name="issue" class="jetbrains.youtrack.IssueLink" key="youtrack.integration.plugin.issue">
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
-        <category name="confluence-content"/>
+        <category name="formating"/>
         <parameters>
             <parameter name="id" type="string" required="true"/>
             <parameter name="style" type="enum" required="false" default="short">
@@ -27,9 +27,9 @@
             </parameter>
             <parameter name="link-text-template" type="string" required="false" default="$issue"/>
         </parameters>
-    </macro>
+    </xhtml-macro>
 
-    <macro name="report" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.report">
+    <xhtml-macro name="report" class="jetbrains.youtrack.IssuesList" key="youtrack.integration.plugin.report">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
@@ -43,7 +43,7 @@
             <parameter name="pageSize" type="string" required="false" default="25"/>
             <parameter name="numPages" type="string" required="false" default="10"/>
         </parameters>
-    </macro>
+    </xhtml-macro>
 
 
     <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.youtrack.actions.ConfigurationServlet">

@@ -1,10 +1,10 @@
 package jetbrains.youtrack;
 
+import com.atlassian.confluence.content.render.xhtml.ConversionContext;
+import com.atlassian.confluence.macro.Macro;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
-import com.atlassian.renderer.RenderContext;
-import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.youtrack.base.YouTrackAuthAwareMacroBase;
@@ -29,8 +29,8 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
         super(pluginSettingsFactory, transactionTemplate);
     }
 
-
-    public String execute(Map params, String s, RenderContext renderContext) {
+    @Override
+    public String execute(Map<String,String> params, String s, ConversionContext renderContext) {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             final String issueId = (String) params.get(ID);
@@ -63,7 +63,6 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
         return "Issue not specified";
     }
 
-    @Override
     protected String getLoggingPrefix() {
         return logPrefix;
     }
@@ -72,16 +71,13 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
     protected Logger getLogger() {
         return LOG;
     }
-
-    public boolean isInline() {
-        return true;
+    @Override
+    public Macro.BodyType getBodyType() {
+        return Macro.BodyType.NONE;
     }
 
-    public boolean hasBody() {
-        return false;
-    }
-
-    public RenderMode getBodyRenderMode() {
-        return RenderMode.NO_RENDER;
+    @Override
+    public Macro.OutputType getOutputType() {
+        return Macro.OutputType.BLOCK;
     }
 }

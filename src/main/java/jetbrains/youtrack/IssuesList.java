@@ -1,12 +1,12 @@
 package jetbrains.youtrack;
 
+import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.renderer.PageContext;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
-import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
@@ -48,13 +48,14 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
 
     @Inject
     public IssuesList(@ComponentImport PluginSettingsFactory pluginSettingsFactory,
-                       @ComponentImport TransactionTemplate transactionTemplate,
-                       @ComponentImport PageManager pageManager) {
+                      @ComponentImport TransactionTemplate transactionTemplate,
+                      @ComponentImport PageManager pageManager) {
         super(pluginSettingsFactory, transactionTemplate);
         this.pageManager = pageManager;
     }
 
-    public String execute(Map params, String s, RenderContext renderContext) {
+    @Override
+    public String execute(Map<String, String> params, String s, ConversionContext renderContext) {
         try {
             logMessage("Report macro invoked.");
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
@@ -250,5 +251,15 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
     @Override
     protected Logger getLogger() {
         return LOG;
+    }
+
+    @Override
+    public BodyType getBodyType() {
+        return BodyType.NONE;
+    }
+
+    @Override
+    public OutputType getOutputType() {
+        return OutputType.BLOCK;
     }
 }

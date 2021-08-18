@@ -1,6 +1,6 @@
 package jetbrains.youtrack.base;
 
-import com.atlassian.renderer.v2.macro.BaseMacro;
+import com.atlassian.confluence.macro.Macro;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionCallback;
@@ -9,7 +9,7 @@ import jetbrains.youtrack.util.Strings;
 
 import java.util.Properties;
 
-public abstract class MacroWithPersistableSettingsBase extends BaseMacro {
+public abstract class MacroWithPersistableSettingsBase implements Macro {
 
     private final PluginSettingsFactory pluginSettingsFactory;
 
