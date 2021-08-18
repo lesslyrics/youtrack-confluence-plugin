@@ -39,7 +39,7 @@
 
     <div id="tokenBlock" class="field-group">
         <label for="youtracktoken">Access token</label>
-        <input type="text" class="text" name="authKey" id="authKey" value="$authKey" autocomplete="off">
+        <input type="password" class="text" name="authKey" id="authKey" value="$authKey" autocomplete="off">
         <div class="description">To authorize access to YouTrack, <a id="generateTokenLink" target="_blank">generate a permanent token</a></div>
     </div>
 
