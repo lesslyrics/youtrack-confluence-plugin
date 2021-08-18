@@ -1,4 +1,4 @@
-package jetbrains.youtrack;
+package jetbrains.youtrack.macros;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.macro.Macro;
@@ -7,7 +7,6 @@ import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import jetbrains.youtrack.base.YouTrackAuthAwareMacroBase;
 import jetbrains.youtrack.client.api.Issue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
 
-import static jetbrains.youtrack.util.Strings.*;
+import static jetbrains.youtrack.Strings.*;
 
 @Named("IssueLink")
 public class IssueLink extends YouTrackAuthAwareMacroBase {

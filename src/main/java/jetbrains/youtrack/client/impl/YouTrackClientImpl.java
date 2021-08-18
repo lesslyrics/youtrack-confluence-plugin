@@ -4,8 +4,7 @@ import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.YouTrackAPI;
-import jetbrains.youtrack.util.Strings;
-import org.apache.commons.lang3.StringUtils;
+import jetbrains.youtrack.Strings;
 
 public class YouTrackClientImpl implements YouTrackClient {
 

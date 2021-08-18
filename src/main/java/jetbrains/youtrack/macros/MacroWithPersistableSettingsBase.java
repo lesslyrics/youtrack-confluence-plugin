@@ -1,11 +1,11 @@
-package jetbrains.youtrack.base;
+package jetbrains.youtrack.macros;
 
 import com.atlassian.confluence.macro.Macro;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import jetbrains.youtrack.util.Strings;
+import jetbrains.youtrack.Strings;
 
 import java.util.Properties;
 

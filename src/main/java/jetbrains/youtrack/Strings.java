@@ -1,4 +1,4 @@
-package jetbrains.youtrack.util;
+package jetbrains.youtrack;
 
 import org.apache.commons.lang3.StringUtils;
 

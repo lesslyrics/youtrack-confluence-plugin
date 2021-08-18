@@ -1,4 +1,4 @@
-package jetbrains.youtrack.base;
+package jetbrains.youtrack.macros;
 
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
@@ -8,13 +8,13 @@ import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.User;
-import jetbrains.youtrack.util.Strings;
+import jetbrains.youtrack.Strings;
 import org.slf4j.Logger;
 
 import java.text.MessageFormat;
 import java.util.Map;
 
-import static jetbrains.youtrack.util.Strings.*;
+import static jetbrains.youtrack.Strings.*;
 
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {

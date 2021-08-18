@@ -1,4 +1,4 @@
-package jetbrains.youtrack.util;
+package jetbrains.youtrack;
 
 import java.util.HashMap;
 import java.util.Map;

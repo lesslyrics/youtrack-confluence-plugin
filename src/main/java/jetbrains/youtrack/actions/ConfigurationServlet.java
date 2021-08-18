@@ -10,7 +10,7 @@ import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
-import jetbrains.youtrack.util.Strings;
+import jetbrains.youtrack.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static jetbrains.youtrack.util.Strings.*;
+import static jetbrains.youtrack.Strings.*;
 
 @Named("ConfigurationServlet")
 public class ConfigurationServlet extends HttpServlet {

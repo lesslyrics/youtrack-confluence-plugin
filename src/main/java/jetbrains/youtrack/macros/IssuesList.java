@@ -1,4 +1,4 @@
-package jetbrains.youtrack;
+package jetbrains.youtrack.macros;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.pages.Page;
@@ -11,11 +11,10 @@ import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.opensymphony.webwork.ServletActionContext;
-import jetbrains.youtrack.base.YouTrackAuthAwareMacroBase;
+import jetbrains.youtrack.Strings;
 import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.IssueComment;
-import jetbrains.youtrack.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +25,8 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static jetbrains.youtrack.util.Service.*;
-import static jetbrains.youtrack.util.Strings.*;
+import static jetbrains.youtrack.Service.*;
+import static jetbrains.youtrack.Strings.*;
 
 @Named("IssueList")
 public class IssuesList extends YouTrackAuthAwareMacroBase {
@@ -82,8 +81,7 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
                 logMessage("Current page determined: " + currentPage);
 
                 final StringBuilder pagination = new StringBuilder();
-                final PageContext pageContext = (PageContext) renderContext;
-                final Page page = pageManager.getPage(pageContext.getSpaceKey(), pageContext.getPageTitle());
+                final Page page = pageManager.getPage(renderContext.getSpaceKey(), renderContext.getPageContext().getPageTitle());
                 final String thisPageUrl = page == null ? null : page.getUrlPath();
 
                 logMessage("Page URL is (null for new, not saved pages): " + thisPageUrl);
@@ -229,18 +227,6 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
         }
 
         return "Issue not specified";
-    }
-
-    public boolean isInline() {
-        return true;
-    }
-
-    public boolean hasBody() {
-        return false;
-    }
-
-    public RenderMode getBodyRenderMode() {
-        return RenderMode.NO_RENDER;
     }
 
     @Override
