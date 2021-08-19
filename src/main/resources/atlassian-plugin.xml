@@ -5,7 +5,7 @@
             dynamic links and query-based reports.
         </description>
         <version>1.9.0</version>
-        <vendor name="JetBrains" url="http://www.jetbrains.com"/>
+        <vendor name="JetBrains" url="https://www.jetbrains.com"/>
         <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>
 
