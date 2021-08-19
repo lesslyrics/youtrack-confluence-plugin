@@ -32,14 +32,14 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
     public String execute(Map<String,String> params, String s, ConversionContext renderContext) {
         try {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
-            final String issueId = (String) params.get(ID);
-            String strikeMode = (String) params.get(STRIKE_THRU_PARAM);
+            final String issueId = params.get(ID);
+            String strikeMode = params.get(STRIKE_THRU_PARAM);
             if (strikeMode == null) strikeMode = ID_ONLY;
-            String linkTextTemplate = (String) params.get(TEMPLATE_PARAM);
+            String linkTextTemplate = params.get(TEMPLATE_PARAM);
             if (linkTextTemplate == null || linkTextTemplate.isEmpty()) {
                 linkTextTemplate = DEFAULT_TEMPLATE;
             }
-            String style = (String) params.get(STYLE);
+            String style = params.get(STYLE);
             if (!DETAILED.equals(style)) {
                 style = SHORT;
             }

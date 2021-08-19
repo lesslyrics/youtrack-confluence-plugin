@@ -60,9 +60,9 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             logMessage("Processing parameters.");
 
-            final String project = defaultIfNullOrEmpty((String) params.get(PROJECT), ALL_PROJECTS);
-            final String query = (String) params.get(QUERY);
-            final String fieldList = defaultIfNullOrEmpty((String) params.get(REPORT_FIELD_LIST), DEFAULT_REPORT_FIELD_LIST);
+            final String project = defaultIfNullOrEmpty( params.get(PROJECT), ALL_PROJECTS);
+            final String query = params.get(QUERY);
+            final String fieldList = defaultIfNullOrEmpty(params.get(REPORT_FIELD_LIST), DEFAULT_REPORT_FIELD_LIST);
 
             logMessage(MessageFormat.format(" Project: {0} Query: {1} Fields: {2}", project, query, fieldList));
 
@@ -71,7 +71,7 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
                 logMessage("Starting to query YouTrack.");
 
                 final StringBuilder rows = new StringBuilder();
-                final int pageSize = intValueOf((String) params.get(PAGE_SIZE), 25);
+                final int pageSize = intValueOf(params.get(PAGE_SIZE), 25);
 
                 logMessage("Page size determined: " + pageSize);
 
@@ -195,7 +195,7 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
                     logMessage("Processing pagination");
                     if (currentPage != 1 || issues.size() >= pageSize) {
 
-                        int maxPages = intValueOf((String) params.get(TOTAL_PAGES), 10);
+                        int maxPages = intValueOf(params.get(TOTAL_PAGES), 10);
 
                         if (currentPage > 1) {
                             if (issues.size() < pageSize) maxPages = currentPage;
