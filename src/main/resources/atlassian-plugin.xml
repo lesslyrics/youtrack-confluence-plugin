@@ -35,7 +35,7 @@
 
     <xhtml-macro name="report" class="jetbrains.youtrack.macros.IssuesList" key="youtrack.integration.plugin.report"
                  icon="/download/resources/youtrack.integration.plugin/icons/youtrack.png">
-        <description>Inserts a table report based on YouTrack query.</description>
+        <description>Inserts a tabular list of issues that match the specified query parameters.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
         </resource>
