@@ -9,7 +9,11 @@
         <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>
 
-    <xhtml-macro name="issue" class="jetbrains.youtrack.macros.IssueLink" key="youtrack.integration.plugin.issue">
+    <resource key="icons" name="icons/" type="download" location="images"/>
+
+    <xhtml-macro name="issue" class="jetbrains.youtrack.macros.IssueLink" key="youtrack.integration.plugin.issue"
+                 icon="/download/resources/youtrack.integration.plugin/icons/youtrack.png"
+    >
         <resource type="velocity" name="help" location="templates/help-link.vm">
             <param name="help-section" value="confluence"/>
         </resource>
@@ -29,7 +33,8 @@
         </parameters>
     </xhtml-macro>
 
-    <xhtml-macro name="report" class="jetbrains.youtrack.macros.IssuesList" key="youtrack.integration.plugin.report">
+    <xhtml-macro name="report" class="jetbrains.youtrack.macros.IssuesList" key="youtrack.integration.plugin.report"
+                 icon="/download/resources/youtrack.integration.plugin/icons/youtrack.png">
         <description>Inserts a table report based on YouTrack query.</description>
         <resource type="velocity" name="help" location="templates/help-report.vm">
             <param name="help-section" value="confluence"/>
@@ -54,10 +59,6 @@
     <resource type="i18n" name="i18n" location="i18n/plugin"/>
 
     <!-- add our web resources -->
-<!--    <web-resource key="youtrack.web.resources" name="youtrack Web Resources">-->
-<!--        <dependency>com.atlassian.auiplugin:ajs</dependency>-->
-<!--        <resource type="download" name="youtrack.js" location="js/youtrack.js"/>-->
-<!--    </web-resource>-->
 
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
     <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
