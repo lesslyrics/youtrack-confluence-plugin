@@ -1,4 +1,4 @@
-package jetbrains.youtrack.actions;
+package jetbrains.youtrack.settings;
 
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
@@ -8,9 +8,9 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
+import jetbrains.youtrack.Strings;
 import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
-import jetbrains.youtrack.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +67,10 @@ public class ConfigurationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         checkAdminRights(req, resp);
         final String token = req.getParameter(AUTH_KEY);
-        final String retries = req.getParameter(RETRIES);
 
         String baseURL = req.getParameter(LINKBASE);
         if (baseURL == null || baseURL.isEmpty()) {
-            resp.sendError(400);
+            resp.setStatus(400);
             return;
         }
 
@@ -83,18 +82,17 @@ public class ConfigurationServlet extends HttpServlet {
         try {
             final YouTrackClient client = YouTrackClientFactory.newClient(hostAddress, token, Boolean.parseBoolean(trustAll));
             if (!client.isValid()) {
-                resp.sendError(400);
+                resp.setStatus(400);
                 return;
             }
             final String finalLinkbase = baseURL;
-
+            YouTrackClientService.useClient(client);
             transactionTemplate.execute(() -> {
                 final PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
                 final Properties storage = new Properties();
                 storage.setProperty(HOST, hostAddress);
                 storage.setProperty(EXTENDED_DEBUG, extendedDebug);
                 storage.setProperty(AUTH_KEY, token);
-                storage.setProperty(RETRIES, intValueOf(retries, 10));
                 storage.setProperty(TRUST_ALL, trustAll);
                 storage.setProperty(LINKBASE, finalLinkbase);
                 pluginSettings.put(MAIN_KEY, storage);
@@ -131,7 +129,6 @@ public class ConfigurationServlet extends HttpServlet {
         if (storage == null) storage = new Properties();
 
         params.put(HOST, storage.getProperty(HOST, EMPTY));
-        params.put(RETRIES, storage.getProperty(RETRIES, "10"));
         params.put(AUTH_KEY, storage.getProperty(AUTH_KEY, EMPTY));
         params.put(EXTENDED_DEBUG, storage.getProperty(EXTENDED_DEBUG, "false"));
         params.put(TRUST_ALL, storage.getProperty(TRUST_ALL, "false"));

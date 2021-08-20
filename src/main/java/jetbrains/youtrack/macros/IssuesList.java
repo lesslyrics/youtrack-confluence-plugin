@@ -15,6 +15,7 @@ import jetbrains.youtrack.Strings;
 import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.IssueComment;
+import jetbrains.youtrack.settings.YouTrackClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +122,7 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
 
                 logMessage("Running query: " + finalQuery);
 
-                final List<Issue> issues = youTrack.getApi().issues(finalQuery, startIssue, pageSize);
+                final List<Issue> issues = YouTrackClientService.client().getApi().issues(finalQuery, startIssue, pageSize);
 
                 logMessage("Number of isses in query result: " + issues.size());
                 for (final Issue originalIssue : issues) {

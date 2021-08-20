@@ -8,6 +8,7 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import jetbrains.youtrack.client.api.Issue;
+import jetbrains.youtrack.settings.YouTrackClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class IssueLink extends YouTrackAuthAwareMacroBase {
             }
 
             if (issueId != null && !issueId.isEmpty()) {
-                Issue issue = youTrack.getApi().getIssue(issueId);
+                Issue issue = YouTrackClientService.client().getApi().getIssue(issueId);
                 if (issue != null) {
                     setContext(context, strikeMode, linkTextTemplate, issue);
                 } else {

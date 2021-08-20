@@ -51,7 +51,7 @@
     </xhtml-macro>
 
 
-    <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.youtrack.actions.ConfigurationServlet">
+    <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.youtrack.settings.ConfigurationServlet">
         <url-pattern>/youtrack-integration/settings</url-pattern>
     </servlet>
 

@@ -3,12 +3,12 @@ package jetbrains.youtrack.macros;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
+import jetbrains.youtrack.Strings;
 import jetbrains.youtrack.client.IssuePresentation;
-import jetbrains.youtrack.client.YouTrackClient;
 import jetbrains.youtrack.client.YouTrackClientFactory;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.User;
-import jetbrains.youtrack.Strings;
+import jetbrains.youtrack.settings.YouTrackClientService;
 import org.slf4j.Logger;
 
 import java.text.MessageFormat;
@@ -19,12 +19,10 @@ import static jetbrains.youtrack.Strings.*;
 
 public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSettingsBase {
 
-    protected YouTrackClient youTrack;
-
     public YouTrackAuthAwareMacroBase(PluginSettingsFactory pluginSettingsFactory,
                                       TransactionTemplate transactionTemplate) {
         super(pluginSettingsFactory, transactionTemplate);
-        youTrack = YouTrackClientFactory.newClient(getProperty(HOST), getProperty(AUTH_KEY), Boolean.parseBoolean(getProperty(TRUST_ALL)));
+        YouTrackClientService.useClientIfAbsent(() -> YouTrackClientFactory.newClient(getProperty(HOST), getProperty(AUTH_KEY), Boolean.parseBoolean(getProperty(TRUST_ALL))));
     }
 
     protected abstract String getLoggingPrefix();

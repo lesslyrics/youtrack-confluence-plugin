@@ -29,7 +29,6 @@ public class Strings {
     public static final String HOST = "host";
     public static final String EMPTY = "";
     public static final String AUTH_KEY = "authKey";
-    public static final String RETRIES = "retries";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TOTAL_PAGES = "numPages";
     public static final String PAGINATION_SINGLE = TEMPLATES_ROOT + "pagination-report-single.vm";
