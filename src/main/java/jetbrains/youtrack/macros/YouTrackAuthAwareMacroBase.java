@@ -63,7 +63,7 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
         }
         final String assignee = issuePresentation.getAssignee();
         User reporter = issue.getReporter();
-        context.put("title", "Title: " + issue.getSummary() + ", Reporter: " + (reporter.getFullName() == null ? reporter.getLogin() : reporter.getFullName()) + ", Priority: " + issuePresentation.getPriority() + ", State: " +
+        context.put("title", "Summary: " + issue.getSummary() + ", Reporter: " + (reporter.getFullName() == null ? reporter.getLogin() : reporter.getFullName()) + ", Priority: " + issuePresentation.getPriority() + ", State: " +
                 issuePresentation.getState() + ", Assignee: " + (assignee == null ? UNASSIGNED : assignee) +
                 ", Votes: " + issue.getVotes() + ", Type: " + issuePresentation.getType());
         context.put(ISSUE_LINK_TEXT, VelocityUtils.getRenderedContent(linkTextTemplate, context));
