@@ -34,11 +34,4 @@ public class YouTrackClientImpl implements YouTrackClient {
     public YouTrackAPI getApi() {
         return api;
     }
-
-    public static void main(String[] args) {
-        YouTrackClientImpl client = new YouTrackClientImpl("http://localhost:8085", "perm:cm9vdA==.NjMtOQ==.imnIOlOJTolhzsvnUeKMoNgpQ5u8ik", false);
-        Issue issues = client.api.getIssue("ZND-1");
-        System.out.println(issues.getIdReadable());
-        System.out.println(new IssuePresentation(issues).getFieldValues());
-    }
 }
