@@ -88,7 +88,6 @@ public class YouTrackAPIImpl implements YouTrackAPI {
             });
         } catch (Exception e) {
             throw new IllegalStateException(e);
-
         }
     }
 

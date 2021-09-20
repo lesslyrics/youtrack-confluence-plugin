@@ -3,11 +3,9 @@ package jetbrains.youtrack.macros;
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
-import com.atlassian.confluence.renderer.PageContext;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
-import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
 import com.opensymphony.webwork.ServletActionContext;
@@ -61,7 +59,7 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
             final Map<String, Object> context = MacroUtils.defaultVelocityContext();
             logMessage("Processing parameters.");
 
-            final String project = defaultIfNullOrEmpty( params.get(PROJECT), ALL_PROJECTS);
+            final String project = defaultIfNullOrEmpty(params.get(PROJECT), ALL_PROJECTS);
             final String query = params.get(QUERY);
             final String fieldList = defaultIfNullOrEmpty(params.get(REPORT_FIELD_LIST), DEFAULT_REPORT_FIELD_LIST);
 

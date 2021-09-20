@@ -4,7 +4,7 @@
         <description>Plugin that enables integration between Confluence and YouTrack via macros that allow inserting
             dynamic links and query-based reports.
         </description>
-        <version>1.9.0</version>
+        <version>1.9.1</version>
         <vendor name="JetBrains" url="https://www.jetbrains.com"/>
         <param name="configure.url">/plugins/servlet/youtrack-integration/settings</param>
     </plugin-info>

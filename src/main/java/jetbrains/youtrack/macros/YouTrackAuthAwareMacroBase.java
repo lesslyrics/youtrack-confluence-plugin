@@ -30,7 +30,9 @@ public abstract class YouTrackAuthAwareMacroBase extends MacroWithPersistableSet
     protected abstract Logger getLogger();
 
     protected void logMessage(final String msg) {
-        if (getProperty(EXTENDED_DEBUG, "false").equals("true")) getLogger().warn(getLoggingPrefix() + msg);
+        if (getProperty(EXTENDED_DEBUG, "false").equals("true")) {
+            getLogger().warn(getLoggingPrefix() + msg);
+        }
     }
 
     protected void setContext(Map<String, Object> context, String strikeMode, String linkTextTemplate, Issue issue) {
