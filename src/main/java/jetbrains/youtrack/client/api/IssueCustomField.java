@@ -44,6 +44,7 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = MultiGroupIssueCustomField.class, name = "MultiGroupIssueCustomField"),
   @JsonSubTypes.Type(value = PeriodIssueCustomField.class, name = "PeriodIssueCustomField"),
   @JsonSubTypes.Type(value = SingleVersionIssueCustomField.class, name = "SingleVersionIssueCustomField"),
+  @JsonSubTypes.Type(value = StateMachineIssueCustomField.class, name = "StateMachineIssueCustomField"),
 })
 
 public class IssueCustomField {
