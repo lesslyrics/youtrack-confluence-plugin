@@ -56,6 +56,10 @@
 
     <servlet key="youtrack.integration.plugin.settings.servlet" class="jetbrains.youtrack.settings.ConfigurationServlet">
         <url-pattern>/youtrack-integration/settings</url-pattern>
+        <init-param>
+            <param-name>RequireSecurityToken</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </servlet>
 
     <!-- add our i18n resource -->

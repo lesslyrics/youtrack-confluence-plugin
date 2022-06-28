@@ -7,6 +7,8 @@
 </head>
 <body>
 <form id="settings" class="aui" action="$baseUrl/plugins/servlet/youtrack-integration/settings" method="post">
+    <input type="hidden" name="atl_token" id="atl_token"  value="">
+
     <fieldset class="group">
         <legend for="youtracklinkbase">YouTrack site</legend>
         <input type="text" name="linkbase" id="linkbase" class="text" value="$linkbase" onkeydown="syncYouTrackURL()">
@@ -69,6 +71,8 @@
     <script>
         function syncYouTrackURL() {
             setTimeout(function () {
+                document.getElementById("atl_token").value = AJS.Meta.get('atl-token');
+
                 const linkbase = document.getElementById('linkbase');
                 const host = document.getElementById('host');
                 const tokenGenerationLink = (linkbase.value || host.value);
