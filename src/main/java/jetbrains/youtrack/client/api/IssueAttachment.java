@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a file that is attached to an issue or a comment.
  */
@@ -97,7 +99,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getName() {
-    return name;
+    return escapeAll(name, false);
   }
 
   public void setName(String name) {
@@ -155,7 +157,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getExtension() {
-    return extension;
+    return escapeAll(extension, false);
   }
 
    /**
@@ -164,7 +166,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getCharset() {
-    return charset;
+    return escapeAll(charset, false);
   }
 
    /**
@@ -173,7 +175,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getMimeType() {
-    return mimeType;
+    return escapeAll(mimeType, false);
   }
 
    /**
@@ -182,7 +184,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getMetaData() {
-    return metaData;
+    return escapeAll(metaData, false);
   }
 
    /**
@@ -214,7 +216,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getBase64Content() {
-    return base64Content;
+    return escapeAll(base64Content, false);
   }
 
   public void setBase64Content(String base64Content) {
@@ -227,7 +229,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getUrl() {
-    return url;
+    return escapeAll(url, false);
   }
 
   public IssueAttachment visibility(Visibility visibility) {
@@ -290,7 +292,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getThumbnailURL() {
-    return thumbnailURL;
+    return escapeAll(thumbnailURL, false);
   }
 
    /**

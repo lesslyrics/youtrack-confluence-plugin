@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents default project-related settings of the custom field. These settings are applied at the moment when the custom field is attached to a project. After that, any changes in default settings do not affect the field settings for this project.
  */
@@ -83,7 +85,7 @@ public class CustomFieldDefaults {
   **/
   @Schema(description = "")
   public String getEmptyFieldText() {
-    return emptyFieldText;
+    return escapeAll(emptyFieldText, false);
   }
 
   public void setEmptyFieldText(String emptyFieldText) {

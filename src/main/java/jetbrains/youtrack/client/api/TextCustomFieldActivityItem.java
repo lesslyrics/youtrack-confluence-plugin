@@ -17,6 +17,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents an activity that affects a custom field of the &#x60;text&#x60; type of an issue.
  */
@@ -59,7 +61,7 @@ public class TextCustomFieldActivityItem extends CustomFieldActivityItem {
   **/
   @Schema(description = "")
   public String getRemoved() {
-    return removed;
+    return escapeAll(removed, false);
   }
 
    /**
@@ -68,7 +70,7 @@ public class TextCustomFieldActivityItem extends CustomFieldActivityItem {
   **/
   @Schema(description = "")
   public String getAdded() {
-    return added;
+    return escapeAll(added, false);
   }
 
    /**
@@ -77,7 +79,7 @@ public class TextCustomFieldActivityItem extends CustomFieldActivityItem {
   **/
   @Schema(description = "")
   public String getMarkup() {
-    return markup;
+    return escapeAll(markup, false);
   }
 
 

@@ -19,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents jabber settings for this YouTrack installation.
  */
@@ -78,7 +81,7 @@ public class JabberSettings {
   **/
   @Schema(description = "")
   public String getHost() {
-    return host;
+    return escapeAll(host, false);
   }
 
   public void setHost(String host) {
@@ -114,7 +117,7 @@ public class JabberSettings {
   **/
   @Schema(description = "")
   public String getLogin() {
-    return login;
+    return escapeAll(login, false);
   }
 
   public void setLogin(String login) {
@@ -132,7 +135,7 @@ public class JabberSettings {
   **/
   @Schema(description = "")
   public String getServiceName() {
-    return serviceName;
+    return escapeAll(serviceName, false);
   }
 
   public void setServiceName(String serviceName) {

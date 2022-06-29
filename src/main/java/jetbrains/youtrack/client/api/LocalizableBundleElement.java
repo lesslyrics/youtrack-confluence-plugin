@@ -17,6 +17,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents field value that can be localized.
  */
@@ -37,7 +39,7 @@ public class LocalizableBundleElement extends BundleElement {
   **/
   @Schema(description = "")
   public String getLocalizedName() {
-    return localizedName;
+    return escapeAll(localizedName, false);
   }
 
   public void setLocalizedName(String localizedName) {

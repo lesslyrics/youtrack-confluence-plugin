@@ -19,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents the command that was parsed from the provided query.
  */
@@ -49,7 +52,7 @@ public class ParsedCommand {
   **/
   @Schema(description = "")
   public String getDescription() {
-    return description;
+    return escapeAll(description, false);
   }
 
    /**

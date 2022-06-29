@@ -17,6 +17,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a change in a &#x60;String&#x60;-type attribute with the support of markup: &#x60;description&#x60; in an Issue or IssueWorkItem, and the &#x60;text&#x60; of the IssueComment. This entity lets you get the rendered text after the change.
  */
@@ -38,7 +40,7 @@ public class TextMarkupActivityItem extends SimpleValueActivityItem {
   **/
   @Schema(description = "")
   public String getRemoved() {
-    return removed;
+    return escapeAll(removed, false);
   }
 
    /**
@@ -47,7 +49,7 @@ public class TextMarkupActivityItem extends SimpleValueActivityItem {
   **/
   @Schema(description = "")
   public String getAdded() {
-    return added;
+    return escapeAll(added, false);
   }
 
    /**
@@ -56,7 +58,7 @@ public class TextMarkupActivityItem extends SimpleValueActivityItem {
   **/
   @Schema(description = "")
   public String getMarkup() {
-    return markup;
+    return escapeAll(markup, false);
   }
 
 

@@ -19,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a language locale that is used in UI.
  */
@@ -52,7 +55,7 @@ public class LocaleDescriptor {
   **/
   @Schema(description = "")
   public String getLocale() {
-    return locale;
+    return escapeAll(locale, false);
   }
 
    /**
@@ -61,7 +64,7 @@ public class LocaleDescriptor {
   **/
   @Schema(description = "")
   public String getLanguage() {
-    return language;
+    return escapeAll(language, false);
   }
 
    /**
@@ -84,7 +87,7 @@ public class LocaleDescriptor {
   **/
   @Schema(description = "")
   public String getName() {
-    return name;
+    return escapeAll(name, false);
   }
 
   public void setName(String name) {

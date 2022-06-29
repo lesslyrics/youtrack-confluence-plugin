@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a field value in YouTrack.
  */
@@ -70,7 +72,7 @@ public class BundleElement {
   **/
   @Schema(description = "")
   public String getName() {
-    return name;
+    return escapeAll(name, false);
   }
 
   public void setName(String name) {
@@ -106,7 +108,7 @@ public class BundleElement {
   **/
   @Schema(description = "")
   public String getDescription() {
-    return description;
+    return escapeAll(description,false);
   }
 
   public void setDescription(String description) {
