@@ -1,3 +1,0 @@
-<div class="yt yt-comment-body">
-    <a href="$linkbase/issue/$issue-id#comment=$comment-id" target="_blank">#</a>&nbsp;$body
-</div>
