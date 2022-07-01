@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents an issue in YouTrack.
  */
@@ -124,7 +126,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String getIdReadable() {
-    return idReadable;
+    return escapeAll(idReadable, false);
   }
 
    /**
@@ -192,7 +194,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String getSummary() {
-    return summary;
+    return escapeAll(summary, false);
   }
 
   public void setSummary(String summary) {
