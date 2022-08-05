@@ -80,7 +80,7 @@ public class CommandList {
   **/
   @Schema(description = "")
   public String getComment() {
-    return escapeAll(comment, false);
+    return comment;
   }
 
   public void setComment(String comment) {
