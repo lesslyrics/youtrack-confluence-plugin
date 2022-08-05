@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents custom field settings for the particular project.
  */
@@ -132,7 +134,7 @@ public class ProjectCustomField {
   **/
   @Schema(description = "")
   public String getEmptyFieldText() {
-    return emptyFieldText;
+    return escapeAll(emptyFieldText, true);
   }
 
   public void setEmptyFieldText(String emptyFieldText) {

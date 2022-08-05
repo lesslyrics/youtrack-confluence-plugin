@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a file that is attached to an issue or a comment.
  */
@@ -97,7 +99,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getName() {
-    return name;
+    return escapeAll(name, false);
   }
 
   public void setName(String name) {
@@ -155,7 +157,7 @@ public class IssueAttachment {
   **/
   @Schema(description = "")
   public String getExtension() {
-    return extension;
+    return escapeAll(extension, false);
   }
 
    /**

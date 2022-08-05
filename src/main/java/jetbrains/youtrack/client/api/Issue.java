@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 /**
  * Represents an issue in YouTrack.
@@ -212,7 +213,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String getDescription() {
-    return description;
+    return escapeAll(description, false);
   }
 
   public void setDescription(String description) {
@@ -546,7 +547,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String get$Type() {
-    return $type;
+    return escapeAll($type, true);
   }
 
 
