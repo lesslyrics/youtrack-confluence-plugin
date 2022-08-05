@@ -547,7 +547,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String get$Type() {
-    return escapeAll($type, true);
+    return $type;
   }
 
 
