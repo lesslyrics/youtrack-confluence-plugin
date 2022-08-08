@@ -191,7 +191,7 @@ public class CustomField {
   **/
   @Schema(description = "")
   public String getAliases() {
-    return aliases;
+    return escapeAll(aliases, true);
   }
 
   public void setAliases(String aliases) {
