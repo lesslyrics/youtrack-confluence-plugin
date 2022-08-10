@@ -220,7 +220,7 @@ public class Project extends IssueFolder {
   **/
   @Schema(description = "")
   public String getFromEmail() {
-    return escapeAll(fromEmail, true);
+    return fromEmail;
   }
 
   public void setFromEmail(String fromEmail) {
@@ -238,7 +238,7 @@ public class Project extends IssueFolder {
   **/
   @Schema(description = "")
   public String getReplyToEmail() {
-    return escapeAll(replyToEmail,true);
+    return replyToEmail;
   }
 
   public void setReplyToEmail(String replyToEmail) {

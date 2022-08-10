@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents jabber settings for this YouTrack installation.
  */
@@ -117,7 +115,7 @@ public class JabberSettings {
   **/
   @Schema(description = "")
   public String getLogin() {
-    return escapeAll(login, false);
+    return login;
   }
 
   public void setLogin(String login) {
@@ -135,7 +133,7 @@ public class JabberSettings {
   **/
   @Schema(description = "")
   public String getServiceName() {
-    return escapeAll(serviceName, false);
+    return serviceName;
   }
 
   public void setServiceName(String serviceName) {
