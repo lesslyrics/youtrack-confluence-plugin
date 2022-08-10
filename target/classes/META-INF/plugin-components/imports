@@ -1,7 +1,0 @@
-com.atlassian.confluence.pages.PageManager
-com.atlassian.sal.api.ApplicationProperties
-com.atlassian.sal.api.auth.LoginUriProvider
-com.atlassian.sal.api.pluginsettings.PluginSettingsFactory
-com.atlassian.sal.api.transaction.TransactionTemplate
-com.atlassian.sal.api.user.UserManager
-com.atlassian.templaterenderer.TemplateRenderer

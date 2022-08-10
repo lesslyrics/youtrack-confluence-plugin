@@ -17,8 +17,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents the change of the boolean flag that indicates whether YouTrack Wiki or Markdown is used in the target entity as a markup language. If \&quot;true\&quot;, then the markdown is used. Otherwise, YouTrack Wiki markup.
  */
@@ -58,7 +56,7 @@ public class UsesMarkupActivityItem extends SimpleValueActivityItem {
   **/
   @Schema(description = "")
   public String getMarkup() {
-    return escapeAll(markup, false);
+    return markup;
   }
 
 

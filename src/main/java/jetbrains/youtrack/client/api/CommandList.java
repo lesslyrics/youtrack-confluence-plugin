@@ -22,8 +22,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents list of command and related comment in YouTrack. Can be used to either apply a command or get command suggestions.
  */
@@ -80,7 +78,7 @@ public class CommandList {
   **/
   @Schema(description = "")
   public String getComment() {
-    return escapeAll(comment, false);
+    return comment;
   }
 
   public void setComment(String comment) {
@@ -116,7 +114,7 @@ public class CommandList {
   **/
   @Schema(description = "")
   public String getQuery() {
-    return escapeAll(query, false);
+    return query;
   }
 
   public void setQuery(String query) {
@@ -188,7 +186,7 @@ public class CommandList {
   **/
   @Schema(description = "")
   public String getRunAs() {
-    return escapeAll(runAs, false);
+    return runAs;
   }
 
   public void setRunAs(String runAs) {

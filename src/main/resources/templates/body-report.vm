@@ -1,19 +1,19 @@
 <div class="yt yt-report">
 <h3>$title</h3>
-#set($headerEscapedHtml = $header)
-#set($rowsEscapedHtml = $rows)
-#set($paginationEscapedHtml = $pagination)
+#set($headerWithHtml = $header)
+#set($rowsWithHtml = $rows)
+#set($paginationWithHtml = $pagination)
 #if ($hasIssues)
 <table>
     <tr>
-      $headerEscapedHtml
+      $headerWithHtml
     </tr>
-    $rowsEscapedHtml
+    $rowsWithHtml
 </table>
 #else
 <p>No more matching issues to display.</p>
 #end
 <p>
-    $paginationEscapedHtml
+    $paginationWithHtml
 </p>
 </div>

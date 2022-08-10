@@ -17,8 +17,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents a field value or values, parameterizing agile column.
  */
@@ -42,7 +40,7 @@ public class AgileColumnFieldValue extends DatabaseAttributeValue {
   **/
   @Schema(description = "")
   public String getName() {
-    return escapeAll(name, false);
+    return name;
   }
 
   public void setName(String name) {

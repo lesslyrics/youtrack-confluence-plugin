@@ -22,8 +22,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents the list of search suggestions for the currently entered search query.
  */
@@ -101,7 +99,7 @@ public class SearchSuggestions {
   **/
   @Schema(description = "")
   public String getQuery() {
-    return escapeAll(query, false);
+    return query;
   }
 
   public void setQuery(String query) {

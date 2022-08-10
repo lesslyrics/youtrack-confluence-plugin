@@ -1,9 +1,0 @@
-<span class="yt yt-issue yt-issue-detailed">
-#if ($issue)
-    #set($sueLinkTextEscapedHtml = $issueLinkText)
-    #set($summaryEscapedHtml = $summaryFormattedText)
-<span class="yt yt-summary">$summaryEscapedHtml</span>&nbsp;(<a class="yt yt-issuelink" href="$linkbase/issue/$issue" target="_blank" title="$title">$sueLinkTextEscapedHtml</a>)
-#else
-<span class="yt yt-error" style="color:darkred;background-color:lightgrey">$error</span>
-#end
-</span>

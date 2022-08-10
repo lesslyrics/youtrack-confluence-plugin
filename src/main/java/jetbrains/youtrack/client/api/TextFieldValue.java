@@ -19,9 +19,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents a value of the text field. Returns both source and rendered text.
  */
@@ -49,7 +46,7 @@ public class TextFieldValue {
   **/
   @Schema(description = "")
   public String getText() {
-    return escapeAll(text, false);
+    return text;
   }
 
    /**
@@ -58,7 +55,7 @@ public class TextFieldValue {
   **/
   @Schema(description = "")
   public String getMarkdownText() {
-    return escapeAll(markdownText, false);
+    return markdownText;
   }
 
    /**

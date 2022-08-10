@@ -19,8 +19,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents the event when a user adds or removes a group to/from the Visibility settings of the target entity.
  */
@@ -45,7 +43,7 @@ public class VisibilityGroupActivityItem extends VisibilityActivityItem {
   **/
   @Schema(description = "")
   public String getTargetMember() {
-    return escapeAll(targetMember, false);
+    return targetMember;
   }
 
    /**
@@ -54,7 +52,7 @@ public class VisibilityGroupActivityItem extends VisibilityActivityItem {
   **/
   @Schema(description = "")
   public String getTargetSubMember() {
-    return escapeAll(targetSubMember, false);
+    return targetSubMember;
   }
 
    /**

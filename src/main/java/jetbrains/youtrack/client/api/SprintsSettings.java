@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Describes sprints configuration.
  */
@@ -141,7 +139,7 @@ public class SprintsSettings {
   **/
   @Schema(description = "")
   public String getExplicitQuery() {
-    return escapeAll(explicitQuery, false);
+    return explicitQuery;
   }
 
   public void setExplicitQuery(String explicitQuery) {

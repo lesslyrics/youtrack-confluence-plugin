@@ -19,8 +19,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents a saved search.
  */
@@ -44,7 +42,7 @@ public class SavedQuery extends WatchFolder {
   **/
   @Schema(description = "")
   public String getQuery() {
-    return escapeAll(query, false);
+    return query;
   }
 
   public void setQuery(String query) {

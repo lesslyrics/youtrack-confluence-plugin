@@ -19,9 +19,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
-
 /**
  * Represents date format.
  */
@@ -52,7 +49,7 @@ public class DateFormatDescriptor {
   **/
   @Schema(description = "")
   public String getPresentation() {
-    return escapeAll(presentation, false);
+    return presentation;
   }
 
    /**
