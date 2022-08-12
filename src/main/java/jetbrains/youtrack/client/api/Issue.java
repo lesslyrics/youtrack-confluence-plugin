@@ -22,6 +22,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 /**
  * Represents an issue in YouTrack.
  */
@@ -124,7 +127,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String getIdReadable() {
-    return idReadable;
+    return escapeAll(idReadable, false);
   }
 
    /**
@@ -192,7 +195,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String getSummary() {
-    return summary;
+    return escapeAll(summary, false);
   }
 
   public void setSummary(String summary) {
@@ -210,7 +213,7 @@ public class Issue {
   **/
   @Schema(description = "")
   public String getDescription() {
-    return description;
+    return escapeAll(description, false);
   }
 
   public void setDescription(String description) {

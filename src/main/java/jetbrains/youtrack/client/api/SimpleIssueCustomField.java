@@ -17,6 +17,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents the field of simple type in the issue.
  */
@@ -53,7 +55,7 @@ public class SimpleIssueCustomField extends IssueCustomField implements ProjectC
   **/
   @Schema(description = "")
   public Object getValue() {
-    return value;
+    return notNullValueToString(value);
   }
 
 
@@ -96,7 +98,14 @@ public class SimpleIssueCustomField extends IssueCustomField implements ProjectC
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
+    return escapeAll(o.toString().replace("\n", "\n    "), true);
+  }
+
+  private Object notNullValueToString(Object o) {
+    if (o == null) {
+      return o;
+    }
+    return escapeAll(o.toString(), true);
   }
 
 }

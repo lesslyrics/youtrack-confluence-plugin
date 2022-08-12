@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a custom field in YouTrack.
  */
@@ -81,7 +83,7 @@ public class CustomField {
   **/
   @Schema(description = "")
   public String getName() {
-    return name;
+    return escapeAll(name, true);
   }
 
   public void setName(String name) {
@@ -189,7 +191,7 @@ public class CustomField {
   **/
   @Schema(description = "")
   public String getAliases() {
-    return aliases;
+    return escapeAll(aliases, true);
   }
 
   public void setAliases(String aliases) {

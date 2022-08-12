@@ -19,6 +19,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a YouTrack project.
  */
@@ -111,7 +113,7 @@ public class Project extends IssueFolder {
   **/
   @Schema(description = "")
   public String getDescription() {
-    return description;
+    return escapeAll(description, true);
   }
 
   public void setDescription(String description) {

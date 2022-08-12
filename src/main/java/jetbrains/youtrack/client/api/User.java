@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
+import static com.atlassian.renderer.v2.components.HtmlEscaper.escapeAll;
+
 /**
  * Represents a user in YouTrack. Please note that the read-only properties of a user account, like              credentials, or email and so on, you can only change in               &lt;a href&#x3D;\&quot;https://www.jetbrains.com/help/youtrack/devportal/?Hub-REST-API\&quot;&gt;Hub REST API&lt;/a&gt;.
  */
@@ -81,7 +83,7 @@ public class User {
   **/
   @Schema(description = "")
   public String getLogin() {
-    return login;
+    return escapeAll(login, true);
   }
 
    /**
@@ -90,7 +92,7 @@ public class User {
   **/
   @Schema(description = "")
   public String getFullName() {
-    return fullName;
+    return escapeAll(fullName, true);
   }
 
    /**
