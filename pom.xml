@@ -31,9 +31,9 @@
     </repositories>
 
     <properties>
-        <confluence.version>6.1.0</confluence.version>
-        <confluence.data.version>6.1.0</confluence.data.version>
-        <amps.version>6.1.0</amps.version>
+        <confluence.version>8.0.2</confluence.version>
+        <confluence.data.version>8.0.2</confluence.data.version>
+        <amps.version>8.0.2</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
@@ -155,8 +155,8 @@
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-confluence-plugin</artifactId>
-                <version>6.1.0</version>
+                <artifactId>confluence-maven-plugin</artifactId>
+                <version>8.0.2</version>
                 <extensions>true</extensions>
                 <configuration>
                     <productVersion>${confluence.version}</productVersion>

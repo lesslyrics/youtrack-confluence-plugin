@@ -8,7 +8,7 @@ import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import com.opensymphony.webwork.ServletActionContext;
+import org.apache.struts2.ServletActionContext;
 import jetbrains.youtrack.Strings;
 import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.api.Issue;
