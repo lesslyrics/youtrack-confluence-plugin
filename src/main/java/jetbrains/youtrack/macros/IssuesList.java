@@ -8,11 +8,11 @@ import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import org.apache.struts2.ServletActionContext;
 import jetbrains.youtrack.Strings;
 import jetbrains.youtrack.client.IssuePresentation;
 import jetbrains.youtrack.client.api.Issue;
 import jetbrains.youtrack.client.api.IssueComment;
+import com.atlassian.core.filters.ServletContextThreadLocal;
 import jetbrains.youtrack.settings.YouTrackClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public class IssuesList extends YouTrackAuthAwareMacroBase {
 
                 logMessage("Page size determined: " + pageSize);
 
-                final HttpServletRequest request = ServletActionContext.getRequest();
+                final HttpServletRequest request = ServletContextThreadLocal.getRequest();
                 final int currentPage = request == null ? 1 : intValueOf(request.getParameter(PAGINATION_PARAM), 1);
 
                 logMessage("Current page determined: " + currentPage);
